@@ -8,7 +8,10 @@
 import Foundation
 
 func formatTime(seconds: Double) -> String {
-    let minutes = Int(seconds) / 60
+    
+    let hours = Int(seconds) / 3600
+    let minutes = (Int(seconds) % 3600) / 60
     let remainingSeconds = Int(seconds) % 60
-    return String(format: "%02d:%02d", minutes, remainingSeconds)
+    
+    return String(format: "%2d:%02d:%02d", hours, minutes, remainingSeconds)
 }
