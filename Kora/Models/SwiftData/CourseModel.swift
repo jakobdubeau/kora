@@ -8,15 +8,18 @@
 // local persisted course/subject, home list of courses
 
 import SwiftData
+import Foundation
 
 @Model // persistent data model macro, make it storable in db/on disk
 class Course {
+    var id: UUID
     var name: String // column in swiftdata store, automatically observed
     var colour: String?
-    var dailyTotal: Int
+    var dailyTotal: TimeInterval
     
     
-    init(name: String, colour: String? = nil, dailyTotal: Int = 0) {
+    init(name: String, colour: String? = nil, dailyTotal: TimeInterval = 0) {
+        self.id = UUID()
         self.name = name
         self.colour = colour
         self.dailyTotal = dailyTotal
