@@ -165,6 +165,7 @@ final class TimerEngine {
                                                                                        // weak lets us access self, but not force alive
         if let timer {
             RunLoop.main.add(timer, forMode: .common)
+            timer.fire()
         }
     }
     
