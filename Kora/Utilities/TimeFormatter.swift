@@ -7,7 +7,7 @@
 
 import Foundation
 
-func formatTime(seconds: Double) -> String {
+func formatTime(seconds: TimeInterval) -> String {
     
     let hours = Int(seconds) / 3600
     let minutes = (Int(seconds) % 3600) / 60
