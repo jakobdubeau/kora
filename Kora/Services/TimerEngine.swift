@@ -68,6 +68,7 @@ final class TimerEngine {
     // MARK: - Main timer interaction
     func toggleCourse(_ course: UUID) {
         let current = ProcessInfo.processInfo.systemUptime // capture current time
+        currentTime = current
         
         // Case 1: tap currently running course button, start break
         if runningCourse == course {
