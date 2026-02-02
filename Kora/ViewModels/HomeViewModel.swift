@@ -24,7 +24,7 @@ final class HomeViewModel {
     var totalTime: TimeInterval { timer.totalTime }
     var breakTime: TimeInterval { timer.breakTime }
     
-    var isRunning: Bool {
+    var isRunningCourse: Bool {
         timer.runningCourse == demoCourseID
     }
     
