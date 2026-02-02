@@ -23,7 +23,8 @@ final class TimerEngine {
     private var breakStartTime: TimeInterval? = nil
     
     private var currentTime: TimeInterval = ProcessInfo.processInfo.systemUptime
-    private var timer: Timer?
+    
+    private var timer: Timer? // ui
     
     private let maxBreak: TimeInterval = 3600 // 1 hour, max time to be counted as a break vs completely new session
     
@@ -55,7 +56,7 @@ final class TimerEngine {
     }
     
     // live break time
-    var breakTime : TimeInterval {
+    var breakTime: TimeInterval {
         if runningCourse == nil, // if no running course
            let start = breakStartTime { // if there's a start time
             return totalBreakTime + (currentTime - start) // stored breaktime + current break time
@@ -151,14 +152,16 @@ final class TimerEngine {
     
     // MARK: - Timer UI
     
-    private func startTimer() {
+    private func startTimer() { // updates current time
         guard timer == nil else { return } // we only create timer if one doesn't exist already
         
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
-            guard let self else { return }
-            self.currentTime = ProcessInfo.processInfo.systemUptime
-        }
-        
+        // closure = code you give to something else, so it can run it later
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in // timer runs the closure every second,
+            guard let self else { return } // weak referebces can dissapear                // when it runs, it passes itself in (timer)
+            // closure                    // we need to check if engine is gone           // "_" because we don't need the timer itself
+            self.currentTime = ProcessInfo.processInfo.systemUptime                      // since closure owns self, this creates a
+        }                                                                               // retain cycle, nothing can be destroyed
+                                                                                       // weak lets us access self, but not force alive
         if let timer {
             RunLoop.main.add(timer, forMode: .common)
         }
