@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct KoraApp: App {
@@ -13,5 +14,6 @@ struct KoraApp: App {
         WindowGroup {
             HomeView()
         }
+        .modelContainer(for: Course.self)
     }
 }

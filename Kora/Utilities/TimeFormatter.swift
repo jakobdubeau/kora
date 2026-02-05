@@ -28,6 +28,6 @@ func formatTimeBreak(seconds: TimeInterval) -> String {
         return String(format: "%dm %ds", minutes, remainingSeconds)
     }
     else {
-        return String(format: "%dh %dm %ds", hours, minutes, remainingSeconds)
+        return String(format: "%dh %dm", hours, minutes)
     }
 }
