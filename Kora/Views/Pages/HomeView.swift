@@ -12,35 +12,24 @@ struct HomeView: View {
     
     var body: some View {
         VStack(spacing: 16) {
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Total: \(formatTime(seconds: vm.totalTime))") // string interpolation
-                    .font(.title2)
-                
-                Text("Course : \(formatTime(seconds: vm.demoCourseTime))")
-                    .font(.title3)
-                
-                Text("Break : \(formatTime(seconds: vm.breakTime))")
-                    .foregroundStyle(.secondary)
+            VStack(alignment: .center, spacing: 16) {
+                Text(Date(), format: .dateTime.weekday().day().month())
+                    .font(.headline.bold())
+                    .padding(.bottom, 12)
+                Text("\(formatTime(seconds: vm.totalTime))") // string interpolation
+                    .font(.system(size: 48, weight: .semibold))
+                    .monospacedDigit()
+                if vm.breakTime > 0 {
+                    Text("[Break for \(formatTimeBreak(seconds: vm.breakTime))]")
+                        .font(.caption).foregroundStyle(.secondary)
+                }
+                Spacer()
             }
-            .frame(maxWidth: .infinity, alignment: .center)
-            .padding()
-            
-            Button {
-                vm.toggleCourse()
-            } label: {
-                Text(vm.isRunningCourse ? "Stop course" : "start course")
-                    .frame(maxWidth: .infinity)
-            }
-            .buttonStyle(.borderedProminent)
-            
-            Button(role: .destructive) {
-                vm.newDay()
-            } label: {
-                Text("New day reset")
-                    .frame(maxWidth: .infinity)
-            }
-            .buttonStyle(.bordered)
+            .padding(.top, 20).frame(maxWidth: .infinity)
         }
-        .padding()
     }
 }
+#Preview {
+    HomeView()
+}
+
