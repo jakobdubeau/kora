@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct addCourse: View {
+struct AddCourse: View {
     @Environment(\.modelContext) private var context // db session
     @Environment(\.dismiss) private var dismiss // close the modal
     

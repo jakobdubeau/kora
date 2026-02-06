@@ -10,6 +10,7 @@ import SwiftData
 
 struct HomeView: View {
     @State private var vm = HomeViewModel() // @state ensures viewmodel instance isn't lost after redraw
+    @State private var showAddCourse = false
     
     @Query(sort: \Course.createdAt) private var courses: [Course] // sort by created date, make courses array
     @Environment(\.modelContext) private var context // insert/delete/update
@@ -28,17 +29,32 @@ struct HomeView: View {
                         Text("[Break for \(formatTimeBreak(seconds: vm.breakTime))]")
                             .font(.caption).foregroundStyle(.secondary)
                     }
-                    Spacer()
                 }
-                .padding(.top, 20).frame(maxWidth: .infinity)
+                .padding(.top, 20)
+                
+                List {
+                    Section {
+                        ForEach(courses) { course in
+                            Text(course.name)
+                        }
+                    }
+                    footer: {
+                        Button("Add") {
+                            showAddCourse = true
+                        }
+                        .foregroundStyle(.secondary)
+                        .buttonStyle(.plain)
+                    }
+                }
             }
-            List(courses) { course in
-                Text(course.name)
-            }
+        }
+        .sheet(isPresented: $showAddCourse) {
+            AddCourse()
         }
     }
 }
 #Preview {
     HomeView()
+        .modelContainer(for: [Course.self], inMemory: true)
 }
 
