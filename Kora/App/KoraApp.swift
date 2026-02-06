@@ -14,6 +14,6 @@ struct KoraApp: App {
         WindowGroup {
             HomeView()
         }
-        .modelContainer(for: Course.self)
+        .modelContainer(for: [Course.self])
     }
 }
