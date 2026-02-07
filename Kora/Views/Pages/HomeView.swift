@@ -37,6 +37,11 @@ struct HomeView: View {
                         ForEach(courses) { course in
                             Text(course.name)
                         }
+                        .onDelete { indexSet in // index set is indices of rows user deletes
+                            for index in indexSet {
+                                context.delete(courses[index]) // deletes the actual course model
+                            }
+                        }
                     }
                     footer: {
                         Button("Add") {
