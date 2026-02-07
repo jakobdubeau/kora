@@ -21,16 +21,21 @@ struct HomeView: View {
                 VStack(alignment: .center, spacing: 16) {
                     Text(Date(), format: .dateTime.weekday().day().month())
                         .font(.headline.bold())
-                        .padding(.bottom, 12)
+                        .padding(.bottom, 8)
                     Text("\(formatTime(seconds: vm.totalTime))") // string interpolation
                         .font(.system(size: 48, weight: .semibold))
                         .monospacedDigit()
-                    if vm.breakTime > 1000000000000 {
+                    if vm.breakTime > 0 {
                         Text("[Break for \(formatTimeBreak(seconds: vm.breakTime))]")
-                            .font(.caption).foregroundStyle(.secondary)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    else {
+                        Text("")
                     }
                 }
-                .padding(.top, 20)
+                .padding(.top)
+                Divider()
                 
                 List {
                     Section {
@@ -43,6 +48,7 @@ struct HomeView: View {
                                     vm.toggleCourse(course)
                                 }
                             )
+                            .listRowSeparator(.hidden)
                         }
                         .onDelete { indexSet in // index set is indices of rows user deletes
                             for index in indexSet {
@@ -55,9 +61,12 @@ struct HomeView: View {
                             showAddCourse = true
                         }
                         .foregroundStyle(.secondary)
-                        .buttonStyle(.plain)
+                        .buttonStyle(.bordered)
+                        .controlSize(.small)
+                        .listRowSeparator(.hidden)
                     }
                 }
+                .listStyle(.plain)
             }
         }
         .fullScreenCover(isPresented: $showAddCourse) {

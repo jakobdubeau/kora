@@ -21,6 +21,7 @@ struct CourseRow: View {
             } label: {
                 Image(systemName: isActive ? "pause.circle.fill" : "play.circle.fill")
                     .foregroundStyle(.secondary)
+                    .font(.system(size: 32))
             }
             .buttonStyle(.plain)
             
