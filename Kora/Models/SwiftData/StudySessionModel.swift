@@ -19,7 +19,6 @@ class StudySession {
     
     // computed property (no stored value), value will be calculated every time it's accessed
     var duration: TimeInterval { // TimeInterval is basically a double formatted in seconds
-        
         if let end = end {  // if let end = end is optional binding (cause ? before), if block only runs if end exists / not nil
             return end.timeIntervalSince(start) // elapsed time between start and end, returns seconds as double
         } else {

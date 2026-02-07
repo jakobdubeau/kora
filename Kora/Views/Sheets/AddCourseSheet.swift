@@ -20,6 +20,7 @@ struct AddCourse: View {
                 TextField("Course name", text: $name) // $ binds input text to the var
             }
             .navigationTitle("New Course")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {

@@ -10,26 +10,24 @@
 import Foundation
 import Observation
 
-// viewmodel creates engine, viewmodel is the only layer that talks to engine directly, the view goes through the viewmodel
+@Observable
 final class HomeViewModel {
     
     let timer = TimerEngine()
     
-    let demoCourseID = UUID()
-    
-    var demoCourseTime: TimeInterval {
-        timer.courseTime(for: demoCourseID)
-    }
-    
     var totalTime: TimeInterval { timer.totalTime }
     var breakTime: TimeInterval { timer.breakTime }
     
-    var isRunningCourse: Bool {
-        timer.runningCourse == demoCourseID
+    func isRunning(_ course: Course) -> Bool {
+        timer.runningCourse == course.id
     }
     
-    func toggleCourse() {
-        timer.toggleCourse(demoCourseID)
+    func courseTime(for course: Course) -> TimeInterval {
+        timer.courseTime(for: course.id)
+    }
+    
+    func toggleCourse(_ course: Course) {
+        timer.toggleCourse(course.id)
     }
     
     func newDay() {

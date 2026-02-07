@@ -25,7 +25,7 @@ struct HomeView: View {
                     Text("\(formatTime(seconds: vm.totalTime))") // string interpolation
                         .font(.system(size: 48, weight: .semibold))
                         .monospacedDigit()
-                    if vm.breakTime > 0 {
+                    if vm.breakTime > 1000000000000 {
                         Text("[Break for \(formatTimeBreak(seconds: vm.breakTime))]")
                             .font(.caption).foregroundStyle(.secondary)
                     }
@@ -35,7 +35,14 @@ struct HomeView: View {
                 List {
                     Section {
                         ForEach(courses) { course in
-                            Text(course.name)
+                            CourseRow(
+                                course: course,
+                                isActive: vm.isRunning(course),
+                                time: vm.courseTime(for: course),
+                                onTap: {
+                                    vm.toggleCourse(course)
+                                }
+                            )
                         }
                         .onDelete { indexSet in // index set is indices of rows user deletes
                             for index in indexSet {
@@ -53,7 +60,7 @@ struct HomeView: View {
                 }
             }
         }
-        .sheet(isPresented: $showAddCourse) {
+        .fullScreenCover(isPresented: $showAddCourse) {
             AddCourse()
         }
     }
