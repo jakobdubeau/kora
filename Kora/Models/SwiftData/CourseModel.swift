@@ -16,13 +16,11 @@ class Course {
     var name: String // column in swiftdata store, automatically observed
     var colour: String?
     var createdAt: Date
-    var dailyTotal: TimeInterval
     
-    init(name: String, colour: String? = nil, dailyTotal: TimeInterval = 0) {
+    init(name: String, colour: String? = nil) {
         self.id = UUID()
         self.name = name
         self.colour = colour
         self.createdAt = .now
-        self.dailyTotal = dailyTotal
     }
 }
