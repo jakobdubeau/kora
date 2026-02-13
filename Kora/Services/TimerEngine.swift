@@ -14,7 +14,7 @@ final class TimerEngine {
     // MARK: - Public observable state
     
     private(set) var runningCourse: UUID? = nil // current running course by id
-    private(set) var courseTimes: [UUID: TimeInterval] = [:] // dictionary to map course name to seconds while active
+    private(set) var courseTimes: [UUID: TimeInterval] = [:] // dictionary to map course id to seconds while active
     private(set) var totalBreakTime: TimeInterval = 0 // total break time, not bounded by courses
     
     // MARK: - Private bookkeeping
@@ -157,12 +157,12 @@ final class TimerEngine {
         guard timer == nil else { return } // we only create timer if one doesn't exist already
         
         // closure = code you give to something else, so it can run it later
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in // timer runs the closure every second,
-            guard let self else { return } // weak referebces can dissapear                // when it runs, it passes itself in (timer)
-            // closure                    // we need to check if engine is gone           // "_" because we don't need the timer itself
-            self.currentTime = ProcessInfo.processInfo.systemUptime                      // since closure owns self, this creates a
-        }                                                                               // retain cycle, nothing can be destroyed
-                                                                                       // weak lets us access self, but not force alive
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in  // timer runs the closure every second,
+            guard let self else { return } // weak references can dissapear                 // when it runs, it passes itself in (timer)
+            // closure                    // we need to check if engine is gone            // "_" because we don't need the timer itself
+            self.currentTime = ProcessInfo.processInfo.systemUptime                       // since closure owns self, this creates a
+        }                                                                                // retain cycle, nothing can be destroyed
+                                                                                        // weak lets us access self, but not force alive
         if let timer {
             RunLoop.main.add(timer, forMode: .common)
         }

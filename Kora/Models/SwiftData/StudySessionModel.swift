@@ -12,7 +12,8 @@ import Foundation
 
 @Model
 class StudySession {
-    var course: Course // course model
+    var id: UUID // study session id
+    var courseId: UUID?
     var start: Date // Date represents absolute point in time
     var end: Date? // optional, either Date value or nil, now we use optional binding when accessing
     var isCompleted: Bool
@@ -26,8 +27,9 @@ class StudySession {
         }
     }
     
-    init(course: Course, start: Date = .now, end: Date? = nil, isCompleted: Bool = false) {
-        self.course = course
+    init(courseId: UUID?, start: Date = .now, end: Date? = nil, isCompleted: Bool = false) {
+        self.id = UUID()
+        self.courseId = courseId
         self.start = start
         self.end = end
         self.isCompleted = isCompleted

@@ -19,7 +19,7 @@ struct AddCourse: View {
             Form {
                 TextField("Course name", text: $name) // $ binds input text to the var
             }
-            .navigationTitle("New Course")
+            .navigationTitle("Add Course")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
