@@ -11,6 +11,8 @@ import Observation
 @Observable
 final class TimerEngine {
     
+    var onSessionEnd: ((UUID, Date, Date) -> Void)? // closure to save study sessions
+    
     // MARK: - Public observable state
     
     private(set) var runningCourse: UUID? = nil // current running course by id
@@ -20,6 +22,7 @@ final class TimerEngine {
     // MARK: - Private bookkeeping
     
     private var sessionStartTime: TimeInterval? = nil
+    private var sessionStartDate: Date? = nil
     private var breakStartTime: TimeInterval? = nil
     
     private var currentTime: TimeInterval = ProcessInfo.processInfo.systemUptime
@@ -76,6 +79,7 @@ final class TimerEngine {
             startBreak(at: current)
             runningCourse = nil
             sessionStartTime = nil
+            sessionStartDate = nil
             
             startTimer()
             return
@@ -86,6 +90,7 @@ final class TimerEngine {
             stopRunningCourse(at: current)
             runningCourse = course
             sessionStartTime = current
+            sessionStartDate = Date.now
             
             breakStartTime = nil
             
@@ -97,6 +102,7 @@ final class TimerEngine {
         stopBreak(at: current)
         runningCourse = course
         sessionStartTime = current
+        sessionStartDate = Date.now
         
         startTimer()
         
@@ -110,6 +116,10 @@ final class TimerEngine {
         
         let elapsed = current - start
         courseTimes[running, default: 0] += elapsed
+        
+        if let startDate = sessionStartDate {
+            onSessionEnd?(running, startDate, Date.now)
+        }
     }
     
     private func startBreak(at current: TimeInterval) {
@@ -145,10 +155,15 @@ final class TimerEngine {
         totalBreakTime = 0
         
         sessionStartTime = nil
+        sessionStartDate = nil
         breakStartTime = nil
         
         stopTimer()
         currentTime = current
+    }
+    
+    func loadCourseTimes(_ times: [UUID: TimeInterval]) {
+        courseTimes = times
     }
     
     // MARK: - Timer UI
