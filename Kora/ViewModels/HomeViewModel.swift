@@ -53,4 +53,11 @@ final class HomeViewModel {
         }
     }
     
+    func saveSession(context: ModelContext) {
+        timer.onSessionEnd = { courseId, startDate, endDate in
+            let session = StudySession(courseId: courseId, start: startDate, end: endDate, isCompleted: true)
+            
+            context.insert(session)
+        }
+    }
 }
