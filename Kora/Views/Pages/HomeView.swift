@@ -72,10 +72,14 @@ struct HomeView: View {
         .fullScreenCover(isPresented: $showAddCourse) {
             AddCourse()
         }
+        .onAppear {
+            vm.saveSession(context: context) // closure (setup once), timer engine saves sessions, from launch, everytime timer engine calls stopRunningCourse, closure fires
+            vm.setup(context: context)
+        }
     }
 }
 #Preview {
     HomeView()
-        .modelContainer(for: [Course.self], inMemory: true)
+        .modelContainer(for: [Course.self, StudySession.self], inMemory: true)
 }
 
