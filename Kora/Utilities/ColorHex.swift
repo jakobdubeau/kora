@@ -7,7 +7,20 @@
 
 import SwiftUI
 
+// extension lets you add functionality to an existing type
 extension Color {
+    init(hex: String) {
+        let hex = hex.trimmingCharacters(in: CharacterSet(charactersIn: "#"))
+        let scanner = Scanner(string: hex)
+        var rgb: UInt64 = 0
+        scanner.scanHexInt64(&rgb)
+        
+        let r = Double((rgb >> 16) & 0xFF) / 255.0
+        let g = Double((rgb >> 8) & 0xFF) / 255.0
+        let b = Double(rgb & 0xFF) / 255.0
+
+        self.init(red: r, green: g, blue: b)
+    }
     static let palettes: [(name: String, shades: [String])] = [
         ("red",    ["#FFCDD2", "#EF9A9A", "#EF5350", "#E53935", "#B71C1C"]),
         ("orange", ["#FFE0B2", "#FFCC80", "#FFA726", "#FB8C00", "#E65100"]),
