@@ -21,6 +21,7 @@ extension Color {
 
         self.init(red: r, green: g, blue: b)
     }
+    // use array of tuples so colours stay in same spots
     static let palettes: [(name: String, shades: [String])] = [
         ("red",    ["#FFCDD2", "#EF9A9A", "#EF5350", "#E53935", "#B71C1C"]),
         ("orange", ["#FFE0B2", "#FFCC80", "#FFA726", "#FB8C00", "#E65100"]),

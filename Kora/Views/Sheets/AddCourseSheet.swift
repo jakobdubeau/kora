@@ -13,11 +13,30 @@ struct AddCourse: View {
     @Environment(\.dismiss) private var dismiss // close the modal
     
     @State private var name: String = "" // @State to redraw when value changes
+    @State private var selectedFamily: Int = 0
+    @State private var selectedColor: String = Color.palettes[0].shades[2]
     
     var body: some View {
         NavigationStack {
             Form {
                 TextField("Course name", text: $name) // $ binds input text to the var
+                
+                HStack(spacing:12) {
+                    ForEach(0..<Color.palettes.count, id: \.self) { index in
+                        let palette = Color.palettes[index]
+                        Circle()
+                            .fill(Color(hex: palette.shades[2]))
+                            .frame(width: 28, height: 28)
+                            .overlay(
+                                Circle().strokeBorder(.primary, lineWidth: selectedFamily == index ? 2 : 0)
+                            )
+                            .onTapGesture {
+                                selectedFamily = index
+                                selectedColor = palette.shades[2]
+                            }
+                        
+                    }
+                }
             }
             .navigationTitle("Add Course")
             .navigationBarTitleDisplayMode(.inline)
