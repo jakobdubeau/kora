@@ -31,5 +31,6 @@ extension Color {
         ("blue",   ["#BBDEFB", "#64B5F6", "#42A5F5", "#1E88E5", "#0D47A1"]),
         ("purple", ["#E1BEE7", "#CE93D8", "#AB47BC", "#8E24AA", "#4A148C"]),
         ("pink",   ["#F8BBD0", "#F48FB1", "#EC407A", "#D81B60", "#880E4F"]),
+        ("grey",   ["#F5F5F5", "#BDBDBD", "#757575", "#424242", "#212121"]),
     ]
 }
