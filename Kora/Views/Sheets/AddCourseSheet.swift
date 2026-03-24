@@ -18,8 +18,11 @@ struct AddCourse: View {
     
     var body: some View {
         NavigationStack {
-            Form {
-                TextField("Course name", text: $name) // $ binds input text to the var
+            VStack {
+                Form {
+                    TextField("Course name", text: $name) // $ binds input text to the var
+                }
+                .frame(height: 130)
                 
                 // color picker
                 
@@ -70,6 +73,7 @@ struct AddCourse: View {
                         }
                     }
                 }
+                Spacer()
             }
             .navigationTitle("Add Course")
             .navigationBarTitleDisplayMode(.inline)

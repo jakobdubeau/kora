@@ -20,7 +20,9 @@ struct CourseRow: View {
                 onTap()
             } label: {
                 Image(systemName: isActive ? "pause.circle.fill" : "play.circle.fill")
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(
+                        course.colour != nil ? Color(hex: course.colour!) : Color.secondary
+                    )
                     .font(.system(size: 32))
             }
             .buttonStyle(.plain)
