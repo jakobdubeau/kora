@@ -13,7 +13,7 @@ struct AddCourse: View {
     @Environment(\.dismiss) private var dismiss // close the modal
     
     @State private var name: String = "" // @State to redraw when value changes
-    @State private var selectedFamily: Int = 0
+    @State private var selectedFamily: Int? = nil
     @State private var selectedColor: String = Color.palettes[0].shades[2]
     
     var body: some View {
@@ -21,20 +21,53 @@ struct AddCourse: View {
             Form {
                 TextField("Course name", text: $name) // $ binds input text to the var
                 
-                HStack(spacing:12) {
-                    ForEach(0..<Color.palettes.count, id: \.self) { index in
-                        let palette = Color.palettes[index]
-                        Circle()
-                            .fill(Color(hex: palette.shades[2]))
-                            .frame(width: 28, height: 28)
-                            .overlay(
-                                Circle().strokeBorder(.primary, lineWidth: selectedFamily == index ? 2 : 0)
-                            )
-                            .onTapGesture {
-                                selectedFamily = index
-                                selectedColor = palette.shades[2]
-                            }
-                        
+                // color picker
+                
+                if let family = selectedFamily {
+                    HStack(spacing:12) {
+                        Image(systemName: "chevron.left")
+                              .foregroundStyle(.secondary)
+                              .onTapGesture {
+                                  withAnimation {
+                                      selectedFamily = nil
+                                  }
+                              }
+                        ForEach(Array(Color.palettes[family].shades.enumerated()), id: \.offset) { index, hex in
+                                Circle()
+                                    .fill(Color(hex: hex))
+                                    .frame(width: 28, height: 28)
+                                    .transition(.scale.combined(with: .opacity))
+                                    .animation(.spring(duration: 0.3).delay(Double(index) * 0.05), value: selectedFamily)
+                                    .overlay(
+                                        Circle().strokeBorder(.primary, lineWidth: selectedColor == hex ? 2 : 0)
+                                    )
+                                    .onTapGesture {
+                                        withAnimation {
+                                            selectedColor = hex
+                                        }
+                                    }
+                        }
+                    }
+                }
+                else {
+                    HStack(spacing:12) {
+                        ForEach(0..<Color.palettes.count, id: \.self) { index in
+                            let palette = Color.palettes[index]
+                            Circle()
+                                .fill(Color(hex: palette.shades[2]))
+                                .frame(width: 28, height: 28)
+                                .transition(.scale.combined(with: .opacity))
+                                .animation(.spring(duration: 0.3).delay(Double(index) * 0.05), value: selectedFamily)
+                                .overlay(
+                                    Circle().strokeBorder(.primary, lineWidth: selectedFamily == index ? 2 : 0)
+                                )
+                                .onTapGesture {
+                                    withAnimation {
+                                        selectedFamily = index
+                                        selectedColor = palette.shades[2]
+                                    }
+                                }
+                        }
                     }
                 }
             }
@@ -48,7 +81,7 @@ struct AddCourse: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") {
-                        context.insert(Course(name: name)) // add new model to swift data
+                        context.insert(Course(name: name, colour: selectedColor)) // add new model to swift data
                         dismiss()
                     }.disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty) // disable done if no name/only spaces
                 }
