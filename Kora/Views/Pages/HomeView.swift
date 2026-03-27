@@ -21,11 +21,11 @@ struct HomeView: View {
                 VStack(alignment: .center, spacing: 16) {
                     Text(Date(), format: .dateTime.weekday().day().month())
                         .font(.headline.bold())
-                        .padding(.bottom, 8)
                     Text("\(formatTime(seconds: vm.totalTime))") // string interpolation
                         .font(.system(size: 48, weight: .semibold))
                         .monospacedDigit()
-                    if vm.breakTime > 0 {
+                        .padding(.bottom, 4)
+                    if vm.breakTime > 0 && vm.onBreak {
                         Text("[Break for \(formatTimeBreak(seconds: vm.breakTime))]")
                             .font(.caption)
                             .foregroundStyle(.secondary)
@@ -35,6 +35,7 @@ struct HomeView: View {
                     }
                 }
                 .padding(.top)
+                .padding(.bottom, 12)
                 Divider()
                 
                 List {

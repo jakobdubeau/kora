@@ -19,6 +19,8 @@ final class HomeViewModel {
     var totalTime: TimeInterval { timer.totalTime }
     var breakTime: TimeInterval { timer.breakTime }
     
+    var onBreak: Bool { timer.runningCourse == nil }
+    
     func isRunning(_ course: Course) -> Bool {
         timer.runningCourse == course.id
     }

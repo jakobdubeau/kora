@@ -69,7 +69,7 @@ struct AddCourse: View {
                                 .opacity(showBack ? 1 : 0)
                                 .onTapGesture {
                                     showBack = false
-                                    withAnimation(.spring(response: 0.5, dampingFraction: 0.8).delay(0.55)) {
+                                    withAnimation(.spring(response: 0.5, dampingFraction: 0.8).delay(0.6)) {
                                         showShades = false
                                     }
                                 }
