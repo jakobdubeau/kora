@@ -56,11 +56,11 @@ struct AddCourse: View {
                     }
                     .padding(.horizontal, 16)
                     .opacity(showShades ? 0 : 1)
-                    .scaleEffect(showShades ? 0.92 : 1)
+                    .scaleEffect(showShades ? 0.95 : 1)
                     .animation(
                         showShades
                             ? .spring(response: 0.4, dampingFraction: 0.95)
-                            : .spring(response: 0.28, dampingFraction: 1.0)
+                        : .spring(response: 0.4, dampingFraction: 0.95)
                                 .delay(0.18),
                         value: showShades
                     )
@@ -95,7 +95,7 @@ struct AddCourse: View {
                                     .animation(
                                         showShades
                                             ? .spring(response: 0.55, dampingFraction: 0.95)
-                                                .delay(Double(index) * 0.1)
+                                                .delay(Double(index) * 0.09)
                                             : .spring(response: 0.22, dampingFraction: 1.0),
                                         value: showShades
                                     )
