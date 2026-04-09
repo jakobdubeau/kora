@@ -47,7 +47,7 @@ struct AddCourse: View {
                                     selectedFamily = index
                                     selectedColor = palette.shades[2]
 
-                                    withAnimation(.spring(response: 0.6, dampingFraction: 0.8).delay((0.05))) {
+                                    withAnimation(.spring(response: 0.55, dampingFraction: 0.82)) {
                                         showShades = true
                                         showBack = true
                                     }
@@ -56,7 +56,14 @@ struct AddCourse: View {
                     }
                     .padding(.horizontal, 16)
                     .opacity(showShades ? 0 : 1)
-                    .scaleEffect(showShades ? 0.99 : 1)
+                    .scaleEffect(showShades ? 0.92 : 1)
+                    .animation(
+                        showShades
+                            ? .spring(response: 0.4, dampingFraction: 0.95)
+                            : .spring(response: 0.28, dampingFraction: 1.0)
+                                .delay(0.18),
+                        value: showShades
+                    )
                     .allowsHitTesting(!showShades)
 
                     if let family = selectedFamily {
@@ -67,10 +74,11 @@ struct AddCourse: View {
                                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                                 .padding(.leading, 35)
                                 .opacity(showBack ? 1 : 0)
+                                .scaleEffect(showBack ? 1 : 0.9)
                                 .onTapGesture {
-                                    showBack = false
-                                    withAnimation(.spring(response: 0.5, dampingFraction: 0.8).delay(0.6)) {
+                                    withAnimation(.spring(response: 0.28, dampingFraction: 0.88)) {
                                         showShades = false
+                                        showBack = false
                                     }
                                 }
 
@@ -81,12 +89,20 @@ struct AddCourse: View {
                                     .overlay(
                                         Circle().strokeBorder(.primary, lineWidth: selectedColor == hex ? 3 : 0)
                                     )
-                                    .scaleEffect(showShades ? 1 : 0.2)
+                                    .scaleEffect(showShades ? 1 : 0.75)
                                     .opacity(showShades ? 1 : 0)
                                     .offset(shadeOffset(index: index, radius: 130))
-                                    .animation(.spring(response: 0.3, dampingFraction: 0.8).delay(Double(index) * 0.11), value: showShades)
+                                    .animation(
+                                        showShades
+                                            ? .spring(response: 0.55, dampingFraction: 0.95)
+                                                .delay(Double(index) * 0.1)
+                                            : .spring(response: 0.22, dampingFraction: 1.0),
+                                        value: showShades
+                                    )
                                     .onTapGesture {
-                                        selectedColor = hex
+                                        withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
+                                            selectedColor = hex
+                                        }
                                     }
                             }
                         }
