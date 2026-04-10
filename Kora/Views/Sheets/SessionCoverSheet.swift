@@ -32,7 +32,12 @@ struct SessionCover: View {
                 }
                 .buttonStyle(.plain)
                 .font(.system(size: 20))
+                .padding(.top, -2)
             }
+            .padding(.leading)
+            .padding(.trailing, 20)
+            .padding(.top, 8)
+            
             HStack {
                 Text(formatTime(seconds: vm.timer.currentSessionTime))
                     .font(.system(size: 48, weight: .semibold))
@@ -49,12 +54,15 @@ struct SessionCover: View {
                 }
                 .buttonStyle(.plain)
             }
-            .padding(.top, 42)
+            .padding(.top, 36)
+            .padding(.bottom, 48)
+            
+            SessionGroup()
+            
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding(.horizontal, 20)
-        .padding(.top, 12)
+        .padding(.horizontal, 8)
         .background(Color(.systemBackground))
     }
 }

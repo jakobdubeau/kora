@@ -37,7 +37,6 @@ struct HomeView: View {
                         }
                     }
                     .padding(.top, 24)
-                    .padding(.bottom, 12)
                     Divider()
                         .opacity(0.5)
                     
