@@ -9,10 +9,10 @@ import SwiftUI
 
 struct SessionCover: View {
     @Bindable var vm: HomeViewModel
-    @Environment(\.dismiss) private var dismiss
     @State private var focusMode: Bool = false
     
     let course: Course
+    let onDismiss: () -> Void
     
     var body: some View {
         VStack {
@@ -31,8 +31,7 @@ struct SessionCover: View {
                         .foregroundStyle(.secondary)
                 }
                 .buttonStyle(.plain)
-                .font(.system(size: 22))
-                .padding(.trailing, 4)
+                .font(.system(size: 20))
             }
             HStack {
                 Text(formatTime(seconds: vm.timer.currentSessionTime))
@@ -40,7 +39,7 @@ struct SessionCover: View {
                     .monospacedDigit()
                 Button {
                     vm.toggleCourse(course)
-                    dismiss()
+                    onDismiss()
                 } label: {
                     Image(systemName: "pause.circle.fill")
                         .foregroundStyle(
@@ -53,7 +52,9 @@ struct SessionCover: View {
             .padding(.top, 42)
             Spacer()
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(.horizontal, 20)
         .padding(.top, 12)
+        .background(Color(.systemBackground))
     }
 }
