@@ -76,6 +76,14 @@ final class TimerEngine {
         return totalBreakTime // stored break time
     }
     
+    var currentBreakTime: TimeInterval {
+        if runningCourse == nil,
+           let start = breakStartTime {
+            return currentTime - start
+        }
+        return 0
+    }
+    
     // MARK: - Main timer interaction
     func toggleCourse(_ course: UUID) {
         let current = ProcessInfo.processInfo.systemUptime // capture current time

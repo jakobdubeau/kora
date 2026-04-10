@@ -27,8 +27,8 @@ struct HomeView: View {
                             .font(.system(size: 48, weight: .semibold))
                             .monospacedDigit()
                             .padding(.bottom, 4)
-                        if vm.breakTime > 0 && vm.onBreak {
-                            Text("[Break for \(formatTimeBreak(seconds: vm.breakTime))]")
+                        if vm.currentBreakTime > 60 {
+                            Text("[Break for \(formatTimeBreak(seconds: vm.currentBreakTime))]")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }

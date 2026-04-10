@@ -18,6 +18,7 @@ final class HomeViewModel {
     
     var totalTime: TimeInterval { timer.totalTime }
     var breakTime: TimeInterval { timer.breakTime }
+    var currentBreakTime: TimeInterval { timer.currentBreakTime }
     
     var onBreak: Bool { timer.runningCourse == nil }
     
