@@ -11,6 +11,7 @@ import SwiftData
 struct HomeView: View {
     @State private var vm = HomeViewModel() // @state ensures viewmodel instance isn't lost after redraw
     @State private var showAddCourse = false
+    @State private var activeCourse: Course? = nil
     
     @Query(sort: \Course.createdAt) private var courses: [Course] // sort by created date, make courses array
     @Environment(\.modelContext) private var context // insert/delete/update
@@ -47,6 +48,7 @@ struct HomeView: View {
                                 time: vm.courseTime(for: course),
                                 onTap: {
                                     vm.toggleCourse(course)
+                                    activeCourse = course
                                 }
                             )
                             .listRowSeparator(.hidden)
@@ -72,6 +74,10 @@ struct HomeView: View {
         }
         .fullScreenCover(isPresented: $showAddCourse) {
             AddCourse()
+        }
+        .fullScreenCover(item: $activeCourse) { course in
+            SessionCover(vm: vm, course: course)
+            Button("Dismiss") { activeCourse = nil }
         }
         .onAppear {
             vm.saveSession(context: context) // closure (setup once), timer engine saves sessions, from launch, everytime timer engine calls stopRunningCourse, closure fires
