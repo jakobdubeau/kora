@@ -17,6 +17,7 @@ struct AddCourse: View {
     @State private var selectedColor: String = Color.palettes[8].shades[0]
     @State private var showShades: Bool = false // animation
     @State private var showBack: Bool = false
+    @State private var shadesFannedOut: Bool = false
 
     private func shadeOffset(index: Int, radius: CGFloat) -> CGSize {
         let angle = (2 * .pi / 5) * Double(index) - .pi / 2
@@ -47,9 +48,10 @@ struct AddCourse: View {
                                     selectedFamily = index
                                     selectedColor = palette.shades[2]
 
-                                    withAnimation(.spring(response: 0.55, dampingFraction: 0.82)) {
+                                    withAnimation(.spring(response: 0.45, dampingFraction: 0.82)) {
                                         showShades = true
                                         showBack = true
+                                        shadesFannedOut = true
                                     }
                                 }
                         }
@@ -59,9 +61,9 @@ struct AddCourse: View {
                     .scaleEffect(showShades ? 0.95 : 1)
                     .animation(
                         showShades
-                            ? .spring(response: 0.4, dampingFraction: 0.95)
-                            : .spring(response: 0.4, dampingFraction: 0.95)
-                                .delay(0.05),
+                            ? .spring(response: 0.45, dampingFraction: 0.82)
+                            : .spring(response: 0.45, dampingFraction: 0.82)
+                                .delay(0.09),
                         value: showShades
                     )
                     .allowsHitTesting(!showShades)
@@ -76,9 +78,11 @@ struct AddCourse: View {
                                 .opacity(showBack ? 1 : 0)
                                 .scaleEffect(showBack ? 1 : 0.9)
                                 .onTapGesture {
-                                    withAnimation(.spring(response: 0.28, dampingFraction: 0.88)) {
+                                    withAnimation(.spring(response: 0.45, dampingFraction: 0.82)) {
                                         showShades = false
                                         showBack = false
+                                    } completion: {
+                                        shadesFannedOut = false
                                     }
                                 }
 
@@ -91,12 +95,10 @@ struct AddCourse: View {
                                     )
                                     .scaleEffect(showShades ? 1 : 0)
                                     .opacity(showShades ? 1 : 0)
-                                    .offset(showShades ? shadeOffset(index: index, radius: 130) : .zero)
+                                    .offset(shadesFannedOut ? shadeOffset(index: index, radius: 130) : .zero)
                                     .animation(
-                                        showShades
-                                            ? .spring(response: 0.25, dampingFraction: 0.95)
-                                            .delay((Double(index) + 1) * 0.07)
-                                        : .easeInOut(duration: 0.2),
+                                        .spring(response: 0.45, dampingFraction: 0.82)
+                                            .delay(showShades ? (Double(index) + 1) * 0.07 : 0),
                                         value: showShades
                                     )
                                     .onTapGesture {
