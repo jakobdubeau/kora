@@ -37,12 +37,20 @@ final class TimerEngine {
     var totalTime: TimeInterval {
         var total = courseTimes.values.reduce(0, +) // sum up all stored courseTime dict values (TimeIntervals)
         
-        if let running = runningCourse, // if there's a running course
+        if let _ = runningCourse, // if there's a running course
            let start = sessionStartTime { // and has start time
             total += (currentTime - start) // add the current running course to total
         }
     
         return total
+    }
+    
+    var currentSessionTime: TimeInterval {
+        if let _ = runningCourse,
+           let start = sessionStartTime {
+            return currentTime - start
+        }
+        return 0
     }
     
     // live active time for a specific course
@@ -86,7 +94,7 @@ final class TimerEngine {
         }
         
         // Case 2: tapping a different course while one is running, switch courses (no break)
-        if let running = runningCourse {
+        if let _ = runningCourse {
             stopRunningCourse(at: current)
             runningCourse = course
             sessionStartTime = current

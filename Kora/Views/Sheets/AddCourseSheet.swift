@@ -60,8 +60,8 @@ struct AddCourse: View {
                     .animation(
                         showShades
                             ? .spring(response: 0.4, dampingFraction: 0.95)
-                        : .spring(response: 0.4, dampingFraction: 0.95)
-                                .delay(0.18),
+                            : .spring(response: 0.4, dampingFraction: 0.95)
+                                .delay(0.05),
                         value: showShades
                     )
                     .allowsHitTesting(!showShades)
@@ -89,14 +89,14 @@ struct AddCourse: View {
                                     .overlay(
                                         Circle().strokeBorder(.primary, lineWidth: selectedColor == hex ? 3 : 0)
                                     )
-                                    .scaleEffect(showShades ? 1 : 0.75)
+                                    .scaleEffect(showShades ? 1 : 0)
                                     .opacity(showShades ? 1 : 0)
-                                    .offset(shadeOffset(index: index, radius: 130))
+                                    .offset(showShades ? shadeOffset(index: index, radius: 130) : .zero)
                                     .animation(
                                         showShades
-                                            ? .spring(response: 0.55, dampingFraction: 0.95)
-                                                .delay(Double(index) * 0.09)
-                                            : .spring(response: 0.22, dampingFraction: 1.0),
+                                            ? .spring(response: 0.25, dampingFraction: 0.95)
+                                            .delay((Double(index) + 1) * 0.07)
+                                        : .easeInOut(duration: 0.2),
                                         value: showShades
                                     )
                                     .onTapGesture {
