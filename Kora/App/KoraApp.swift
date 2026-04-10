@@ -10,6 +10,8 @@ import SwiftData
 
 @main
 struct KoraApp: App {
+    @UIApplicationDelegateAdaptor(KoraAppDelegate.self) var appDelegate
+    
     var body: some Scene {
         WindowGroup {
             HomeView()

@@ -29,7 +29,8 @@ struct SessionCover: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .contentShape(Rectangle())
                     .onTapGesture {
-                        withAnimation(.easeInOut(duration: 0.7)) {
+                        OrientationLock.set(.portrait)
+                        withAnimation(.easeIn(duration: 0.5)) {
                             focusMode = false
                         }
                     }
@@ -45,7 +46,8 @@ struct SessionCover: View {
                             .foregroundStyle(.secondary)
                             Spacer()
                             Button {
-                                withAnimation(.easeInOut(duration: 0.7)) {
+                                OrientationLock.set(.landscape)
+                                withAnimation(.easeIn(duration: 0.5)) {
                                     focusMode = true
                                 }
                             } label: {
@@ -87,7 +89,8 @@ struct SessionCover: View {
                     .transition(.opacity)
                 }
             }
-            .statusBarHidden(focusMode)
         }
+        .statusBarHidden(focusMode)
+        .persistentSystemOverlays(focusMode ? .hidden : .automatic)
     }
 }
