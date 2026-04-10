@@ -29,7 +29,7 @@ struct SessionCover: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .contentShape(Rectangle())
                     .onTapGesture {
-                        withAnimation(.easeInOut(duration: 0.4)) {
+                        withAnimation(.easeInOut(duration: 0.7)) {
                             focusMode = false
                         }
                     }
@@ -41,18 +41,19 @@ struct SessionCover: View {
                                 Text(course.name)
                                 Text("[\(formatTime(seconds: vm.courseTime(for: course))) ]").monospacedDigit()
                             }
-                            .font(.body)
+                            .font(.system(size: 17, weight: .medium))
+                            .foregroundStyle(.secondary)
                             Spacer()
                             Button {
-                                withAnimation(.easeInOut(duration: 0.4)) {
+                                withAnimation(.easeInOut(duration: 0.7)) {
                                     focusMode = true
                                 }
                             } label: {
                                 Image(systemName: "viewfinder")
-                                    .foregroundStyle(.secondary)
                             }
                             .buttonStyle(.plain)
-                            .font(.system(size: 22))
+                            .font(.system(size: 20, weight: .medium))
+                            .foregroundStyle(.secondary)
                         }
                         .padding(.leading)
                         .padding(.trailing, 20)
