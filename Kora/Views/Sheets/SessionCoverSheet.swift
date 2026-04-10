@@ -22,7 +22,7 @@ struct SessionCover: View {
                     ZStack {
                         Color.black.ignoresSafeArea()
                         Text(formatTime(seconds: vm.timer.currentSessionTime))
-                            .font(.system(size: 96, weight: .semibold))
+                            .font(.system(size: 128, weight: .semibold))
                             .foregroundStyle(.white)
                             .monospacedDigit()
                     }
@@ -91,6 +91,5 @@ struct SessionCover: View {
             }
         }
         .statusBarHidden(focusMode)
-        .persistentSystemOverlays(focusMode ? .hidden : .automatic)
     }
 }
