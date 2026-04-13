@@ -16,13 +16,7 @@ struct AddCourse: View {
     @State private var selectedFamily: Int? = nil
     @State private var selectedColor: String = Color.palettes[8].shades[0]
     @State private var showShades: Bool = false // animation
-    @State private var showBack: Bool = false
-    @State private var shadesFannedOut: Bool = false
-
-    private func shadeOffset(index: Int, radius: CGFloat) -> CGSize {
-        let angle = (2 * .pi / 5) * Double(index) - .pi / 2
-        return CGSize(width: Foundation.cos(angle) * radius, height: Foundation.sin(angle) * radius)
-    }
+    @State private var counter: Int = 0
 
     var body: some View {
         NavigationStack {
@@ -47,23 +41,22 @@ struct AddCourse: View {
                                 .onTapGesture {
                                     selectedFamily = index
                                     selectedColor = palette.shades[2]
+                                    counter += 1
 
                                     withAnimation(.spring(response: 0.45, dampingFraction: 0.9)) {
                                         showShades = true
-                                        showBack = true
-                                        shadesFannedOut = true
                                     }
                                 }
                         }
                     }
                     .padding(.horizontal, 16)
                     .opacity(showShades ? 0 : 1)
-                    .scaleEffect(showShades ? 0.95 : 1)
+                    .scaleEffect(showShades ? 0.97 : 1)
                     .animation(
                         showShades
                             ? .spring(response: 0.45, dampingFraction: 0.9)
                             : .spring(response: 0.45, dampingFraction: 0.9)
-                                .delay(0.09),
+                                .delay(0.1),
                         value: showShades
                     )
                     .allowsHitTesting(!showShades)
@@ -75,40 +68,22 @@ struct AddCourse: View {
                                 .foregroundStyle(.secondary)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                                 .padding(.leading, 35)
-                                .opacity(showBack ? 1 : 0)
-                                .animation(.easeIn(duration: 0.1), value: showBack)
+                                .opacity(showShades ? 1 : 0)
+                                .animation(.easeIn(duration: 0.05), value: showShades)
                                 .onTapGesture {
-                                    withAnimation(.spring(response: 0.45, dampingFraction: 0.9)) {
+                                    withAnimation(.spring(response: 0.45, dampingFraction: 0.9)
+                                        .delay(showShades ? 0 : 0.05)) {
                                         showShades = false
-                                        showBack = false
-                                    } completion: {
-                                        shadesFannedOut = false
                                     }
                                 }
 
-                            ForEach(Array(Color.palettes[family].shades.enumerated()), id: \.offset) { index, hex in
-                                Circle()
-                                    .fill(Color(hex: hex))
-                                    .frame(width: 100, height: 100)
-                                    .overlay(
-                                        Circle().strokeBorder(.primary, lineWidth: selectedColor == hex ? 3 : 0)
-                                    )
-                                    .scaleEffect(showShades ? 1 : 0)
-                                    .opacity(showShades ? 1 : 0)
-                                    .offset(shadesFannedOut ? shadeOffset(index: index, radius: 130) : .zero)
-                                    .animation(
-                                        .spring(response: 0.45, dampingFraction: 0.9)
-                                            .delay(showShades ? (Double(index) + 1) * 0.07 : 0),
-                                        value: showShades
-                                    )
-                                    .onTapGesture {
-                                        withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
-                                            selectedColor = hex
-                                        }
-                                    }
-                            }
+                            Shades(
+                                shades: Color.palettes[family].shades,
+                                show: showShades,
+                                selectedColor: $selectedColor
+                            )
+                            .id(counter)
                         }
-                        .id(family)
                         .allowsHitTesting(showShades)
                     }
                 }
@@ -133,5 +108,47 @@ struct AddCourse: View {
                 }
             }
         }
+    }
+}
+
+private struct Shades: View {
+    let shades: [String]
+    let show: Bool
+    @Binding var selectedColor: String
+
+    @State private var appeared = false
+
+    private func shadeOffset(index: Int, radius: CGFloat) -> CGSize {
+        let angle = (2 * .pi / 5) * Double(index) - .pi / 2
+        return CGSize(width: Foundation.cos(angle) * radius, height: Foundation.sin(angle) * radius)
+    }
+
+    var body: some View {
+        ForEach(Array(shades.enumerated()), id: \.offset) { index, hex in
+            Circle()
+                .fill(Color(hex: hex))
+                .frame(width: 100, height: 100)
+                .overlay(
+                    Circle().strokeBorder(.primary, lineWidth: selectedColor == hex ? 3 : 0)
+                )
+                .scaleEffect(appeared && show ? 1 : 0)
+                .opacity(appeared && show ? 1 : 0)
+                .offset(appeared ? shadeOffset(index: index, radius: 130) : .zero)
+                .animation(
+                    .spring(response: 0.45, dampingFraction: 0.9)
+                        .delay((Double(index) + 1) * 0.07),
+                    value: appeared
+                )
+                .animation(
+                    .spring(response: 0.45, dampingFraction: 0.9),
+                    value: show
+                )
+                .onTapGesture {
+                    withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
+                        selectedColor = hex
+                    }
+                }
+        }
+        .onAppear { appeared = true }
     }
 }
