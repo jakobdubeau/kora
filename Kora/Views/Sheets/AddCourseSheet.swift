@@ -48,7 +48,7 @@ struct AddCourse: View {
                                     selectedFamily = index
                                     selectedColor = palette.shades[2]
 
-                                    withAnimation(.spring(response: 0.45, dampingFraction: 0.90)) {
+                                    withAnimation(.spring(response: 0.45, dampingFraction: 0.9)) {
                                         showShades = true
                                         showBack = true
                                         shadesFannedOut = true
@@ -61,8 +61,8 @@ struct AddCourse: View {
                     .scaleEffect(showShades ? 0.95 : 1)
                     .animation(
                         showShades
-                            ? .spring(response: 0.45, dampingFraction: 0.90)
-                            : .spring(response: 0.45, dampingFraction: 0.90)
+                            ? .spring(response: 0.45, dampingFraction: 0.9)
+                            : .spring(response: 0.45, dampingFraction: 0.9)
                                 .delay(0.09),
                         value: showShades
                     )
@@ -76,9 +76,9 @@ struct AddCourse: View {
                                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                                 .padding(.leading, 35)
                                 .opacity(showBack ? 1 : 0)
-                                .scaleEffect(showBack ? 1 : 0.9)
+                                .animation(.easeIn(duration: 0.1), value: showBack)
                                 .onTapGesture {
-                                    withAnimation(.spring(response: 0.45, dampingFraction: 0.90)) {
+                                    withAnimation(.spring(response: 0.45, dampingFraction: 0.9)) {
                                         showShades = false
                                         showBack = false
                                     } completion: {
@@ -97,7 +97,7 @@ struct AddCourse: View {
                                     .opacity(showShades ? 1 : 0)
                                     .offset(shadesFannedOut ? shadeOffset(index: index, radius: 130) : .zero)
                                     .animation(
-                                        .spring(response: 0.45, dampingFraction: 0.90)
+                                        .spring(response: 0.45, dampingFraction: 0.9)
                                             .delay(showShades ? (Double(index) + 1) * 0.07 : 0),
                                         value: showShades
                                     )
