@@ -56,7 +56,7 @@ struct AddCourse: View {
                         showShades
                             ? .spring(response: 0.45, dampingFraction: 0.9)
                             : .spring(response: 0.45, dampingFraction: 0.9)
-                                .delay(0.1),
+                                .delay(0.08),
                         value: showShades
                     )
                     .allowsHitTesting(!showShades)

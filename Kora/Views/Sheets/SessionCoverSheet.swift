@@ -30,9 +30,7 @@ struct SessionCover: View {
                     .contentShape(Rectangle())
                     .onTapGesture {
                         OrientationLock.set(.portrait)
-                        withAnimation(.easeOut(duration: 1)) {
-                            focusMode = false
-                        }
+                        focusMode = false
                     }
                     .transition(.opacity)
                 } else {
@@ -47,9 +45,7 @@ struct SessionCover: View {
                             Spacer()
                             Button {
                                 OrientationLock.set(.landscape)
-                                withAnimation(.easeIn(duration: 1)) {
-                                    focusMode = true
-                                }
+                                focusMode = true
                             } label: {
                                 Image(systemName: "viewfinder")
                             }
