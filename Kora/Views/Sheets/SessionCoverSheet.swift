@@ -30,7 +30,7 @@ struct SessionCover: View {
                     .contentShape(Rectangle())
                     .onTapGesture {
                         OrientationLock.set(.portrait)
-                        withAnimation(.easeIn(duration: 0.5)) {
+                        withAnimation(.easeOut(duration: 1)) {
                             focusMode = false
                         }
                     }
@@ -47,7 +47,7 @@ struct SessionCover: View {
                             Spacer()
                             Button {
                                 OrientationLock.set(.landscape)
-                                withAnimation(.easeIn(duration: 0.5)) {
+                                withAnimation(.easeIn(duration: 1)) {
                                     focusMode = true
                                 }
                             } label: {
