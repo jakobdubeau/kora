@@ -12,6 +12,7 @@ struct HomeView: View {
     @State private var vm = HomeViewModel() // @state ensures viewmodel instance isn't lost after redraw
     @State private var showAddCourse = false
     @State private var activeCourse: Course? = nil
+    @State private var blackScreen: Double = 0
     
     @Query(sort: \Course.createdAt) private var courses: [Course] // sort by created date, make courses array
     @Environment(\.modelContext) private var context // insert/delete/update
@@ -48,8 +49,16 @@ struct HomeView: View {
                                     isActive: vm.isRunning(course),
                                     time: vm.courseTime(for: course),
                                     onTap: {
-                                        activeCourse = course
-                                        vm.toggleCourse(course)
+                                        withAnimation(.easeOut(duration: 0.3)) {
+                                            blackScreen = 1
+                                        }
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                            activeCourse = course
+                                            vm.toggleCourse(course)
+                                            withAnimation(.easeOut(duration: 0.3)) {
+                                                blackScreen = 0
+                                            }
+                                        }
                                     }
                                 )
                                 .listRowSeparator(.hidden)
@@ -81,12 +90,27 @@ struct HomeView: View {
                 SessionCover(
                     vm: vm,
                     course: course,
-                    onDismiss: { activeCourse = nil })
-                        .transition(.opacity)
-                        .zIndex(1)
+                    onDismiss: {
+                        withAnimation(.easeOut(duration: 0.3)) {
+                            blackScreen = 1
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            vm.toggleCourse(course)
+                            activeCourse = nil
+                            withAnimation(.easeOut(duration: 0.3)) {
+                                blackScreen = 0
+                            }
+                        }
+                    })
+                    .zIndex(1)
             }
+
+            Color.black
+                .ignoresSafeArea()
+                .opacity(blackScreen)
+                .allowsHitTesting(false)
+                .zIndex(2)
         }
-        .animation(.easeIn(duration: 0.3), value: activeCourse == nil)
         .onAppear {
             vm.saveSession(context: context) // closure (setup once), timer engine saves sessions, from launch, everytime timer engine calls stopRunningCourse, closure fires
             vm.setup(context: context)

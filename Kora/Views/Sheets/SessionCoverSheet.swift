@@ -34,7 +34,7 @@ struct SessionCover: View {
                     .ignoresSafeArea()
                     .contentShape(Rectangle())
                     .onTapGesture {
-                        withAnimation(.easeIn(duration: 0.5)) {
+                        withAnimation(.easeIn(duration: 0.3)) {
                             focusMode = false
                         }
                     }
@@ -50,7 +50,7 @@ struct SessionCover: View {
                             .foregroundStyle(.secondary)
                             Spacer()
                             Button {
-                                withAnimation(.easeIn(duration: 0.5)) {
+                                withAnimation(.easeIn(duration: 0.3)) {
                                     focusMode = true
                                 }
                             } label: {
@@ -69,7 +69,6 @@ struct SessionCover: View {
                                 .font(.system(size: 48, weight: .semibold))
                                 .monospacedDigit()
                             Button {
-                                vm.toggleCourse(course)
                                 onDismiss()
                             } label: {
                                 Image(systemName: "pause.circle.fill")
