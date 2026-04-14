@@ -20,7 +20,7 @@ struct HomeView: View {
     var body: some View {
         ZStack {
             NavigationStack {
-                VStack(spacing: 16) {
+                VStack(spacing: 0) {
                     VStack(alignment: .center, spacing: 16) {
                         Text(Date(), format: .dateTime.weekday().day().month())
                             .font(.headline.bold())
@@ -38,6 +38,7 @@ struct HomeView: View {
                         }
                     }
                     .padding(.top, 24)
+                    .padding(.bottom)
                     Divider()
                         .opacity(0.5)
                     
@@ -79,6 +80,8 @@ struct HomeView: View {
                             .listRowSeparator(.hidden)
                         }
                     }
+                    .contentMargins(.top, 0, for: .scrollContent)
+                    .padding(.bottom)
                     .listStyle(.plain)
                 }
             }
