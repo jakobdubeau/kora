@@ -20,6 +20,7 @@ struct AddCourse: View {
 
     var body: some View {
         NavigationStack {
+            GeometryReader { _ in
             VStack {
                 Form {
                     TextField("Course name", text: $name)
@@ -51,12 +52,12 @@ struct AddCourse: View {
                     }
                     .padding(.horizontal, 16)
                     .opacity(showShades ? 0 : 1)
-                    .scaleEffect(showShades ? 0.97 : 1)
+                    .scaleEffect(showShades ? 0.95 : 1)
                     .animation(
                         showShades
                             ? .spring(response: 0.45, dampingFraction: 0.9)
                             : .spring(response: 0.45, dampingFraction: 0.9)
-                                .delay(0.08),
+                                .delay(0.09),
                         value: showShades
                     )
                     .allowsHitTesting(!showShades)
@@ -72,7 +73,7 @@ struct AddCourse: View {
                                 .animation(.easeIn(duration: 0.05), value: showShades)
                                 .onTapGesture {
                                     withAnimation(.spring(response: 0.45, dampingFraction: 0.9)
-                                        .delay(showShades ? 0 : 0.05)) {
+                                        .delay(showShades ? 0.01 : 0.05)) {
                                         showShades = false
                                     }
                                 }
@@ -91,6 +92,8 @@ struct AddCourse: View {
                 
                 Spacer()
             }
+            }
+            .ignoresSafeArea(.keyboard)
             .navigationTitle("Add Course")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -144,7 +147,7 @@ private struct Shades: View {
                     value: show
                 )
                 .onTapGesture {
-                    withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
+                    withAnimation(.spring(response: 0.45, dampingFraction: 0.9)) {
                         selectedColor = hex
                     }
                 }
