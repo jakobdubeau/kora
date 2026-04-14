@@ -19,18 +19,24 @@ struct SessionCover: View {
             Color(.systemBackground).ignoresSafeArea()
             Group {
                 if focusMode {
-                    ZStack {
-                        Color.black.ignoresSafeArea()
-                        Text(formatTime(seconds: vm.timer.currentSessionTime))
-                            .font(.system(size: 128, weight: .semibold))
-                            .foregroundStyle(.white)
-                            .monospacedDigit()
+                    GeometryReader { geo in
+                        ZStack {
+                            Color.black
+                            Text(formatTime(seconds: vm.timer.currentSessionTime))
+                                .font(.system(size: 128, weight: .semibold))
+                                .foregroundStyle(.white)
+                                .monospacedDigit()
+                        }
+                        .frame(width: geo.size.height, height: geo.size.width)
+                        .rotationEffect(.degrees(90))
+                        .frame(width: geo.size.width, height: geo.size.height)
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .ignoresSafeArea()
                     .contentShape(Rectangle())
                     .onTapGesture {
-                        OrientationLock.set(.portrait)
-                        focusMode = false
+                        withAnimation(.easeIn(duration: 0.5)) {
+                            focusMode = false
+                        }
                     }
                     .transition(.opacity)
                 } else {
@@ -44,8 +50,9 @@ struct SessionCover: View {
                             .foregroundStyle(.secondary)
                             Spacer()
                             Button {
-                                OrientationLock.set(.landscape)
-                                focusMode = true
+                                withAnimation(.easeIn(duration: 0.5)) {
+                                    focusMode = true
+                                }
                             } label: {
                                 Image(systemName: "viewfinder")
                             }
