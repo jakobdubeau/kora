@@ -10,6 +10,7 @@ import SwiftUI
 struct SessionCover: View {
     @Bindable var vm: HomeViewModel
     @State private var focusMode: Bool = false
+    @State private var statusBarHidden: Bool = false
     
     let course: Course
     let onDismiss: () -> Void
@@ -34,6 +35,7 @@ struct SessionCover: View {
                     .ignoresSafeArea()
                     .contentShape(Rectangle())
                     .onTapGesture {
+                        statusBarHidden = false
                         withAnimation(.easeIn(duration: 0.3)) {
                             focusMode = false
                         }
@@ -50,6 +52,7 @@ struct SessionCover: View {
                             .foregroundStyle(.secondary)
                             Spacer()
                             Button {
+                                statusBarHidden = true
                                 withAnimation(.easeIn(duration: 0.3)) {
                                     focusMode = true
                                 }
@@ -71,13 +74,14 @@ struct SessionCover: View {
                             Button {
                                 onDismiss()
                             } label: {
-                                Image(systemName: "pause.circle.fill")
-                                    .foregroundStyle(
-                                        course.colour != nil ? Color(hex: course.colour!) : Color.secondary
-                                    )
-                                    .font(.system(size: 32))
+                                AnimatedKoraAsterisk(
+                                    color: course.colour != nil ? Color(hex: course.colour!) : Color.secondary,
+                                    size: 52
+                                )
                             }
                             .buttonStyle(.plain)
+                            .padding(.top, 2)
+                            .padding(.leading, -8)
                         }
                         .padding(.top, 36)
                         .padding(.bottom, 56)
@@ -92,6 +96,6 @@ struct SessionCover: View {
                 }
             }
         }
-        .statusBarHidden(focusMode)
+        .statusBarHidden(statusBarHidden)
     }
 }

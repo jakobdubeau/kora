@@ -27,7 +27,6 @@ struct HomeView: View {
                         Text("\(formatTime(seconds: vm.totalTime))") // string interpolation
                             .font(.system(size: 48, weight: .semibold))
                             .monospacedDigit()
-                            .padding(.bottom, 4)
                         if vm.currentBreakTime > 60 {
                             Text("[Break for \(formatTimeBreak(seconds: vm.currentBreakTime))]")
                                 .font(.caption)
