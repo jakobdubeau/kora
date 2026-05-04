@@ -130,7 +130,7 @@ final class TimerEngine {
         guard let running = runningCourse,
               let start = sessionStartTime else { return }
         
-        let elapsed = current - start
+        let elapsed = (current - start).rounded(.down)
         courseTimes[running, default: 0] += elapsed
         
         if let startDate = sessionStartDate {
