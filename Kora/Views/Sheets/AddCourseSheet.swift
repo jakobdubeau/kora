@@ -139,7 +139,7 @@ private struct Shades: View {
                 .offset(appeared ? shadeOffset(index: index, radius: 130) : .zero)
                 .animation(
                     .spring(response: 0.45, dampingFraction: 0.9)
-                        .delay((Double(index) + 1) * 0.07),
+                    .delay((Double(index) + 1) * 0.1),
                     value: appeared
                 )
                 .animation(

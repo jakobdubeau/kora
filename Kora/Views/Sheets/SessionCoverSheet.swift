@@ -48,7 +48,7 @@ struct SessionCover: View {
                                 Text(course.name)
                                 Text("[\(formatTime(seconds: vm.courseTime(for: course))) ]").monospacedDigit()
                             }
-                            .font(.system(size: 17, weight: .medium))
+                            .font(.system(size: 16, weight: .medium))
                             .foregroundStyle(.secondary)
                             Spacer()
                             Button {
@@ -67,7 +67,7 @@ struct SessionCover: View {
                         .padding(.trailing, 20)
                         .padding(.top, 8)
                         
-                        HStack {
+                        VStack(spacing: 4) {
                             Text(formatTime(seconds: vm.timer.currentSessionTime))
                                 .font(.system(size: 48, weight: .semibold))
                                 .monospacedDigit()
@@ -76,15 +76,14 @@ struct SessionCover: View {
                             } label: {
                                 AnimatedKoraAsterisk(
                                     color: course.colour != nil ? Color(hex: course.colour!) : Color.secondary,
-                                    size: 52
+                                    size: 54
                                 )
                             }
                             .buttonStyle(.plain)
-                            .padding(.top, 2)
-                            .padding(.leading, -8)
                         }
-                        .padding(.top, 36)
-                        .padding(.bottom, 56)
+                        .frame(maxWidth: .infinity)
+                        .padding(.top, 18)
+                        .padding(.bottom, 20)
                         
                         SessionGroup()
                         

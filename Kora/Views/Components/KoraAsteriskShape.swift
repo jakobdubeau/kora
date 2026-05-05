@@ -62,7 +62,7 @@ struct AnimatedKoraAsterisk: View {
 }
 
 #Preview {
-    AnimatedKoraAsterisk(color: .red, size: 70)
+    AnimatedKoraAsterisk(color: .red, size: 72)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.background)
 }

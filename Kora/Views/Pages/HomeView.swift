@@ -24,6 +24,7 @@ struct HomeView: View {
                     VStack(alignment: .center, spacing: 16) {
                         Text(Date(), format: .dateTime.weekday().day().month())
                             .font(.headline.bold())
+                            .padding(.bottom, -2)
                         Text("\(formatTime(seconds: vm.totalTime))") // string interpolation
                             .font(.system(size: 48, weight: .semibold))
                             .monospacedDigit()
@@ -36,8 +37,8 @@ struct HomeView: View {
                             Text("")
                         }
                     }
-                    .padding(.top, 20)
-                    .padding(.bottom, 20)
+                    .padding(.top, 24)
+                    .padding(.bottom, 24)
                     Divider()
                         .opacity(0.5)
                     
