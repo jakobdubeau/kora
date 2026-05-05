@@ -36,8 +36,8 @@ struct HomeView: View {
                             Text("")
                         }
                     }
-                    .padding(.top, 24)
-                    .padding(.bottom)
+                    .padding(.top, 20)
+                    .padding(.bottom, 20)
                     Divider()
                         .opacity(0.5)
                     

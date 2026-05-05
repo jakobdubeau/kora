@@ -54,7 +54,7 @@ struct AnimatedKoraAsterisk: View {
                 withAnimation(.linear(duration: 7).repeatForever(autoreverses: false)) {
                     rotation = 360
                 }
-                withAnimation(.easeInOut(duration: 2).repeatForever(autoreverses: true)) {
+                withAnimation(.easeInOut(duration: 1.7).repeatForever(autoreverses: true)) {
                     breathScale = 1.05
                 }
             }
