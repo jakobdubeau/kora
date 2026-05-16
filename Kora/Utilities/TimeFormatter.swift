@@ -13,7 +13,7 @@ func formatTime(seconds: TimeInterval) -> String {
     let minutes = (Int(seconds) % 3600) / 60
     let remainingSeconds = Int(seconds) % 60
     
-    return String(format: "%2d:%02d:%02d", hours, minutes, remainingSeconds)
+    return String(format: "%1d:%02d:%02d", hours, minutes, remainingSeconds)
 }
 
 func formatTimeBreak(seconds: TimeInterval) -> String {

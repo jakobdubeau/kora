@@ -36,7 +36,7 @@ struct SessionCover: View {
                     .contentShape(Rectangle())
                     .onTapGesture {
                         statusBarHidden = false
-                        withAnimation(.easeIn(duration: 0.3)) {
+                        withAnimation(.easeIn(duration: 0.2)) {
                             focusMode = false
                         }
                     }
@@ -46,31 +46,33 @@ struct SessionCover: View {
                         HStack {
                             HStack {
                                 Text(course.name)
-                                Text("[\(formatTime(seconds: vm.courseTime(for: course))) ]").monospacedDigit()
+                                Text("[\(formatTime(seconds: vm.courseTime(for: course)))]").monospacedDigit()
                             }
                             .font(.system(size: 16, weight: .medium))
                             .foregroundStyle(.secondary)
                             Spacer()
                             Button {
                                 statusBarHidden = true
-                                withAnimation(.easeIn(duration: 0.3)) {
+                                withAnimation(.easeIn(duration: 0.2)) {
                                     focusMode = true
                                 }
                             } label: {
                                 Image(systemName: "viewfinder")
                             }
                             .buttonStyle(.plain)
-                            .font(.system(size: 20, weight: .medium))
+                            .font(.system(size: 19, weight: .bold))
                             .foregroundStyle(.secondary)
+                            .padding(.top, -6)
                         }
                         .padding(.leading)
                         .padding(.trailing, 20)
                         .padding(.top, 8)
                         
-                        VStack(spacing: 4) {
+                        VStack(spacing: 8) {
                             Text(formatTime(seconds: vm.timer.currentSessionTime))
                                 .font(.system(size: 48, weight: .semibold))
                                 .monospacedDigit()
+                                .padding(.bottom, 4)
                             Button {
                                 onDismiss()
                             } label: {
@@ -82,7 +84,7 @@ struct SessionCover: View {
                             .buttonStyle(.plain)
                         }
                         .frame(maxWidth: .infinity)
-                        .padding(.top, 18)
+                        .padding(.top, 20)
                         .padding(.bottom, 20)
                         
                         SessionGroup()

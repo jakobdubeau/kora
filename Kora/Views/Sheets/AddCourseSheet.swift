@@ -54,10 +54,8 @@ struct AddCourse: View {
                     .opacity(showShades ? 0 : 1)
                     .scaleEffect(showShades ? 0.95 : 1)
                     .animation(
-                        showShades
-                            ? .spring(response: 0.45, dampingFraction: 0.9)
-                            : .spring(response: 0.45, dampingFraction: 0.9)
-                                .delay(0.09),
+                        .spring(response: 0.45, dampingFraction: 0.9)
+                        .delay(showShades ? 0 : 0.1),
                         value: showShades
                     )
                     .allowsHitTesting(!showShades)
@@ -73,7 +71,7 @@ struct AddCourse: View {
                                 .animation(.easeIn(duration: 0.05), value: showShades)
                                 .onTapGesture {
                                     withAnimation(.spring(response: 0.45, dampingFraction: 0.9)
-                                        .delay(showShades ? 0.01 : 0.05)) {
+                                        .delay(0.05)) {
                                         showShades = false
                                     }
                                 }
@@ -138,12 +136,12 @@ private struct Shades: View {
                 .opacity(appeared && show ? 1 : 0)
                 .offset(appeared ? shadeOffset(index: index, radius: 130) : .zero)
                 .animation(
-                    .spring(response: 0.45, dampingFraction: 0.9)
-                    .delay((Double(index) + 1) * 0.1),
+                    .spring(response: 0.4, dampingFraction: 0.9)
+                    .delay(0.22 * pow(Double(index) / Double(max(shades.count - 1, 1)), 0.75)),
                     value: appeared
                 )
                 .animation(
-                    .spring(response: 0.45, dampingFraction: 0.9),
+                    .spring(response: 0.3, dampingFraction: 0.9),
                     value: show
                 )
                 .onTapGesture {
