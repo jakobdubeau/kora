@@ -69,6 +69,20 @@ struct HomeView: View {
                                     context.delete(courses[index]) // deletes the actual course model
                                 }
                             }
+                            .onMove { from, to in   // from (index set) = which rows moved, = to (index) new index where it moved
+                                var reordered = courses // make a copy so it's mutable
+                                
+                                // array gets copied, but the course objects inside are still references to the same models
+                                // (editing a course edits the real stored object)
+                                
+                                reordered.move(fromOffsets: from, toOffset: to)
+                                
+                                // for in loops are vor logic, ForEach are for swiftui views
+                                for (index, course) in reordered.enumerated() {
+                                    course.sortOrder = index
+                                }
+                                
+                            }
                         }
                         footer: {
                             Button("Add") {

@@ -127,7 +127,7 @@ private struct Shades: View {
     }
 
     var body: some View {
-        ForEach(Array(shades.enumerated()), id: \.offset) { index, hex in
+        ForEach(Array(shades.enumerated()), id: \.offset) { index, hex in // ForEach is for building views
             Circle()
                 .fill(Color(hex: hex))
                 .frame(width: 100, height: 100)
