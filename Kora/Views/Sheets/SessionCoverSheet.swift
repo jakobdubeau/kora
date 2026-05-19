@@ -62,7 +62,7 @@ struct SessionCover: View {
                             .buttonStyle(.plain)
                             .font(.system(size: 19, weight: .bold))
                             .foregroundStyle(.secondary)
-                            .padding(.top, -6)
+                            .padding(.top, -4)
                         }
                         .padding(.leading)
                         .padding(.trailing, 20)
@@ -72,7 +72,6 @@ struct SessionCover: View {
                             Text(formatTime(seconds: vm.timer.currentSessionTime))
                                 .font(.system(size: 48, weight: .semibold))
                                 .monospacedDigit()
-                                .padding(.bottom, 4)
                             Button {
                                 onDismiss()
                             } label: {
@@ -84,7 +83,7 @@ struct SessionCover: View {
                             .buttonStyle(.plain)
                         }
                         .frame(maxWidth: .infinity)
-                        .padding(.top, 20)
+                        .padding(.top, 22)
                         .padding(.bottom, 20)
                         
                         SessionGroup()

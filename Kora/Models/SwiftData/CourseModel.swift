@@ -16,11 +16,13 @@ class Course {
     var name: String // column in swiftdata store, automatically observed
     var colour: String?
     var createdAt: Date
+    var sortOrder: Int = 0
     
-    init(name: String, colour: String? = nil) {
+    init(name: String, colour: String? = nil, sortOrder: Int = 0) {
         self.id = UUID()
         self.name = name
         self.colour = colour
         self.createdAt = .now
+        self.sortOrder = sortOrder
     }
 }

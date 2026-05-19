@@ -14,7 +14,7 @@ struct HomeView: View {
     @State private var activeCourse: Course? = nil
     @State private var blackScreen: Double = 0
     
-    @Query(sort: \Course.createdAt) private var courses: [Course] // sort by created date, make courses array
+    @Query(sort: \Course.sortOrder) private var courses: [Course]
     @Environment(\.modelContext) private var context // insert/delete/update
     
     var body: some View {

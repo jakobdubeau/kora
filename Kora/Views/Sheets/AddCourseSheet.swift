@@ -11,13 +11,15 @@ import SwiftData
 struct AddCourse: View {
     @Environment(\.modelContext) private var context // db session
     @Environment(\.dismiss) private var dismiss // close the modal
+    
+    @Query private var courses: [Course]
 
     @State private var name: String = "" // @State to redraw when value changes
     @State private var selectedFamily: Int? = nil
     @State private var selectedColor: String = Color.palettes[8].shades[0]
     @State private var showShades: Bool = false // animation
     @State private var counter: Int = 0
-
+    
     var body: some View {
         NavigationStack {
             GeometryReader { _ in
@@ -71,7 +73,7 @@ struct AddCourse: View {
                                 .animation(.easeIn(duration: 0.05), value: showShades)
                                 .onTapGesture {
                                     withAnimation(.spring(response: 0.45, dampingFraction: 0.9)
-                                        .delay(0.05)) {
+                                        .delay(0.07)) {
                                         showShades = false
                                     }
                                 }
@@ -102,7 +104,7 @@ struct AddCourse: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") {
-                        context.insert(Course(name: name, colour: selectedColor)) // add new model to swift data
+                        context.insert(Course(name: name, colour: selectedColor, sortOrder: courses.count)) // add new model to swift data
                         dismiss()
                     }
                     .disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty) // disable done if no name/only spaces
@@ -137,7 +139,7 @@ private struct Shades: View {
                 .offset(appeared ? shadeOffset(index: index, radius: 130) : .zero)
                 .animation(
                     .spring(response: 0.4, dampingFraction: 0.9)
-                    .delay(0.22 * pow(Double(index) / Double(max(shades.count - 1, 1)), 0.75)),
+                    .delay(0.29 * pow(Double(index) / Double(max(shades.count - 1, 1)), 0.8)),
                     value: appeared
                 )
                 .animation(
