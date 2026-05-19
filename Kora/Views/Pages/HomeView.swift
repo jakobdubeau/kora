@@ -60,7 +60,9 @@ struct HomeView: View {
                                                 blackScreen = 0
                                             }
                                         }
-                                    }
+                                    },
+                                    onEdit: { },
+                                    onDelete: { context.delete(course) }
                                 )
                                 .listRowSeparator(.hidden)
                             }
