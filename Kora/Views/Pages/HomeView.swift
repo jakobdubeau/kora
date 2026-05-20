@@ -26,6 +26,9 @@ struct HomeView: View {
             .flatMap { $0.shades } // flatten all shades into an array
         return Color(hex: allShades.randomElement() ?? "#FFFFFF")
     }()
+
+    let isGolden: Bool = Int.random(in: 0..<100) == 0
+    @State private var shimmerRotation: Double = 0
     
     var body: some View {
         ZStack {
@@ -90,7 +93,25 @@ struct HomeView: View {
                                         .resizable()
                                         .scaledToFit()
                                         .frame(width: 24, height: 24)
-                                        .foregroundStyle(asteriskColor)
+                                        .foregroundStyle(
+                                            isGolden
+                                                ? AnyShapeStyle(AngularGradient(
+                                                    colors: [
+                                                        Color(hex: "#A47711"),
+                                                        Color(hex: "#D4A017"),
+                                                        Color(hex: "#FFE680"),
+                                                        Color(hex: "#D4A017"),
+                                                        Color(hex: "#A47711"),
+                                                        Color(hex: "#D4A017"),
+                                                        Color(hex: "#FFE680"),
+                                                        Color(hex: "#D4A017"),
+                                                        Color(hex: "#A47711"),
+                                                    ],
+                                                    center: .center,
+                                                    angle: .degrees(shimmerRotation)
+                                                ))
+                                                : AnyShapeStyle(asteriskColor)
+                                        )
                                     Text("Add")
                                         .font(.system(size: 14, weight: .semibold))
                                 }
@@ -146,6 +167,11 @@ struct HomeView: View {
             vm.saveSession(context: context) // closure (setup once), timer engine saves sessions, from launch, everytime timer engine calls stopRunningCourse, closure fires
             vm.setup(context: context)
             orderedCourses = courses
+            if isGolden {
+                withAnimation(.linear(duration: 6).repeatForever(autoreverses: false)) {
+                    shimmerRotation = 360
+                }
+            }
         }
         .onChange(of: courses) { _, newValue in
             if orderedCourses.count != newValue.count {
