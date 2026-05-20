@@ -99,11 +99,11 @@ struct HomeView: View {
                                                     colors: [
                                                         Color(hex: "#A47711"),
                                                         Color(hex: "#D4A017"),
-                                                        Color(hex: "#FFE680"),
+                                                        Color(hex: "#E3C95F"),
                                                         Color(hex: "#D4A017"),
                                                         Color(hex: "#A47711"),
                                                         Color(hex: "#D4A017"),
-                                                        Color(hex: "#FFE680"),
+                                                        Color(hex: "#E3C95F"),
                                                         Color(hex: "#D4A017"),
                                                         Color(hex: "#A47711"),
                                                     ],

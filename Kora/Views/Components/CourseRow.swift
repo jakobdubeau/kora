@@ -45,10 +45,9 @@ struct CourseRow: View {
                     .font(.system(size: 18, weight: .regular))
                     .foregroundStyle(.white)
                     .rotationEffect(.degrees(90))
-                    .frame(width: 72, height: 72)
-                    .padding(.leading, -28)
-                    .padding(.trailing, -22)
-                    .padding(.vertical, -28)
+                    .frame(width: 32, height: 32, alignment: .trailing)
+                    .padding(.leading, -14)
+                    .padding(.trailing, 4)
             }
             .dragHandle(id: course.id)
         }
