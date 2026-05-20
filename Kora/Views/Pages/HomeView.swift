@@ -15,7 +15,10 @@ struct HomeView: View {
     @State private var blackScreen: Double = 0
     
     @Query(sort: \Course.sortOrder) private var courses: [Course]
+    @State private var orderedCourses: [Course] = []
     @Environment(\.modelContext) private var context // insert/delete/update
+    
+    let rowHeight: CGFloat = 64
     
     var body: some View {
         ZStack {
@@ -42,63 +45,42 @@ struct HomeView: View {
                     Divider()
                         .opacity(0.5)
                     
-                    List {
-                        Section {
-                            ForEach(courses) { course in
-                                CourseRow(
-                                    course: course,
-                                    isActive: vm.isRunning(course),
-                                    time: vm.courseTime(for: course),
-                                    onTap: {
+                    ScrollView {
+                        ReorderableList(orderedCourses, rowHeight: rowHeight, onMove: { from, to in
+                            orderedCourses.move(fromOffsets: IndexSet(integer: from), toOffset: (to > from) ? to + 1 : to)
+                            for (index, course) in orderedCourses.enumerated() {
+                                course.sortOrder = index
+                            }
+                        }) { course, _ in
+                            CourseRow(
+                                course: course,
+                                isActive: vm.isRunning(course),
+                                time: vm.courseTime(for: course),
+                                onTap: {
+                                    withAnimation(.easeOut(duration: 0.3)) {
+                                        blackScreen = 1
+                                    }
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                        activeCourse = course
+                                        vm.toggleCourse(course)
                                         withAnimation(.easeOut(duration: 0.3)) {
-                                            blackScreen = 1
+                                            blackScreen = 0
                                         }
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                            activeCourse = course
-                                            vm.toggleCourse(course)
-                                            withAnimation(.easeOut(duration: 0.3)) {
-                                                blackScreen = 0
-                                            }
-                                        }
-                                    },
-                                    onEdit: { },
-                                    onDelete: { context.delete(course) }
-                                )
-                                .listRowSeparator(.hidden)
-                            }
-                            .onDelete { indexSet in // index set is indices of rows user deletes
-                                for index in indexSet {
-                                    context.delete(courses[index]) // deletes the actual course model
-                                }
-                            }
-                            .onMove { from, to in   // from (index set) = which rows moved, = to (index) new index where it moved
-                                var reordered = courses // make a copy so it's mutable
-                                
-                                // array gets copied, but the course objects inside are still references to the same models
-                                // (editing a course edits the real stored object)
-                                
-                                reordered.move(fromOffsets: from, toOffset: to)
-                                
-                                // for in loops are vor logic, ForEach are for swiftui views
-                                for (index, course) in reordered.enumerated() {
-                                    course.sortOrder = index
-                                }
-                                
-                            }
+                                    }
+                                },
+                                onEdit: { },
+                                onDelete: { context.delete(course) }
+                            )
                         }
-                        footer: {
-                            Button("Add") {
-                                showAddCourse = true
-                            }
-                            .foregroundStyle(.secondary)
-                            .buttonStyle(.bordered)
-                            .controlSize(.small)
-                            .listRowSeparator(.hidden)
+
+                        Button("Add") {
+                            showAddCourse = true
                         }
+                        .foregroundStyle(.secondary)
+                        .buttonStyle(.bordered)
+                        .controlSize(.small)
+                        .padding(.top, 8)
                     }
-                    .contentMargins(.top, 0, for: .scrollContent)
-                    .padding(.bottom)
-                    .listStyle(.plain)
                 }
             }
             .fullScreenCover(isPresented: $showAddCourse) {
@@ -133,6 +115,12 @@ struct HomeView: View {
         .onAppear {
             vm.saveSession(context: context) // closure (setup once), timer engine saves sessions, from launch, everytime timer engine calls stopRunningCourse, closure fires
             vm.setup(context: context)
+            orderedCourses = courses
+        }
+        .onChange(of: courses) { _, newValue in
+            if orderedCourses.count != newValue.count {
+                orderedCourses = newValue
+            }
         }
     }
 }

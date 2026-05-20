@@ -47,6 +47,9 @@ struct CourseRow: View {
                     .padding(.leading, -12)
                     .padding(.trailing, -8)
             }
+            .dragHandle(id: course.id)
         }
+        .frame(maxHeight: .infinity)
+        .background(RoundedRectangle(cornerRadius: 12).fill(Color(.systemBackground)))
     }
 }
