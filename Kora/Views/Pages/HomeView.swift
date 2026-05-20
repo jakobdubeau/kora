@@ -103,6 +103,7 @@ struct HomeView: View {
                         }
                         .padding(.leading, 10)
                     }
+                    .scrollBounceBehavior(.basedOnSize)
                 }
             }
             .fullScreenCover(isPresented: $showAddCourse) {

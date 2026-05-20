@@ -44,9 +44,9 @@ struct CourseRow: View {
                 Image(systemName: "ellipsis")
                     .foregroundStyle(.white)
                     .rotationEffect(.degrees(90))
-                    .frame(width: 44, height: 44)
-                    .padding(.leading, -12)
-                    .padding(.trailing, -8)
+                    .frame(width: 52, height: 52)
+                    .padding(.leading, -16)
+                    .padding(.trailing, -10)
             }
             .dragHandle(id: course.id)
         }
