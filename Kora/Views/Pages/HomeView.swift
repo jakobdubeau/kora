@@ -117,7 +117,7 @@ struct HomeView: View {
                                 }
                                 .padding(.leading, 6)
                                 .padding(.trailing, 10)
-                                .padding(.vertical, 6)
+                                .padding(.vertical, 5)
                                 .background(Color(.systemBackground))
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 32)

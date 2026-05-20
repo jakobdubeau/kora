@@ -150,15 +150,19 @@ where Data: RandomAccessCollection,
         let finalTarget = currentTargetIndex
         let startedAt = dragStartIndex
 
-        var transaction = Transaction()
-        transaction.disablesAnimations = true
-        withTransaction(transaction) {
-            if finalTarget != startedAt {
-                onMove(startedAt, finalTarget)
+        withAnimation(.spring(response: 0.35, dampingFraction: 0.78)) {
+            dragOffsetY = CGFloat(finalTarget - startedAt) * rowHeight
+        } completion: {
+            var transaction = Transaction()
+            transaction.disablesAnimations = true
+            withTransaction(transaction) {
+                if finalTarget != startedAt {
+                    onMove(startedAt, finalTarget)
+                }
+                draggingID = nil
+                dragOffsetY = 0
+                currentTargetIndex = startedAt
             }
-            draggingID = nil
-            dragOffsetY = 0
-            currentTargetIndex = startedAt
         }
     }
 }
