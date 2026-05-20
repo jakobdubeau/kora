@@ -88,7 +88,7 @@ struct HomeView: View {
                                 showAddCourse = true
                             } label: {
                                 HStack(spacing: 2) {
-                                    Image("KoraAssetBold")
+                                    Image("KoraAssetBoldSVG")
                                         .renderingMode(.template)
                                         .resizable()
                                         .scaledToFit()
@@ -168,7 +168,7 @@ struct HomeView: View {
             vm.setup(context: context)
             orderedCourses = courses
             if isGolden {
-                withAnimation(.linear(duration: 6).repeatForever(autoreverses: false)) {
+                withAnimation(.linear(duration: 7).repeatForever(autoreverses: false)) {
                     shimmerRotation = 360
                 }
             }
