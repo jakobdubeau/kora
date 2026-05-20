@@ -19,6 +19,13 @@ struct HomeView: View {
     @Environment(\.modelContext) private var context // insert/delete/update
     
     let rowHeight: CGFloat = 64
+
+    let asteriskColor: Color = {
+        let allShades = Color.palettes
+            .filter { $0.name != "grey" } // $0 means the current element being filtered
+            .flatMap { $0.shades } // flatten all shades into an array
+        return Color(hex: allShades.randomElement() ?? "#FFFFFF")
+    }()
     
     var body: some View {
         ZStack {
@@ -41,7 +48,7 @@ struct HomeView: View {
                         }
                     }
                     .padding(.top, 24)
-                    .padding(.bottom, 24)
+                    .padding(.bottom, 26)
                     Divider()
                         .opacity(0.5)
                     
@@ -83,7 +90,7 @@ struct HomeView: View {
                                         .resizable()
                                         .scaledToFit()
                                         .frame(width: 24, height: 24)
-                                        .foregroundStyle(Color.white)
+                                        .foregroundStyle(asteriskColor)
                                     Text("Add")
                                         .font(.system(size: 14, weight: .semibold))
                                 }

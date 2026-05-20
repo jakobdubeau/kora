@@ -37,7 +37,7 @@ struct DragHandleModifier<ID: Hashable>: ViewModifier {
 
     func body(content: Content) -> some View {
         content.simultaneousGesture(
-            DragGesture(minimumDistance: 3, coordinateSpace: .named(callbacks.coordinateSpaceName))
+            DragGesture(minimumDistance: 4, coordinateSpace: .named(callbacks.coordinateSpaceName))
                 .onChanged { value in
                     callbacks.onChanged(value, AnyHashable(id))
                 }

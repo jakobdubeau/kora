@@ -42,11 +42,13 @@ struct CourseRow: View {
                 Button("Delete", role: .destructive) { onDelete() }
             } label: {
                 Image(systemName: "ellipsis")
+                    .font(.system(size: 18, weight: .regular))
                     .foregroundStyle(.white)
                     .rotationEffect(.degrees(90))
-                    .frame(width: 52, height: 52)
-                    .padding(.leading, -16)
-                    .padding(.trailing, -10)
+                    .frame(width: 72, height: 72)
+                    .padding(.leading, -28)
+                    .padding(.trailing, -22)
+                    .padding(.vertical, -28)
             }
             .dragHandle(id: course.id)
         }
