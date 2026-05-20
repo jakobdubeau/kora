@@ -72,14 +72,36 @@ struct HomeView: View {
                                 onDelete: { context.delete(course) }
                             )
                         }
-
-                        Button("Add") {
-                            showAddCourse = true
+                        
+                        HStack {
+                            Button {
+                                showAddCourse = true
+                            } label: {
+                                HStack(spacing: 2) {
+                                    Image("KoraAssetBold")
+                                        .renderingMode(.template)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 24, height: 24)
+                                        .foregroundStyle(Color.white)
+                                    Text("Add")
+                                        .font(.system(size: 14, weight: .semibold))
+                                }
+                                .padding(.leading, 6)
+                                .padding(.trailing, 10)
+                                .padding(.vertical, 6)
+                                .background(Color(.systemBackground))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 32)
+                                        .stroke(Color(.separator).opacity(0.5), lineWidth: 1)
+                                )
+                            }
+                            .buttonStyle(.plain)
+                            .padding(.top, 4)
+                            
+                            Spacer()
                         }
-                        .foregroundStyle(.secondary)
-                        .buttonStyle(.bordered)
-                        .controlSize(.small)
-                        .padding(.top, 8)
+                        .padding(.leading, 10)
                     }
                 }
             }

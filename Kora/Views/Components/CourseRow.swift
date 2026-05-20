@@ -28,6 +28,7 @@ struct CourseRow: View {
                     .font(.system(size: 32))
             }
             .buttonStyle(.plain)
+            .padding(.leading, 8)
             
             Text(course.name)
             
@@ -50,6 +51,6 @@ struct CourseRow: View {
             .dragHandle(id: course.id)
         }
         .frame(maxHeight: .infinity)
-        .background(RoundedRectangle(cornerRadius: 12).fill(Color(.systemBackground)))
+        .background(RoundedRectangle(cornerRadius: 16).fill(Color(.systemBackground)))
     }
 }
