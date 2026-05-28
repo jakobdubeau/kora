@@ -32,7 +32,40 @@ struct TabsView: View {
                 HomeView()
             
             }
-            Text("bar")
+            HStack {
+                Button {
+                    withAnimation(.smooth(duration: 0.2)) {
+                        selectedTab = .home
+                    }
+                } label: {
+                    Image(systemName: "house.fill")
+                }
+                .buttonStyle(.plain)
+                .font(.system(size: 18, weight: .bold))
+                .foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity)
+                
+                Button {
+
+                } label: {
+                    Image(systemName: "person.3.fill")
+                }
+                .buttonStyle(.plain)
+                .font(.system(size: 18, weight: .bold))
+                .foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity)
+                
+                Button {
+
+                } label: {
+                    Image(systemName: "person.crop.circle.fill")
+                }
+                .buttonStyle(.plain)
+                .font(.system(size: 18, weight: .bold))
+                .foregroundStyle(Color.gray)
+                .frame(maxWidth: .infinity)
+                
+            }
         }
     }
 }
