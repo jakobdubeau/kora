@@ -30,13 +30,15 @@ struct TabsView: View {
                 
             case .profile:
                 HomeView()
-            
+                
             }
+        }
+        .safeAreaInset(edge: .bottom) {
             VStack {
                 Rectangle()
                     .foregroundStyle(Color(.separator).opacity(0.5))
                     .frame(height: 0.5)
-                    .padding(.bottom, 18)
+                    .padding(.bottom, 20)
     
                 HStack {
                     Button {
@@ -71,7 +73,7 @@ struct TabsView: View {
                         Image(systemName: "person.crop.circle.fill")
                     }
                     .buttonStyle(.plain)
-                    .font(.system(size: 20, weight: .bold))
+                    .font(.system(size: 22, weight: .bold))
                     .foregroundStyle(selectedTab == .profile ? Color.primary.opacity(0.8) : Color.secondary)
                     .frame(maxWidth: .infinity)
                     
