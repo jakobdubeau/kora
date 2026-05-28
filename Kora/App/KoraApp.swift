@@ -14,7 +14,7 @@ struct KoraApp: App {
     
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            TabsView()
         }
         .modelContainer(for: [Course.self, StudySession.self])
     }
