@@ -32,39 +32,50 @@ struct TabsView: View {
                 HomeView()
             
             }
-            HStack {
-                Button {
-                    withAnimation(.smooth(duration: 0.2)) {
-                        selectedTab = .home
+            VStack {
+                Rectangle()
+                    .foregroundStyle(Color(.separator).opacity(0.5))
+                    .frame(height: 0.5)
+                    .padding(.bottom, 18)
+    
+                HStack {
+                    Button {
+                        withAnimation(.smooth(duration: 0.2)) {
+                            selectedTab = .home
+                        }
+                    } label: {
+                        Image(systemName: "house.fill")
                     }
-                } label: {
-                    Image(systemName: "house.fill")
+                    .buttonStyle(.plain)
+                    .font(.system(size: 20, weight: .bold))
+                    .foregroundStyle(selectedTab == .home ? Color.primary.opacity(0.8) : Color.secondary)
+                    .frame(maxWidth: .infinity)
+                    
+                    Button {
+                        withAnimation(.smooth(duration: 0.2)) {
+                            selectedTab = .groups
+                        }
+                    } label: {
+                        Image(systemName: "person.3.fill")
+                    }
+                    .buttonStyle(.plain)
+                    .font(.system(size: 20, weight: .bold))
+                    .foregroundStyle(selectedTab == .groups ? Color.primary.opacity(0.8) : Color.secondary)
+                    .frame(maxWidth: .infinity)
+                    
+                    Button {
+                        withAnimation(.smooth(duration: 0.2)) {
+                            selectedTab = .profile
+                        }
+                    } label: {
+                        Image(systemName: "person.crop.circle.fill")
+                    }
+                    .buttonStyle(.plain)
+                    .font(.system(size: 20, weight: .bold))
+                    .foregroundStyle(selectedTab == .profile ? Color.primary.opacity(0.8) : Color.secondary)
+                    .frame(maxWidth: .infinity)
+                    
                 }
-                .buttonStyle(.plain)
-                .font(.system(size: 18, weight: .bold))
-                .foregroundStyle(.secondary)
-                .frame(maxWidth: .infinity)
-                
-                Button {
-
-                } label: {
-                    Image(systemName: "person.3.fill")
-                }
-                .buttonStyle(.plain)
-                .font(.system(size: 18, weight: .bold))
-                .foregroundStyle(.secondary)
-                .frame(maxWidth: .infinity)
-                
-                Button {
-
-                } label: {
-                    Image(systemName: "person.crop.circle.fill")
-                }
-                .buttonStyle(.plain)
-                .font(.system(size: 18, weight: .bold))
-                .foregroundStyle(Color.gray)
-                .frame(maxWidth: .infinity)
-                
             }
         }
     }
