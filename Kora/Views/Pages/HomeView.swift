@@ -52,8 +52,9 @@ struct HomeView: View {
                     }
                     .padding(.top, 24)
                     .padding(.bottom, 26)
-                    Divider()
-                        .opacity(0.5)
+                    Rectangle()
+                        .foregroundStyle(Color(.separator).opacity(0.5))
+                        .frame(height: 1)
                     
                     ScrollView {
                         ReorderableList(orderedCourses, rowHeight: rowHeight, onMove: { from, to in

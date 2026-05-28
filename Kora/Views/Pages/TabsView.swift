@@ -19,7 +19,7 @@ struct TabsView: View {
     
     var body: some View {
         
-        ZStack {
+        ZStack(alignment: .bottom) {
             switch selectedTab {
                 
             case .home:
