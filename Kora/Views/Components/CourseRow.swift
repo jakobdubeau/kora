@@ -10,6 +10,7 @@ import SwiftData
 
 struct CourseRow: View {
     let course: Course
+    let isDragging: Bool
     let isActive: Bool
     let time: TimeInterval
     let onTap: () -> Void
@@ -54,5 +55,8 @@ struct CourseRow: View {
         }
         .frame(maxHeight: .infinity)
         .background(RoundedRectangle(cornerRadius: 14).fill(Color(.systemBackground)))
+        .overlay(isDragging ? RoundedRectangle(cornerRadius: 14).stroke(Color(.separator).opacity(0.5), lineWidth: 0.5)
+                 : RoundedRectangle(cornerRadius: 14).stroke(Color(.separator).opacity(0), lineWidth: 0.5))
+        .animation(.smooth(duration: 0.1), value: isDragging)
     }
 }

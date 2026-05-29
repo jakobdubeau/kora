@@ -62,9 +62,10 @@ struct HomeView: View {
                             for (index, course) in orderedCourses.enumerated() {
                                 course.sortOrder = index
                             }
-                        }) { course, _ in
+                        }) { course, isDragging in
                             CourseRow(
                                 course: course,
+                                isDragging: isDragging,
                                 isActive: vm.isRunning(course),
                                 time: vm.courseTime(for: course),
                                 onTap: {

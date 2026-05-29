@@ -85,6 +85,7 @@ where Data: RandomAccessCollection,
 
     @State private var coordinateSpaceName = UUID().uuidString
     @State private var draggingID: AnyHashable?
+    @State private var draggedID: AnyHashable?
     @State private var dragStartIndex: Int = 0
     @State private var currentTargetIndex: Int = 0
     @State private var dragOffsetY: CGFloat = 0
@@ -92,7 +93,7 @@ where Data: RandomAccessCollection,
     var body: some View {
         VStack(spacing: 0) {
             ForEach(Array(data.enumerated()), id: \.element.id) { index, item in
-                content(item, draggingID == AnyHashable(item.id))
+                content(item, draggedID == AnyHashable(item.id))
                     .frame(height: rowHeight)
                     .offset(y: offsetFor(index: index))
                     .zIndex(draggingID == AnyHashable(item.id) ? 1 : 0)
@@ -131,6 +132,7 @@ where Data: RandomAccessCollection,
     private func handleDragChanged(_ value: DragGesture.Value, _ id: AnyHashable) {
         if draggingID == nil {
             draggingID = id
+            draggedID = id
             dragStartIndex = data.firstIndex(where: { AnyHashable($0.id) == id }) ?? 0
             currentTargetIndex = dragStartIndex
             UIImpactFeedbackGenerator(style: .soft).impactOccurred()
@@ -147,6 +149,7 @@ where Data: RandomAccessCollection,
     }
 
     private func handleDragEnded(_ value: DragGesture.Value, _ id: AnyHashable) {
+        draggedID = nil
         let finalTarget = currentTargetIndex
         let startedAt = dragStartIndex
 
