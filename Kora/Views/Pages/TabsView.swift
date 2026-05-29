@@ -81,7 +81,7 @@ struct TabsView: View {
                     
                 }
                 .padding(.top)
-                .background(Color.secondary.opacity(0.05))
+                .background(Color(hex: "#090709"))
             }
         }
     }
