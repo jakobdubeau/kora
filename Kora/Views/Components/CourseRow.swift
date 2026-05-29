@@ -53,6 +53,6 @@ struct CourseRow: View {
             .dragHandle(id: course.id)
         }
         .frame(maxHeight: .infinity)
-        .background(RoundedRectangle(cornerRadius: 16).fill(Color(.systemBackground)))
+        .background(RoundedRectangle(cornerRadius: 14).fill(Color(.systemBackground)))
     }
 }

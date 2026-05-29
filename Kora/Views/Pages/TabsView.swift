@@ -46,12 +46,12 @@ struct TabsView: View {
                         }
                     } label: {
                         Image(systemName: "house.fill")
+                            .frame(maxWidth: .infinity)
+                            .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
                     .font(.system(size: 20, weight: .bold))
                     .foregroundStyle(selectedTab == .home ? Color.primary.opacity(0.8) : Color.secondary)
-                    .frame(maxWidth: .infinity)
-                    .contentShape(Rectangle())
                     
                     Button {
                         withAnimation(.smooth(duration: 0.2)) {
@@ -59,12 +59,12 @@ struct TabsView: View {
                         }
                     } label: {
                         Image(systemName: "person.3.fill")
+                            .frame(maxWidth: .infinity)
+                            .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
                     .font(.system(size: 20, weight: .bold))
                     .foregroundStyle(selectedTab == .groups ? Color.primary.opacity(0.8) : Color.secondary)
-                    .frame(maxWidth: .infinity)
-                    .contentShape(Rectangle())
                     
                     Button {
                         withAnimation(.smooth(duration: 0.2)) {
@@ -72,12 +72,12 @@ struct TabsView: View {
                         }
                     } label: {
                         Image(systemName: "person.crop.circle.fill")
+                            .frame(maxWidth: .infinity)
+                            .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
                     .font(.system(size: 22, weight: .bold))
                     .foregroundStyle(selectedTab == .profile ? Color.primary.opacity(0.8) : Color.secondary)
-                    .frame(maxWidth: .infinity)
-                    .contentShape(Rectangle())
                     
                 }
                 .padding(.top)
