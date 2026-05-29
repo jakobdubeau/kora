@@ -49,6 +49,7 @@ struct CourseRow: View {
                     .padding(.leading, -14)
                     .padding(.trailing, 4)
             }
+            .contentShape(Rectangle())
             .dragHandle(id: course.id)
         }
         .frame(maxHeight: .infinity)

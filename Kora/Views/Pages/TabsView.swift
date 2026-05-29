@@ -51,6 +51,7 @@ struct TabsView: View {
                     .font(.system(size: 20, weight: .bold))
                     .foregroundStyle(selectedTab == .home ? Color.primary.opacity(0.8) : Color.secondary)
                     .frame(maxWidth: .infinity)
+                    .contentShape(Rectangle())
                     
                     Button {
                         withAnimation(.smooth(duration: 0.2)) {
@@ -63,6 +64,7 @@ struct TabsView: View {
                     .font(.system(size: 20, weight: .bold))
                     .foregroundStyle(selectedTab == .groups ? Color.primary.opacity(0.8) : Color.secondary)
                     .frame(maxWidth: .infinity)
+                    .contentShape(Rectangle())
                     
                     Button {
                         withAnimation(.smooth(duration: 0.2)) {
@@ -75,9 +77,10 @@ struct TabsView: View {
                     .font(.system(size: 22, weight: .bold))
                     .foregroundStyle(selectedTab == .profile ? Color.primary.opacity(0.8) : Color.secondary)
                     .frame(maxWidth: .infinity)
+                    .contentShape(Rectangle())
                     
                 }
-                .padding(.top, 19)
+                .padding(.top)
                 .background(Color.secondary.opacity(0.05))
             }
         }
