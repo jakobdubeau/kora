@@ -34,11 +34,10 @@ struct TabsView: View {
             }
         }
         .safeAreaInset(edge: .bottom) {
-            VStack {
+            VStack(spacing: 0) {
                 Rectangle()
                     .foregroundStyle(Color(.separator).opacity(0.5))
                     .frame(height: 0.5)
-                    .padding(.bottom, 20)
     
                 HStack {
                     Button {
@@ -78,6 +77,8 @@ struct TabsView: View {
                     .frame(maxWidth: .infinity)
                     
                 }
+                .padding(.top, 19)
+                .background(Color.secondary.opacity(0.05))
             }
         }
     }
