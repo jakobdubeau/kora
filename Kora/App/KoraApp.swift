@@ -20,7 +20,7 @@ struct KoraApp: App {
             Group {
                 switch coordinator.state {
                 case .splash:
-                    EmptyView()
+                    SplashView()
                 case .login:
                     EmptyView()
                 case .main:
