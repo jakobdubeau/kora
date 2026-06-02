@@ -22,7 +22,7 @@ struct KoraApp: App {
                 case .splash:
                     SplashView()
                 case .login:
-                    EmptyView()
+                    LoginView()
                 case .main:
                     TabsView()
                 }
