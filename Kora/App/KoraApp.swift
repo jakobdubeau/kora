@@ -12,9 +12,22 @@ import SwiftData
 struct KoraApp: App {
     @UIApplicationDelegateAdaptor(KoraAppDelegate.self) var appDelegate
     
+    @State private var coordinator = AppCoordinator()
+    
     var body: some Scene {
         WindowGroup {
-            TabsView()
+            
+            Group {
+                switch coordinator.state {
+                case .splash:
+                    EmptyView()
+                case .login:
+                    EmptyView()
+                case .main:
+                    TabsView()
+                }
+            }
+            .environment(coordinator)
         }
         .modelContainer(for: [Course.self, StudySession.self])
     }
