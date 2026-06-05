@@ -37,10 +37,14 @@ private struct StarField: View {
         Star(x: 0.84, y: 0.91, size: 23),
         Star(x: 0.88, y: 0.77, size: 30),
     ]
+    
+    private let blank: [Star] = [
+        
+    ]
 
     var body: some View {
         GeometryReader { geo in
-            ForEach(stars) { star in
+            ForEach(blank) { star in
                 KoraAsteriskShape()
                     .fill(Color.white.opacity(0.8))
                     .frame(width: star.size, height: star.size)
@@ -53,6 +57,8 @@ private struct StarField: View {
 
 
 struct LoginView: View {
+    
+    @Environment(AppCoordinator.self) private var coordinator
     
     @State private var email: String = ""
     @State private var password: String = ""
@@ -68,10 +74,10 @@ struct LoginView: View {
                 
                 HStack {
                     Button {
-                        
+                        coordinator.state = .main
                     } label: {
                         HStack(spacing: 4) {
-                            Image("GoogleLogoAsset")
+                            Image("GoogleLogoTAsset")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 16, height: 16)
