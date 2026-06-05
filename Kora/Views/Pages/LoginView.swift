@@ -28,21 +28,21 @@ private struct StarField: View {
         Star(x: 0.88, y: 0.30, size: 24),
         Star(x: 0.91, y: 0.16, size: 26),
 
-        Star(x: 0.12, y: 0.80, size: 24),
-        Star(x: 0.20, y: 0.92, size: 22),
-        Star(x: 0.38, y: 0.85, size: 28),
-        Star(x: 0.53, y: 0.78, size: 24),
-        Star(x: 0.60, y: 0.94, size: 22),
+        Star(x: 0.12, y: 0.76, size: 24),
+        Star(x: 0.16, y: 0.90, size: 22),
+        Star(x: 0.33, y: 0.85, size: 28),
+        Star(x: 0.51, y: 0.79, size: 24),
+        Star(x: 0.60, y: 0.93, size: 22),
         Star(x: 0.70, y: 0.84, size: 20),
-        Star(x: 0.84, y: 0.92, size: 23),
-        Star(x: 0.88, y: 0.79, size: 30),
+        Star(x: 0.84, y: 0.91, size: 23),
+        Star(x: 0.88, y: 0.77, size: 30),
     ]
 
     var body: some View {
         GeometryReader { geo in
             ForEach(stars) { star in
                 KoraAsteriskShape()
-                    .fill(Color.white.opacity(0.9))
+                    .fill(Color.white.opacity(0.8))
                     .frame(width: star.size, height: star.size)
                     .position(x: star.x * geo.size.width, y: star.y * geo.size.height)
             }
