@@ -45,14 +45,14 @@ final class HomeViewModel {
             predicate: #Predicate { session in session.start >= today }
         )
                                          
-            if let sessions = try? context.fetch(descriptor) {
-                var totals: [UUID: TimeInterval] = [:]
-                for session in sessions {
-                    if let courseId = session.courseId {
-                        totals[courseId, default: 0] += session.duration.rounded(.down)
-                    }
+        if let sessions = try? context.fetch(descriptor) {
+            var totals: [UUID: TimeInterval] = [:]
+            for session in sessions {
+                if let courseId = session.courseId {
+                    totals[courseId, default: 0] += session.duration.rounded(.down)
                 }
-                timer.loadCourseTimes(totals)
+            }
+            timer.loadCourseTimes(totals)
         }
     }
     
