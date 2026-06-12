@@ -16,6 +16,7 @@ struct TabsView: View {
     }
     
     @State private var selectedTab: Tab = .home
+    @State private var showTabs: Bool = true
     
     var body: some View {
         
@@ -23,65 +24,67 @@ struct TabsView: View {
             switch selectedTab {
                 
             case .home:
-                HomeView()
+                HomeView(showTabs: $showTabs)
                 
             case .groups:
-                HomeView()
+                HomeView(showTabs: $showTabs)
                 
             case .profile:
-                HomeView()
+                HomeView(showTabs: $showTabs)
                 
             }
         }
         .safeAreaInset(edge: .bottom) {
-            VStack(spacing: 0) {
-                Rectangle()
-                    .foregroundStyle(Color(.separator).opacity(0.5))
-                    .frame(height: 0.5)
-    
-                HStack {
-                    Button {
-                        withAnimation(.smooth(duration: 0.2)) {
-                            selectedTab = .home
-                        }
-                    } label: {
-                        Image(systemName: "house.fill")
-                            .frame(maxWidth: .infinity)
-                            .contentShape(Rectangle())
-                    }
-                    .buttonStyle(.plain)
-                    .font(.system(size: 20, weight: .bold))
-                    .foregroundStyle(selectedTab == .home ? Color.primary.opacity(0.8) : Color.secondary)
+            if showTabs {
+                VStack(spacing: 0) {
+                    Rectangle()
+                        .foregroundStyle(Color(.separator).opacity(0.5))
+                        .frame(height: 0.5)
                     
-                    Button {
-                        withAnimation(.smooth(duration: 0.2)) {
-                            selectedTab = .groups
+                    HStack {
+                        Button {
+                            withAnimation(.smooth(duration: 0.2)) {
+                                selectedTab = .home
+                            }
+                        } label: {
+                            Image(systemName: "house.fill")
+                                .frame(maxWidth: .infinity)
+                                .contentShape(Rectangle())
                         }
-                    } label: {
-                        Image(systemName: "person.3.fill")
-                            .frame(maxWidth: .infinity)
-                            .contentShape(Rectangle())
-                    }
-                    .buttonStyle(.plain)
-                    .font(.system(size: 20, weight: .bold))
-                    .foregroundStyle(selectedTab == .groups ? Color.primary.opacity(0.8) : Color.secondary)
-                    
-                    Button {
-                        withAnimation(.smooth(duration: 0.2)) {
-                            selectedTab = .profile
+                        .buttonStyle(.plain)
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundStyle(selectedTab == .home ? Color.primary.opacity(0.8) : Color.secondary)
+                        
+                        Button {
+                            withAnimation(.smooth(duration: 0.2)) {
+                                selectedTab = .groups
+                            }
+                        } label: {
+                            Image(systemName: "person.3.fill")
+                                .frame(maxWidth: .infinity)
+                                .contentShape(Rectangle())
                         }
-                    } label: {
-                        Image(systemName: "person.crop.circle.fill")
-                            .frame(maxWidth: .infinity)
-                            .contentShape(Rectangle())
+                        .buttonStyle(.plain)
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundStyle(selectedTab == .groups ? Color.primary.opacity(0.8) : Color.secondary)
+                        
+                        Button {
+                            withAnimation(.smooth(duration: 0.2)) {
+                                selectedTab = .profile
+                            }
+                        } label: {
+                            Image(systemName: "person.crop.circle.fill")
+                                .frame(maxWidth: .infinity)
+                                .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                        .font(.system(size: 22, weight: .bold))
+                        .foregroundStyle(selectedTab == .profile ? Color.primary.opacity(0.8) : Color.secondary)
+                        
                     }
-                    .buttonStyle(.plain)
-                    .font(.system(size: 22, weight: .bold))
-                    .foregroundStyle(selectedTab == .profile ? Color.primary.opacity(0.8) : Color.secondary)
-                    
+                    .padding(.top)
+                    .background(Color(hex: "#090709"))
                 }
-                .padding(.top)
-                .background(Color(hex: "#090709"))
             }
         }
     }

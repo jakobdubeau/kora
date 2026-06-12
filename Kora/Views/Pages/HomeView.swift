@@ -14,6 +14,8 @@ struct HomeView: View {
     @State private var activeCourse: Course? = nil
     @State private var blackScreen: Double = 0
     
+    @Binding var showTabs: Bool
+    
     @Query(sort: \Course.sortOrder) private var courses: [Course]
     @State private var orderedCourses: [Course] = []
     @Environment(\.modelContext) private var context // insert/delete/update
@@ -71,6 +73,7 @@ struct HomeView: View {
                                 onTap: {
                                     withAnimation(.easeOut(duration: 0.3)) {
                                         blackScreen = 1
+                                        showTabs = false
                                     }
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                                         activeCourse = course
@@ -155,6 +158,7 @@ struct HomeView: View {
                             activeCourse = nil
                             withAnimation(.easeOut(duration: 0.3)) {
                                 blackScreen = 0
+                                showTabs = true
                             }
                         }
                     })
@@ -185,7 +189,7 @@ struct HomeView: View {
     }
 }
 #Preview {
-    HomeView()
+    HomeView(showTabs: .constant(true))
         .modelContainer(for: [Course.self, StudySession.self], inMemory: true)
 }
 
