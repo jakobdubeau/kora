@@ -8,7 +8,12 @@
 import SwiftUI
 
 struct HeatmapView: View {
+    @State private var vm = HeatmapViewModel()
+    
     var body: some View {
-        Text("HeatmapView")
+        VStack(alignment: .center) {
+            Text(Date(), format: .dateTime.month())
+                .font(.headline.bold())
+        }
     }
 }

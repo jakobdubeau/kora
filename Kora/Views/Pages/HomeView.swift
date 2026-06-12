@@ -22,14 +22,14 @@ struct HomeView: View {
     
     let rowHeight: CGFloat = 64
 
-    let asteriskColor: Color = {
+    @State private var asteriskColor: Color = {
         let allShades = Color.palettes
             .filter { $0.name != "grey" } // $0 means the current element being filtered
             .flatMap { $0.shades } // flatten all shades into an array
         return Color(hex: allShades.randomElement() ?? "#FFFFFF")
     }()
 
-    let isGolden: Bool = Int.random(in: 0..<100) == 0
+    @State private var isGolden: Bool = Int.random(in: 0..<100) == 0
     @State private var shimmerRotation: Double = 0
     
     var body: some View {
