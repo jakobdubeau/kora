@@ -42,7 +42,7 @@ struct SessionCover: View {
                     }
                     .transition(.opacity)
                 } else {
-                    VStack {
+                    VStack(spacing: 8) {
                         HStack {
                             HStack {
                                 Text(course.name)
@@ -66,7 +66,7 @@ struct SessionCover: View {
                         }
                         .padding(.leading)
                         .padding(.trailing, 20)
-                        .padding(.top, 8)
+                        .padding(.top, 9)
                         
                         VStack(spacing: 8) {
                             Text(formatTime(seconds: vm.timer.currentSessionTime))
