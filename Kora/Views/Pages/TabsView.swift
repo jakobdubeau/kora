@@ -27,7 +27,7 @@ struct TabsView: View {
                 HomeView(showTabs: $showTabs)
                 
             case .groups:
-                HomeView(showTabs: $showTabs)
+                HeatmapView()
                 
             case .profile:
                 HomeView(showTabs: $showTabs)
