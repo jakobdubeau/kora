@@ -36,9 +36,22 @@ struct HeatmapView: View {
                 .foregroundStyle(.secondary)
             }
             VStack {
+                HStack(alignment: .center, spacing: 37) {
+                    Text("M")
+                    Text("T")
+                    Text("W")
+                    Text("T")
+                    Text("F")
+                    Text("S")
+                    Text("S")
+                }
+                .font(.system(size: 12, weight: .medium))
+                .foregroundStyle(Color(.separator))
+                .fontDesign(.monospaced)
+                
                 HeatmapGrid(dailyTotals: vm.dailyTotals, onTap: {_ in})
             }
-            .padding(.vertical, 22)
+            .padding(.vertical, 12)
             .padding(.horizontal, 42)
             
             Rectangle()

@@ -60,7 +60,7 @@ struct SessionCover: View {
                                 Image(systemName: "viewfinder")
                             }
                             .buttonStyle(.plain)
-                            .font(.system(size: 19, weight: .bold))
+                            .font(.system(size: 19, weight: .medium))
                             .foregroundStyle(.secondary)
                             .padding(.top, -4)
                         }
