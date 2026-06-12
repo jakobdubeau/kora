@@ -38,7 +38,7 @@ struct HeatmapGrid: View {
         LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7)) {
             ForEach(days.indices, id: \.self) { index in
                 if let day = days[index] {
-                    let colors = ["#090709", "#1D1B1D", "#2E2C2E", "#474547", "#6B6A6B", "#9D9C9D", "#FFFFFF"]
+                    let colors = ["#090909", "#1D1D1D", "#2E2E2E", "#474747", "#6B6B6B", "#9D9D9D", "#FFFFFF"]
                     let colorIndex = [1, 2, 3, 4, 6, 8].filter { (dailyTotals[day] ?? 0) / 3600 >= $0 }.count
                     RoundedRectangle(cornerRadius: 4)
                         .fill(Color(hex: colors[colorIndex]))

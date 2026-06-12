@@ -118,7 +118,7 @@ struct LoginView: View {
                     .multilineTextAlignment(TextAlignment.center)
                     .frame(maxWidth: .infinity)
                     .frame(height: 46)
-                    .background(Color(hex: "#090709"))
+                    .background(Color(hex: "#090909"))
                     .clipShape(RoundedRectangle(cornerRadius: 14))
                     .overlay(RoundedRectangle(cornerRadius: 14).stroke(Color(.separator).opacity(0.5), lineWidth: 0.5))
             }
