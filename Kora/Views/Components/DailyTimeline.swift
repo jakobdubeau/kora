@@ -12,8 +12,24 @@ struct DailyTimeline: View {
     
     let sessions: [SessionBlock]
     let date: Date
+    let hours = Array(4...29)
     
     var body: some View {
-        Text("DailyTimeline")
+        VStack {
+            Text(date, format: .dateTime.weekday().day().month())
+                .font(.headline.bold())
+                .multilineTextAlignment(.leading)
+            
+            VStack(spacing: 0) {
+                ForEach(hours, id: \.self) { hour in
+                    HStack {
+                        Text(formatHour(hour: hour))
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundStyle(Color(.separator))
+                            .fontDesign(.monospaced)
+                    }
+                }
+            }
+        }
     }
 }

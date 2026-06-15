@@ -31,3 +31,11 @@ func formatTimeBreak(seconds: TimeInterval) -> String {
         return String(format: "%dh %dm", hours, minutes)
     }
 }
+
+func formatHour(hour: Int) -> String {
+    
+    let suffix = hour >= 12 && hour < 24 ? "PM" : "AM"
+    let standardHour = hour % 12 == 0 ? 12 : hour % 12
+    
+    return "\(standardHour)\(suffix)"
+}

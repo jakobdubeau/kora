@@ -69,6 +69,7 @@ struct HeatmapView: View {
             if let day = selectedDay {
                 DailyTimeline(sessions: vm.dailySessions[day] ?? [], date: day)
             }
+            Spacer()
         }
         .onAppear {
             vm.setup(context: context)
