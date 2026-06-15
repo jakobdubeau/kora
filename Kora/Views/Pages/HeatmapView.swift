@@ -11,7 +11,7 @@ import SwiftData
 struct HeatmapView: View {
     @State private var vm = HeatmapViewModel()
     @State private var selectedDay: Date?
-    @State private var selectedMonth: Date = Date()
+    @State private var selectedMonth: Date = Date.now
     
     @Environment(\.modelContext) private var context
     
@@ -19,26 +19,29 @@ struct HeatmapView: View {
         VStack(alignment: .center, spacing: 16) {
             HStack(spacing: 22) {
                 Button {
-
+                    selectedMonth = Calendar.current.date(byAdding: .month, value: -1, to: selectedMonth)!
                 } label: {
                     Image(systemName: "chevron.left")
                 }
                 .buttonStyle(.plain)
                 .font(.system(size: 16, weight: .medium))
                 .foregroundStyle(.secondary)
+                .disabled(selectedMonth <= (vm.firstActiveMonth ?? selectedMonth))
                 // use Color(.separator).opacity(0.5) for disabled (end)
                 
-                Text(Date(), format: .dateTime.month())
+                Text(selectedMonth, format: .dateTime.month())
                     .font(.headline.bold())
+                    .frame(width: 54)
                 
                 Button {
-
+                    selectedMonth = Calendar.current.date(byAdding: .month, value: 1, to: selectedMonth)!
                 } label: {
                     Image(systemName: "chevron.right")
                 }
                 .buttonStyle(.plain)
                 .font(.system(size: 16, weight: .medium))
                 .foregroundStyle(.secondary)
+                .disabled(Calendar.current.isDate(selectedMonth, equalTo: Date.now, toGranularity: .month))
             }
             VStack {
                 HStack(alignment: .center, spacing: 37) {
@@ -54,7 +57,7 @@ struct HeatmapView: View {
                 .foregroundStyle(Color(.separator))
                 .fontDesign(.monospaced)
                 
-                HeatmapGrid(dailyTotals: vm.dailyTotals, onTap: {_ in})
+                HeatmapGrid(dailyTotals: vm.dailyTotals, onTap: {_ in}, month: selectedMonth)
             }
             .padding(.vertical, 12)
             .padding(.horizontal, 42)

@@ -14,6 +14,7 @@ final class HeatmapViewModel {
     
     var dailyTotals: [Date: TimeInterval] = [:]
     var dailySessions: [Date: [SessionBlock]] = [:]
+    var firstActiveMonth: Date?
         
     func setup(context: ModelContext) {
 
@@ -37,6 +38,8 @@ final class HeatmapViewModel {
                 dailyTotals = res.dailyTotals
                 dailySessions = res.dailySessions
             }
+            firstActiveMonth = sessions.map { Calendar.current.startOfDay(for: $0.start) }
+                  .min().map { Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: $0))! }
         }
     }
 }

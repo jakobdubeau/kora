@@ -12,12 +12,13 @@ struct HeatmapGrid: View {
     
     let dailyTotals: [Date: TimeInterval]
     let onTap: (Date) -> Void
+    let month: Date
     
     var days: [Date?] {
         // first day of current month
-        let start = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: Date.now))!
+        let start = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: month))!
         // gets all day numbers in current month
-        let range = Calendar.current.range(of: .day, in: .month, for: Date.now)!
+        let range = Calendar.current.range(of: .day, in: .month, for: month)!
         
         // gets weekday of first day
         let firstDay = Calendar.current.component(.weekday, from: start)
