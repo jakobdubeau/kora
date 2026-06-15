@@ -16,6 +16,7 @@ struct TabsView: View {
     }
     
     @State private var selectedTab: Tab = .home
+    @State private var activeTab: Tab = .home
     @State private var showTabs: Bool = true
     @State private var tabTransition: Double = 0
     
@@ -49,12 +50,13 @@ struct TabsView: View {
                     
                     HStack {
                         Button {
-                            withAnimation(.smooth(duration: 0.2)) {
+                            activeTab = .home
+                            withAnimation(.smooth(duration: 0.1)) {
                                 tabTransition = 1
                             }
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                 selectedTab = .home
-                                withAnimation(.smooth(duration: 0.2)) {
+                                withAnimation(.smooth(duration: 0.1)) {
                                     tabTransition = 0
                                 }
                             }
@@ -65,15 +67,16 @@ struct TabsView: View {
                         }
                         .buttonStyle(.plain)
                         .font(.system(size: 20, weight: .bold))
-                        .foregroundStyle(selectedTab == .home ? Color.primary.opacity(0.8) : Color.secondary)
+                        .foregroundStyle(activeTab == .home ? Color.primary.opacity(0.8) : Color.secondary)
                         
                         Button {
-                            withAnimation(.smooth(duration: 0.2)) {
+                            activeTab = .groups
+                            withAnimation(.smooth(duration: 0.1)) {
                                 tabTransition = 1
                             }
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                 selectedTab = .groups
-                                withAnimation(.smooth(duration: 0.2)) {
+                                withAnimation(.smooth(duration: 0.1)) {
                                     tabTransition = 0
                                 }
                             }
@@ -84,15 +87,16 @@ struct TabsView: View {
                         }
                         .buttonStyle(.plain)
                         .font(.system(size: 20, weight: .bold))
-                        .foregroundStyle(selectedTab == .groups ? Color.primary.opacity(0.8) : Color.secondary)
+                        .foregroundStyle(activeTab == .groups ? Color.primary.opacity(0.8) : Color.secondary)
                         
                         Button {
-                            withAnimation(.smooth(duration: 0.2)) {
+                            activeTab = .profile
+                            withAnimation(.smooth(duration: 0.1)) {
                                 tabTransition = 1
                             }
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                 selectedTab = .profile
-                                withAnimation(.smooth(duration: 0.2)) {
+                                withAnimation(.smooth(duration: 0.1)) {
                                     tabTransition = 0
                                 }
                             }
@@ -103,7 +107,7 @@ struct TabsView: View {
                         }
                         .buttonStyle(.plain)
                         .font(.system(size: 22, weight: .bold))
-                        .foregroundStyle(selectedTab == .profile ? Color.primary.opacity(0.8) : Color.secondary)
+                        .foregroundStyle(activeTab == .profile ? Color.primary.opacity(0.8) : Color.secondary)
                         
                     }
                     .padding(.top)
