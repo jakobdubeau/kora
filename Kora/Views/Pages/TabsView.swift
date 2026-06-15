@@ -17,6 +17,7 @@ struct TabsView: View {
     
     @State private var selectedTab: Tab = .home
     @State private var showTabs: Bool = true
+    @State private var tabTransition: Double = 0
     
     var body: some View {
         
@@ -33,6 +34,11 @@ struct TabsView: View {
                 HomeView(showTabs: $showTabs)
                 
             }
+            
+            Color.black
+                .ignoresSafeArea()
+                .opacity(tabTransition)
+                .allowsHitTesting(false)
         }
         .safeAreaInset(edge: .bottom) {
             if showTabs {
@@ -44,7 +50,13 @@ struct TabsView: View {
                     HStack {
                         Button {
                             withAnimation(.smooth(duration: 0.2)) {
+                                tabTransition = 1
+                            }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                                 selectedTab = .home
+                                withAnimation(.smooth(duration: 0.2)) {
+                                    tabTransition = 0
+                                }
                             }
                         } label: {
                             Image(systemName: "house.fill")
@@ -57,7 +69,13 @@ struct TabsView: View {
                         
                         Button {
                             withAnimation(.smooth(duration: 0.2)) {
+                                tabTransition = 1
+                            }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                                 selectedTab = .groups
+                                withAnimation(.smooth(duration: 0.2)) {
+                                    tabTransition = 0
+                                }
                             }
                         } label: {
                             Image(systemName: "person.3.fill")
@@ -70,7 +88,13 @@ struct TabsView: View {
                         
                         Button {
                             withAnimation(.smooth(duration: 0.2)) {
+                                tabTransition = 1
+                            }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                                 selectedTab = .profile
+                                withAnimation(.smooth(duration: 0.2)) {
+                                    tabTransition = 0
+                                }
                             }
                         } label: {
                             Image(systemName: "person.crop.circle.fill")
