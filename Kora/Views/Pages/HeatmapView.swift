@@ -6,9 +6,14 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct HeatmapView: View {
     @State private var vm = HeatmapViewModel()
+    @State private var selectedDay: Date?
+    @State private var selectedMonth: Date = Date()
+    
+    @Environment(\.modelContext) private var context
     
     var body: some View {
         VStack(alignment: .center, spacing: 16) {
@@ -57,10 +62,20 @@ struct HeatmapView: View {
             Rectangle()
                 .foregroundStyle(Color(.separator).opacity(0.5))
                 .frame(height: 0.5)
+            
             ScrollView {
                 Text("blocks")
             }
+            .opacity(selectedDay == nil ? 0 : 1)
+        }
+        .onAppear {
+            vm.setup(context: context)
         }
         .padding(.top, 24)
     }
+}
+
+#Preview {
+    HeatmapView()
+        .modelContainer(for: [Course.self, StudySession.self], inMemory: true)
 }
