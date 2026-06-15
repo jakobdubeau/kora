@@ -57,7 +57,7 @@ struct HeatmapView: View {
                 .foregroundStyle(Color(.separator))
                 .fontDesign(.monospaced)
                 
-                HeatmapGrid(dailyTotals: vm.dailyTotals, onTap: {_ in}, month: selectedMonth)
+                HeatmapGrid(dailyTotals: vm.dailyTotals, onTap: {day in selectedDay = day}, month: selectedMonth)
             }
             .padding(.vertical, 12)
             .padding(.horizontal, 42)
@@ -66,10 +66,9 @@ struct HeatmapView: View {
                 .foregroundStyle(Color(.separator).opacity(0.5))
                 .frame(height: 0.5)
             
-            ScrollView {
-                Text("blocks")
+            if let day = selectedDay {
+                DailyTimeline(sessions: vm.dailySessions[day] ?? [], date: day)
             }
-            .opacity(selectedDay == nil ? 0 : 1)
         }
         .onAppear {
             vm.setup(context: context)
