@@ -62,10 +62,6 @@ struct HeatmapView: View {
             .padding(.vertical, 12)
             .padding(.horizontal, 42)
             
-            Rectangle()
-                .foregroundStyle(Color(.separator).opacity(0.5))
-                .frame(height: 0.5)
-            
             if let day = selectedDay {
                 DailyTimeline(sessions: vm.dailySessions[day] ?? [], date: day)
             }
