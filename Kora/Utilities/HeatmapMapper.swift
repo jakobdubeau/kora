@@ -10,6 +10,7 @@ import Foundation
 // snapshot of session data for visual time block
 struct SessionBlock {
     let duration: TimeInterval
+    let start: Date
     let name: String
     let colour: String?
 }
@@ -34,7 +35,7 @@ struct HeatmapMapper {
             
             dailyTotals[sessionDay, default: 0] += session.duration.rounded(.down)
             
-            let block = SessionBlock(duration: session.duration.rounded(.down), name: sessionCourse.name, colour: sessionCourse.colour)
+            let block = SessionBlock(duration: session.duration.rounded(.down), start: session.start, name: sessionCourse.name, colour: sessionCourse.colour)
             dailySessions[sessionDay, default: []].append(block)
         }
         return (dailyTotals, dailySessions)

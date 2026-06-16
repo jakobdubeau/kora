@@ -31,7 +31,7 @@ struct DailyTimeline: View {
                             .font(.system(size: 12, weight: .medium))
                             .foregroundStyle(Color(.separator))
                             .fontDesign(.monospaced)
-                            .frame(width: 32)
+                            .frame(width: 32, alignment: .leading)
                         
                         GeometryReader { geo in
                             Path { path in
@@ -49,6 +49,5 @@ struct DailyTimeline: View {
             }
             .scrollIndicators(.hidden)
         }
-        .padding(.top, 4)
     }
 }
