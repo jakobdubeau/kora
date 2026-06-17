@@ -52,5 +52,6 @@ struct HeatmapGrid: View {
                 }
             }
         }
+        .animation(.smooth(duration: 0.2), value: month)
     }
 }

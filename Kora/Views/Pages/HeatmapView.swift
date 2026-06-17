@@ -79,8 +79,8 @@ struct HeatmapView: View {
             .onTapGesture {
                 withAnimation(.spring(duration: 0.3)) {
                     selectedDay = nil
-                    daySelected = false
                 }
+                daySelected = false
             }
             
             ZStack {
@@ -101,8 +101,8 @@ struct HeatmapView: View {
             vm.setup(context: context, selectedMonth: selectedMonth)
             withAnimation(.spring(duration: 0.3)) {
                 selectedDay = nil
-                daySelected = false
             }
+            daySelected = false
         }
         .padding(.top, 24)
     }
