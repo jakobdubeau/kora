@@ -19,64 +19,73 @@ struct HeatmapView: View {
     
     var body: some View {
         VStack(alignment: .center, spacing: 16) {
-            HStack(spacing: 22) {
-                Button {
-                    selectedMonth = Calendar.current.date(byAdding: .month, value: -1, to: selectedMonth)!
-                } label: {
-                    Image(systemName: "chevron.left")
-                }
-                .buttonStyle(.plain)
-                .font(.system(size: 16, weight: .medium))
-                .foregroundStyle(.secondary)
-                .disabled(selectedMonth <= (vm.firstActiveMonth ?? selectedMonth))
-                
-                Text(selectedMonth, format: .dateTime.month())
-                    .font(.headline.bold())
-                    .frame(width: 54)
-                
-                Button {
-                    selectedMonth = Calendar.current.date(byAdding: .month, value: 1, to: selectedMonth)!
-                } label: {
-                    Image(systemName: "chevron.right")
-                }
-                .buttonStyle(.plain)
-                .font(.system(size: 16, weight: .medium))
-                .foregroundStyle(.secondary)
-                .disabled(Calendar.current.isDate(selectedMonth, equalTo: Date.now, toGranularity: .month))
-            }
-            VStack {
-                HStack(alignment: .center, spacing: 37) {
-                    Text("M")
-                    Text("T")
-                    Text("W")
-                    Text("T")
-                    Text("F")
-                    Text("S")
-                    Text("S")
-                }
-                .font(.system(size: 12, weight: .medium))
-                .foregroundStyle(Color(.separator))
-                .fontDesign(.monospaced)
-                
-                HeatmapGrid(dailyTotals: vm.dailyTotals, onTap: { day in if !daySelected {
-                    daySelected = true
-                    withAnimation(.spring(duration: 0.3)) { selectedDay = day }
-                } else {
-                    withAnimation(.smooth(duration: 0.2)) { dayTransition = 1 }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { selectedDay = day
-                        withAnimation(.smooth(duration: 0.2)) {
-                            dayTransition = 0
-                        }
+            VStack(spacing: 16) {
+                HStack(spacing: 22) {
+                    Button {
+                        selectedMonth = Calendar.current.date(byAdding: .month, value: -1, to: selectedMonth)!
+                    } label: {
+                        Image(systemName: "chevron.left")
                     }
-                }}, month: selectedMonth)
+                    .buttonStyle(.plain)
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundStyle(.secondary)
+                    .disabled(selectedMonth <= (vm.firstActiveMonth ?? selectedMonth))
+                    
+                    Text(selectedMonth, format: .dateTime.month())
+                        .font(.headline.bold())
+                        .frame(width: 54)
+                    
+                    Button {
+                        selectedMonth = Calendar.current.date(byAdding: .month, value: 1, to: selectedMonth)!
+                    } label: {
+                        Image(systemName: "chevron.right")
+                    }
+                    .buttonStyle(.plain)
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundStyle(.secondary)
+                    .disabled(Calendar.current.isDate(selectedMonth, equalTo: Date.now, toGranularity: .month))
+                }
+                VStack {
+                    HStack(alignment: .center, spacing: 37) {
+                        Text("M")
+                        Text("T")
+                        Text("W")
+                        Text("T")
+                        Text("F")
+                        Text("S")
+                        Text("S")
+                    }
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(Color(.separator))
+                    .fontDesign(.monospaced)
+                    
+                    HeatmapGrid(dailyTotals: vm.dailyTotals, onTap: { day in if !daySelected {
+                        daySelected = true
+                        withAnimation(.spring(duration: 0.3)) { selectedDay = day }
+                    } else {
+                        withAnimation(.smooth(duration: 0.2)) { dayTransition = 1 }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { selectedDay = day
+                            withAnimation(.smooth(duration: 0.2)) {
+                                dayTransition = 0
+                            }
+                        }
+                    }}, month: selectedMonth)
+                }
+                .padding(.vertical, 12)
+                .padding(.horizontal, 42)
             }
-            .padding(.vertical, 12)
-            .padding(.horizontal, 42)
+            .contentShape(Rectangle())
+            .onTapGesture {
+                withAnimation(.spring(duration: 0.3)) {
+                    selectedDay = nil
+                    daySelected = false
+                }
+            }
             
             ZStack {
                 if let day = selectedDay {
                     DailyTimeline(sessions: vm.dailySessions[day] ?? [], date: day)
-                        .transition(.asymmetric(insertion: .opacity.combined(with: .move(edge: .bottom)), removal: .opacity.combined(with: .move(edge: .top))))
+                        .transition(.asymmetric(insertion: .opacity.combined(with: .move(edge: .bottom)), removal: .opacity.combined(with: .move(edge: .bottom))))
                 }
                 Color.black
                     .opacity(dayTransition)
