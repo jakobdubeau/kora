@@ -12,6 +12,8 @@ struct HeatmapView: View {
     @State private var vm = HeatmapViewModel()
     @State private var selectedDay: Date?
     @State private var selectedMonth: Date = Date.now
+    @State private var daySelected: Bool = false
+    @State private var dayTransition: Double = 0
     
     @Environment(\.modelContext) private var context
     
@@ -56,13 +58,29 @@ struct HeatmapView: View {
                 .foregroundStyle(Color(.separator))
                 .fontDesign(.monospaced)
                 
-                HeatmapGrid(dailyTotals: vm.dailyTotals, onTap: {day in selectedDay = day}, month: selectedMonth)
+                HeatmapGrid(dailyTotals: vm.dailyTotals, onTap: { day in if !daySelected {
+                    daySelected = true
+                    withAnimation(.spring(duration: 0.3)) { selectedDay = day }
+                } else {
+                    withAnimation(.smooth(duration: 0.2)) { dayTransition = 1 }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { selectedDay = day
+                        withAnimation(.smooth(duration: 0.2)) {
+                            dayTransition = 0
+                        }
+                    }
+                }}, month: selectedMonth)
             }
             .padding(.vertical, 12)
             .padding(.horizontal, 42)
             
-            if let day = selectedDay {
-                DailyTimeline(sessions: vm.dailySessions[day] ?? [], date: day)
+            ZStack {
+                if let day = selectedDay {
+                    DailyTimeline(sessions: vm.dailySessions[day] ?? [], date: day)
+                        .transition(.asymmetric(insertion: .opacity.combined(with: .move(edge: .bottom)), removal: .opacity.combined(with: .move(edge: .top))))
+                }
+                Color.black
+                    .opacity(dayTransition)
+                    .allowsHitTesting(false)
             }
             Spacer()
         }
@@ -72,6 +90,7 @@ struct HeatmapView: View {
         .onChange(of: selectedMonth) {
             vm.setup(context: context, selectedMonth: selectedMonth)
             selectedDay = nil
+            daySelected = false
         }
         .padding(.top, 24)
     }

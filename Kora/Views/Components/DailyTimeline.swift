@@ -82,6 +82,7 @@ struct DailyTimeline: View {
                 }
                 .frame(height: 1200)
             }
+            .padding(.horizontal, 4)
             .scrollIndicators(.hidden)
         }
     }
