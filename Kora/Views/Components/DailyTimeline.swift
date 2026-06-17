@@ -76,7 +76,7 @@ struct DailyTimeline: View {
                         .frame(height: sessionHeight)
                         .background(RoundedRectangle(cornerRadius: 8).stroke(Color(.separator).opacity(0.5), lineWidth: 1))
                         .padding(.leading, 44)
-                        .padding(.trailing, 8)
+                        .padding(.trailing, 16)
                         .padding(.top, startTime)
                     }
                 }
