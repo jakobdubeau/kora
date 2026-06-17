@@ -16,9 +16,9 @@ final class HeatmapViewModel {
     var dailySessions: [Date: [SessionBlock]] = [:]
     var firstActiveMonth: Date?
         
-    func setup(context: ModelContext) {
+    func setup(context: ModelContext, selectedMonth: Date) {
 
-        let month = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: Date.now))!
+        let month = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: selectedMonth))!
         let nextMonth = Calendar.current.date(byAdding: .month, value: 1, to: month)!
         
         // query
@@ -38,8 +38,18 @@ final class HeatmapViewModel {
                 dailyTotals = res.dailyTotals
                 dailySessions = res.dailySessions
             }
-            firstActiveMonth = sessions.map { Calendar.current.startOfDay(for: $0.start) }
-                  .min().map { Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: $0))! }
+        }
+
+        // to start monthly heatmap at month user first used the app of the year
+        let yearStart = Calendar.current.date(from: Calendar.current.dateComponents([.year], from: month))!
+        let yearEnd = Calendar.current.date(byAdding: .year, value: 1, to: yearStart)!
+        let yearDescriptor = FetchDescriptor<StudySession>(
+            predicate: #Predicate { session in session.start >= yearStart && session.start < yearEnd }
+        )
+        if let yearSessions = try? context.fetch(yearDescriptor) {
+            firstActiveMonth = yearSessions.map { Calendar.current.startOfDay(for: $0.start) }
+                .min()
+                .map { Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: $0))! }
         }
     }
 }

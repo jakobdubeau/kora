@@ -27,7 +27,6 @@ struct HeatmapView: View {
                 .font(.system(size: 16, weight: .medium))
                 .foregroundStyle(.secondary)
                 .disabled(selectedMonth <= (vm.firstActiveMonth ?? selectedMonth))
-                // use Color(.separator).opacity(0.5) for disabled (end)
                 
                 Text(selectedMonth, format: .dateTime.month())
                     .font(.headline.bold())
@@ -68,7 +67,11 @@ struct HeatmapView: View {
             Spacer()
         }
         .onAppear {
-            vm.setup(context: context)
+            vm.setup(context: context, selectedMonth: selectedMonth)
+        }
+        .onChange(of: selectedMonth) {
+            vm.setup(context: context, selectedMonth: selectedMonth)
+            selectedDay = nil
         }
         .padding(.top, 24)
     }
