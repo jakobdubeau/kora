@@ -59,7 +59,7 @@ struct HeatmapView: View {
                     .foregroundStyle(Color(.separator))
                     .fontDesign(.monospaced)
                     
-                    HeatmapGrid(dailyTotals: vm.dailyTotals, onTap: { day in if !daySelected {
+                    HeatmapGrid(dailyTotals: vm.dailyTotals, onTap: { day in if day != selectedDay { if !daySelected {
                         daySelected = true
                         withAnimation(.spring(duration: 0.3)) { selectedDay = day }
                     } else {
@@ -69,7 +69,7 @@ struct HeatmapView: View {
                                 dayTransition = 0
                             }
                         }
-                    }}, month: selectedMonth)
+                    }}}, month: selectedMonth)
                 }
                 .padding(.vertical, 12)
                 .padding(.horizontal, 42)
