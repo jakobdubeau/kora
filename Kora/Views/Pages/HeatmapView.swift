@@ -14,6 +14,7 @@ struct HeatmapView: View {
     @State private var selectedMonth: Date = Date.now
     @State private var daySelected: Bool = false
     @State private var dayTransition: Double = 0
+    @State private var isAnimating: Bool = false
     
     @Environment(\.modelContext) private var context
     
@@ -60,6 +61,7 @@ struct HeatmapView: View {
                     .fontDesign(.monospaced)
                     
                     HeatmapGrid(dailyTotals: vm.dailyTotals, onTap: { day in if day != selectedDay { if !daySelected {
+                        guard !isAnimating else { return }
                         daySelected = true
                         withAnimation(.spring(duration: 0.3)) { selectedDay = day }
                     } else {
@@ -77,10 +79,12 @@ struct HeatmapView: View {
             .fixedSize(horizontal: false, vertical: true)
             .contentShape(Rectangle())
             .onTapGesture {
+                isAnimating = true
                 withAnimation(.spring(duration: 0.3)) {
                     selectedDay = nil
                 }
                 daySelected = false
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { isAnimating = false }
             }
             
             ZStack {
@@ -98,11 +102,13 @@ struct HeatmapView: View {
             vm.setup(context: context, selectedMonth: selectedMonth)
         }
         .onChange(of: selectedMonth) {
+            isAnimating = true
             vm.setup(context: context, selectedMonth: selectedMonth)
             withAnimation(.spring(duration: 0.3)) {
                 selectedDay = nil
             }
             daySelected = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { isAnimating = false }
         }
         .padding(.top, 24)
     }
