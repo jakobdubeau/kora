@@ -16,6 +16,32 @@ final class HeatmapViewModel {
     var dailySessions: [Date: [SessionBlock]] = [:]
     var firstActiveMonth: Date?
         
+    func sessions(for day: Date) -> [SessionBlock] {
+        let nextDay = Calendar.current.date(byAdding: .day, value: 1, to: day)!
+
+        let normal = (dailySessions[day] ?? []).filter {
+            Calendar.current.component(.hour, from: $0.start) >= 5
+        }
+
+        let earlyMorning = (dailySessions[day] ?? []).compactMap { block -> SessionBlock? in
+            guard Calendar.current.component(.hour, from: block.start) < 5 else { return nil }
+            let dayStart = Calendar.current.date(bySettingHour: 5, minute: 0, second: 0, of: block.start)!
+            let remaining = block.start.addingTimeInterval(block.duration).timeIntervalSince(dayStart)
+            guard remaining > 0 else { return nil }
+            return SessionBlock(duration: remaining, start: dayStart, name: block.name, colour: block.colour)
+        }
+
+        let lateNight = (dailySessions[nextDay] ?? []).compactMap { block -> SessionBlock? in
+            guard Calendar.current.component(.hour, from: block.start) < 5 else { return nil }
+            let dayStart = Calendar.current.date(bySettingHour: 5, minute: 0, second: 0, of: block.start)!
+            let trimmed = min(block.duration, dayStart.timeIntervalSince(block.start))
+            guard trimmed > 0 else { return nil }
+            return SessionBlock(duration: trimmed, start: block.start, name: block.name, colour: block.colour)
+        }
+
+        return normal + earlyMorning + lateNight
+    }
+
     func setup(context: ModelContext, selectedMonth: Date) {
 
         let month = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: selectedMonth))!
