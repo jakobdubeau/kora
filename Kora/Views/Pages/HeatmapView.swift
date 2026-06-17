@@ -74,6 +74,7 @@ struct HeatmapView: View {
                 .padding(.vertical, 12)
                 .padding(.horizontal, 42)
             }
+            .fixedSize(horizontal: false, vertical: true)
             .contentShape(Rectangle())
             .onTapGesture {
                 withAnimation(.spring(duration: 0.3)) {
@@ -98,8 +99,10 @@ struct HeatmapView: View {
         }
         .onChange(of: selectedMonth) {
             vm.setup(context: context, selectedMonth: selectedMonth)
-            selectedDay = nil
-            daySelected = false
+            withAnimation(.spring(duration: 0.3)) {
+                selectedDay = nil
+                daySelected = false
+            }
         }
         .padding(.top, 24)
     }
