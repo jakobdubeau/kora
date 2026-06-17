@@ -27,6 +27,9 @@ func formatTimeBreak(seconds: TimeInterval) -> String {
     else if Int(seconds) < 3600 {
         return String(format: "%dm %ds", minutes, remainingSeconds)
     }
+    else if minutes == 0 {
+        return String(format: "%dh", hours)
+    }
     else {
         return String(format: "%dh %dm", hours, minutes)
     }
