@@ -85,7 +85,11 @@ struct HeatmapView: View {
             
             ZStack {
                 if let day = selectedDay {
-                    DailyTimeline(sessions: vm.dailySessions[day] ?? [], date: day)
+                    let nextDay = Calendar.current.date(byAdding: .day, value: 1, to: day)!
+                    let earlyMorning = (vm.dailySessions[nextDay] ?? []).filter {
+                        Calendar.current.component(.hour, from: $0.start) < 5
+                    }
+                    DailyTimeline(sessions: (vm.dailySessions[day] ?? []) + earlyMorning, date: day)
                         .transition(.asymmetric(insertion: .opacity.combined(with: .move(edge: .bottom)), removal: .opacity.combined(with: .move(edge: .bottom))))
                 }
                 Color.black

@@ -53,7 +53,8 @@ struct DailyTimeline: View {
                         let session = sessions[index]
                         let hour = Calendar.current.component(.hour, from: session.start)
                         let minute = Calendar.current.component(.minute, from: session.start)
-                        let startTime = (Double(hour - 5) + Double(minute) / 60.0) * 48 + 24
+                        let adjustedHour = hour < 5 ? hour + 24 : hour
+                        let startTime = (Double(adjustedHour - 5) + Double(minute) / 60.0) * 48 + 24
                         let sessionHeight = (session.duration / 3600) * 48
                         
                         HStack(spacing: 8) {
