@@ -68,6 +68,7 @@ struct TabsView: View {
                         .buttonStyle(.plain)
                         .font(.system(size: 20, weight: .bold))
                         .foregroundStyle(activeTab == .home ? Color.primary.opacity(0.8) : Color.secondary)
+                        .allowsHitTesting(activeTab != .home)
                         
                         Button {
                             activeTab = .groups
@@ -88,6 +89,7 @@ struct TabsView: View {
                         .buttonStyle(.plain)
                         .font(.system(size: 20, weight: .bold))
                         .foregroundStyle(activeTab == .groups ? Color.primary.opacity(0.8) : Color.secondary)
+                        .allowsHitTesting(activeTab != .groups)
                         
                         Button {
                             activeTab = .profile
@@ -108,6 +110,7 @@ struct TabsView: View {
                         .buttonStyle(.plain)
                         .font(.system(size: 22, weight: .bold))
                         .foregroundStyle(activeTab == .profile ? Color.primary.opacity(0.8) : Color.secondary)
+                        .allowsHitTesting(activeTab != .profile)
                         
                     }
                     .padding(.top)
