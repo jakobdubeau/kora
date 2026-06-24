@@ -45,7 +45,17 @@ struct HomeView: View {
                             .font(.system(size: 48, weight: .semibold))
                             .monospacedDigit()
                             .onTapGesture {
-                                showDailySessions = true
+                                withAnimation(.easeOut(duration: 0.1)) {
+                                    blackScreen = 1
+                                    showTabs = false
+                                }
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                    showDailySessions = true
+                                    withAnimation(.easeOut(duration: 0.1)) {
+                                        blackScreen = 0
+                                    }
+                                }
+
                             }
                         if vm.currentBreakTime > 60 {
                             Text("[Break for \(formatTimeBreak(seconds: vm.currentBreakTime))]")
@@ -173,14 +183,14 @@ struct HomeView: View {
                 DailySessionsSheet(
                     date: Date.now,
                     onDismiss: {
-                        withAnimation(.easeOut(duration: 0.3)) {
+                        withAnimation(.easeOut(duration: 0.1)) {
                             blackScreen = 1
                         }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                             showDailySessions = false
-                            withAnimation(.easeOut(duration: 0.3)) {
+                            showTabs = true
+                            withAnimation(.easeOut(duration: 0.1)) {
                                 blackScreen = 0
-                                showTabs = true
                             }
                         }
                     })
