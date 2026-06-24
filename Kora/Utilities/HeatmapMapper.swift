@@ -13,6 +13,7 @@ struct SessionBlock {
     let start: Date
     let name: String
     let colour: String?
+    let id: UUID
 }
 
 // get daily hours and sessions
@@ -35,7 +36,7 @@ struct HeatmapMapper {
             
             dailyTotals[sessionDay, default: 0] += session.duration.rounded(.down)
             
-            let block = SessionBlock(duration: session.duration.rounded(.down), start: session.start, name: sessionCourse.name, colour: sessionCourse.colour)
+            let block = SessionBlock(duration: session.duration.rounded(.down), start: session.start, name: sessionCourse.name, colour: sessionCourse.colour, id: session.id)
             dailySessions[sessionDay, default: []].append(block)
         }
         return (dailyTotals, dailySessions)
