@@ -28,7 +28,7 @@ final class HeatmapViewModel {
             let dayStart = Calendar.current.date(bySettingHour: 5, minute: 0, second: 0, of: block.start)!
             let remaining = block.start.addingTimeInterval(block.duration).timeIntervalSince(dayStart)
             guard remaining > 0 else { return nil }
-            return SessionBlock(duration: remaining, start: dayStart, name: block.name, colour: block.colour)
+            return SessionBlock(duration: remaining, start: dayStart, name: block.name, colour: block.colour, id: block.id)
         }
 
         let lateNight = (dailySessions[nextDay] ?? []).compactMap { block -> SessionBlock? in
@@ -36,7 +36,7 @@ final class HeatmapViewModel {
             let dayStart = Calendar.current.date(bySettingHour: 5, minute: 0, second: 0, of: block.start)!
             let trimmed = min(block.duration, dayStart.timeIntervalSince(block.start))
             guard trimmed > 0 else { return nil }
-            return SessionBlock(duration: trimmed, start: block.start, name: block.name, colour: block.colour)
+            return SessionBlock(duration: trimmed, start: block.start, name: block.name, colour: block.colour, id: block.id)
         }
 
         return normal + earlyMorning + lateNight

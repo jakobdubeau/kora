@@ -13,9 +13,8 @@ struct DailySessionsSheet: View {
     
     @Environment(\.modelContext) private var context
     
-    let sessions: [SessionBlock]
     let date: Date
-
+    let onDismiss: () -> Void
     
     var body: some View {
         Text("DailySessionsSheet")

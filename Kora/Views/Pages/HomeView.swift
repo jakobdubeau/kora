@@ -11,6 +11,7 @@ import SwiftData
 struct HomeView: View {
     @State private var vm = HomeViewModel() // @state ensures viewmodel instance isn't lost after redraw
     @State private var showAddCourse = false
+    @State private var showDailySessions = false
     @State private var activeCourse: Course? = nil
     @State private var blackScreen: Double = 0
     
@@ -43,6 +44,9 @@ struct HomeView: View {
                         Text("\(formatTime(seconds: vm.totalTime))") // string interpolation
                             .font(.system(size: 48, weight: .semibold))
                             .monospacedDigit()
+                            .onTapGesture {
+                                showDailySessions = true
+                            }
                         if vm.currentBreakTime > 60 {
                             Text("[Break for \(formatTimeBreak(seconds: vm.currentBreakTime))]")
                                 .font(.caption)
@@ -164,7 +168,24 @@ struct HomeView: View {
                     })
                     .zIndex(1)
             }
-
+            
+            if showDailySessions {
+                DailySessionsSheet(
+                    date: Date.now,
+                    onDismiss: {
+                        withAnimation(.easeOut(duration: 0.3)) {
+                            blackScreen = 1
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            showDailySessions = false
+                            withAnimation(.easeOut(duration: 0.3)) {
+                                blackScreen = 0
+                                showTabs = true
+                            }
+                        }
+                    })
+                    .zIndex(1)
+            }
             Color.black
                 .ignoresSafeArea()
                 .opacity(blackScreen)
