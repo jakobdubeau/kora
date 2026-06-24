@@ -16,7 +16,26 @@ struct DailySessionsSheet: View {
     let date: Date
     let onDismiss: () -> Void
     
+    enum TimeBlock {
+        case session(SessionBlock)
+        case empty(start: Date, duration: TimeInterval)
+    }
+    
     var body: some View {
-        Text("DailySessionsSheet")
+        VStack(spacing: 0) {
+            HStack {
+                
+            }
+            HStack {
+                VStack {
+                    
+                }
+                ScrollView {
+                    
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(.systemBackground))
     }
 }

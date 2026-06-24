@@ -83,8 +83,7 @@ struct SessionCover: View {
                             .buttonStyle(.plain)
                         }
                         .frame(maxWidth: .infinity)
-                        .padding(.top, 22)
-                        .padding(.bottom, 20)
+                        .padding(.vertical, 22)
                         
                         SessionGroup()
                         
