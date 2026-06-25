@@ -35,8 +35,8 @@ struct DailySessionsSheet: View {
         for session in sessions {
             if let cursor, session.start > cursor {
                 res.append(.empty(start: cursor, duration: session.start.timeIntervalSince(cursor)))
-                res.append(.session(session))
             }
+            res.append(.session(session))
             cursor = session.start.addingTimeInterval(session.duration)
         }
         
@@ -76,16 +76,55 @@ struct DailySessionsSheet: View {
                 .opacity(0)
             }
             .padding(.horizontal, 32)
-            .padding(.top, 22)
+            .padding(.vertical, 22)
             
-            HStack {
-                VStack {
-                    
-                }
-                ScrollView {
-                    
+            ScrollView {
+                HStack {
+                    VStack {
+                        
+                    }
+                    ForEach(blocks.indices, id: \.self) { index in
+                        let block = blocks[index]
+                        
+                        switch block {
+                        case .empty(let start, let duration):
+                            let blankHeight = (duration / 3600) * 48
+                            
+                            RoundedRectangle(cornerRadius: 8)
+                                .fill(Color(.systemBackground))
+                                .stroke(Color(.separator).opacity(0.5), lineWidth: 0.5)
+                                .overlay(Text("+ \(formatTimeBreak(seconds: duration))").frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading).padding(16).font(.system(size: 14, weight: .regular)).foregroundStyle(Color(.separator)))
+                                .frame(height: max(blankHeight, 24))
+                            
+                        case .session(let session):
+                            let sessionHeight = (session.duration / 3600) * 48
+                            
+                            HStack(spacing: 8) {
+                                RoundedRectangle(cornerRadius: 14)
+                                    .fill(Color(hex: session.colour ?? "#FFFFFF"))
+                                    .frame(width: 8)
+                                
+                                VStack(alignment: .leading, spacing: 0) {
+                                    Text(session.name)
+                                        .font(.system(size: 16, weight: .regular))
+                                    Text(formatTimeBreak(seconds: session.duration))
+                                        .font(.system(size: 14, weight: .regular))
+                                        .foregroundStyle(.secondary)
+                                    Spacer()
+                                }
+                                .padding(.top, 7)
+                                Spacer()
+                            }
+                            .frame(height: max(sessionHeight, 24))
+                            .background(RoundedRectangle(cornerRadius: 8)
+                                .fill(Color(hex: "#090909"))
+                                .stroke(Color(.separator).opacity(0.5), lineWidth: 0.5))
+                        }
+                    }
                 }
             }
+            .padding(.horizontal, 8)
+            .scrollIndicators(.hidden)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemBackground))
