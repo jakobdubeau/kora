@@ -15,7 +15,7 @@ struct SessionGroup: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(RoundedRectangle(cornerRadius: 16)
-            .fill(Color(hex: "#080809"))
+            .fill(Color(hex: "#090909"))
             .overlay(RoundedRectangle(cornerRadius: 16).stroke(Color(.separator).opacity(0.5), lineWidth: 0.5))
         )
     }

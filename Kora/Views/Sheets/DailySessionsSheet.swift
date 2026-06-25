@@ -119,7 +119,7 @@ struct DailySessionsSheet: View {
                                 }
                                 .frame(height: max(sessionHeight, 48))
                                 .background(RoundedRectangle(cornerRadius: 8)
-                                    .fill(Color(hex: "#080809"))
+                                    .fill(Color(hex: "#090909"))
                                     .stroke(Color(.separator).opacity(0.5), lineWidth: 0.5))
                             }
                         }
