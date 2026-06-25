@@ -24,7 +24,7 @@ struct DailySessionsSheet: View {
     var blocks: [TimeBlock] {
         var res: [TimeBlock] = []
         
-        let sessions = vm.sessions(for: date).sorted { $0.start < $1.start }
+        let sessions = vm.sessions(for: Calendar.current.startOfDay(for: date)).sorted { $0.start < $1.start }
         
         let dayStart = Calendar.current.date(bySettingHour: 5, minute: 0, second: 0, of: date)
         let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: date)!
@@ -83,47 +83,50 @@ struct DailySessionsSheet: View {
                     VStack {
                         
                     }
-                    ForEach(blocks.indices, id: \.self) { index in
-                        let block = blocks[index]
-                        
-                        switch block {
-                        case .empty(let start, let duration):
-                            let blankHeight = (duration / 3600) * 48
+                    VStack {
+                        ForEach(blocks.indices, id: \.self) { index in
+                            let block = blocks[index]
                             
-                            RoundedRectangle(cornerRadius: 8)
-                                .fill(Color(.systemBackground))
-                                .stroke(Color(.separator).opacity(0.5), lineWidth: 0.5)
-                                .overlay(Text("+ \(formatTimeBreak(seconds: duration))").frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading).padding(16).font(.system(size: 14, weight: .regular)).foregroundStyle(Color(.separator)))
-                                .frame(height: max(blankHeight, 24))
-                            
-                        case .session(let session):
-                            let sessionHeight = (session.duration / 3600) * 48
-                            
-                            HStack(spacing: 8) {
-                                RoundedRectangle(cornerRadius: 14)
-                                    .fill(Color(hex: session.colour ?? "#FFFFFF"))
-                                    .frame(width: 8)
+                            switch block {
+                            case .empty(let start, let duration):
+                                let blankHeight = (duration / 3600) * 48
                                 
-                                VStack(alignment: .leading, spacing: 0) {
-                                    Text(session.name)
-                                        .font(.system(size: 16, weight: .regular))
-                                    Text(formatTimeBreak(seconds: session.duration))
-                                        .font(.system(size: 14, weight: .regular))
-                                        .foregroundStyle(.secondary)
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(Color(.systemBackground))
+                                    .stroke(Color(.separator).opacity(0.5), lineWidth: 0.5)
+                                    .overlay(Text("+ \(formatTimeBreak(seconds: duration))").frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading).padding(.horizontal, 12).padding(.vertical, 8).font(.system(size: 12, weight: .regular)).foregroundStyle(Color(.separator)))
+                                    .frame(height: max(blankHeight, 24))
+                                
+                            case .session(let session):
+                                let sessionHeight = (session.duration / 3600) * 48
+                                
+                                HStack(spacing: 8) {
+                                    RoundedRectangle(cornerRadius: 14)
+                                        .fill(Color(hex: session.colour ?? "#FFFFFF"))
+                                        .frame(width: 8, height: max(sessionHeight - 16, 32))
+                                        .padding(.leading, 8)
+                                    
+                                    VStack(alignment: .leading, spacing: 0) {
+                                        Text(session.name)
+                                            .font(.system(size: 14, weight: .regular))
+                                        Text(formatTimeBreak(seconds: session.duration))
+                                            .font(.system(size: 12, weight: .regular))
+                                            .foregroundStyle(.secondary)
+                                        Spacer()
+                                    }
+                                    .padding(.top, 7)
                                     Spacer()
                                 }
-                                .padding(.top, 7)
-                                Spacer()
+                                .frame(height: max(sessionHeight, 48))
+                                .background(RoundedRectangle(cornerRadius: 8)
+                                    .fill(Color(hex: "#090909"))
+                                    .stroke(Color(.separator).opacity(0.5), lineWidth: 0.5))
                             }
-                            .frame(height: max(sessionHeight, 24))
-                            .background(RoundedRectangle(cornerRadius: 8)
-                                .fill(Color(hex: "#090909"))
-                                .stroke(Color(.separator).opacity(0.5), lineWidth: 0.5))
                         }
                     }
                 }
             }
-            .padding(.horizontal, 8)
+            .padding(.horizontal, 16)
             .scrollIndicators(.hidden)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
