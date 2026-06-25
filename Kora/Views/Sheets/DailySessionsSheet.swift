@@ -76,20 +76,46 @@ struct DailySessionsSheet: View {
                 .font(.system(size: 19, weight: .medium))
                 .opacity(0)
             }
-            .padding(.horizontal, 32)
+            .padding(.horizontal, 22)
             .padding(.vertical, 22)
+            
+            Rectangle()
+                .foregroundStyle(Color(.separator).opacity(0.5))
+                .frame(height: 0.5)
             
             ScrollView {
                 HStack {
-                    VStack {
-                        
-                    }
                     VStack(spacing: 10) {
                         ForEach(blocks.indices, id: \.self) { index in
                             let block = blocks[index]
                             
                             switch block {
                             case .empty(let start, let duration):
+                                let blankHeight = (duration / 3600) * 48
+                                
+                                Text(start.formatted(.dateTime.hour().minute()))
+                                    .frame(height: max(blankHeight, 24), alignment: .topLeading)
+                                    .font(.system(size: 9, weight: .regular))
+                                    .foregroundStyle(Color(.separator))
+                                
+                            case .session(let session):
+                                let sessionHeight = (session.duration / 3600) * 48
+                                
+                                Text(session.start.formatted(.dateTime.hour().minute()))
+                                    .frame(height: max(sessionHeight, 48), alignment: .topLeading)
+                                    .font(.system(size: 9, weight: .regular))
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                    .padding(.top, 6)
+                    
+                    VStack(spacing: 10) {
+                        ForEach(blocks.indices, id: \.self) { index in
+                            let block = blocks[index]
+                            
+                            switch block {
+                            case .empty(_, let duration):
                                 let blankHeight = (duration / 3600) * 48
                                 
                                 RoundedRectangle(cornerRadius: 8)
@@ -126,8 +152,10 @@ struct DailySessionsSheet: View {
                         }
                     }
                 }
+                .padding(.top, 8)
             }
-            .padding(.horizontal, 16)
+            .padding(.trailing, 12)
+            .padding(.leading, 6)
             .scrollIndicators(.hidden)
             .scrollPosition(id: $scrollPosition, anchor: .top)
         }
