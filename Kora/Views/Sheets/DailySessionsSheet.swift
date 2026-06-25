@@ -10,6 +10,7 @@ import SwiftData
 
 struct DailySessionsSheet: View {
     @State private var vm = HeatmapViewModel()
+    @State private var scrollPosition: Int?
     
     @Environment(\.modelContext) private var context
     
@@ -96,6 +97,7 @@ struct DailySessionsSheet: View {
                                     .stroke(Color(.separator).opacity(0.5), lineWidth: 0.5)
                                     .overlay(Text("+ \(formatTimeBreak(seconds: duration))").frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading).padding(.horizontal, 12).padding(.vertical, 8).font(.system(size: 12, weight: .regular)).foregroundStyle(Color(.separator)))
                                     .frame(height: max(blankHeight, 24))
+                                    .id(index)
                                 
                             case .session(let session):
                                 let sessionHeight = (session.duration / 3600) * 48
@@ -118,9 +120,8 @@ struct DailySessionsSheet: View {
                                     Spacer()
                                 }
                                 .frame(height: max(sessionHeight, 48))
-                                .background(RoundedRectangle(cornerRadius: 8)
-                                    .fill(Color(hex: "#090909"))
-                                    .stroke(Color(.separator).opacity(0.5), lineWidth: 0.5))
+                                .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#090909")).stroke(Color(.separator).opacity(0.5), lineWidth: 0.5))
+                                .id(index)
                             }
                         }
                     }
@@ -128,11 +129,15 @@ struct DailySessionsSheet: View {
             }
             .padding(.horizontal, 16)
             .scrollIndicators(.hidden)
+            .scrollPosition(id: $scrollPosition, anchor: .top)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemBackground))
         .onAppear {
             vm.setup(context: context, selectedMonth: date)
+            Task {
+                scrollPosition = blocks.firstIndex { if case .session = $0 { return true } else { return false }}
+            }
         }
     }
 }
