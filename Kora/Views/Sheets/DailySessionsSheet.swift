@@ -107,6 +107,12 @@ struct DailySessionsSheet: View {
                                     .foregroundStyle(.secondary)
                             }
                         }
+                        Text("5:00 AM")
+                            .frame(alignment: .topLeading)
+                            .font(.system(size: 9, weight: .regular))
+                            .foregroundStyle(Color(.separator))
+                            .padding(.top, -24)
+                            .padding(.bottom, 0)
                     }
                     .padding(.top, 6)
                     
@@ -151,6 +157,7 @@ struct DailySessionsSheet: View {
                             }
                         }
                     }
+                    .padding(.top, -9)
                 }
                 .padding(.top, 8)
             }
