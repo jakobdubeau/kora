@@ -83,7 +83,7 @@ struct DailySessionsSheet: View {
                     VStack {
                         
                     }
-                    VStack {
+                    VStack(spacing: 10) {
                         ForEach(blocks.indices, id: \.self) { index in
                             let block = blocks[index]
                             
@@ -119,7 +119,7 @@ struct DailySessionsSheet: View {
                                 }
                                 .frame(height: max(sessionHeight, 48))
                                 .background(RoundedRectangle(cornerRadius: 8)
-                                    .fill(Color(hex: "#090909"))
+                                    .fill(Color(hex: "#080809"))
                                     .stroke(Color(.separator).opacity(0.5), lineWidth: 0.5))
                             }
                         }
