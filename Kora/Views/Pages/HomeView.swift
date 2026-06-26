@@ -211,7 +211,7 @@ struct HomeView: View {
                             isDismissingMenu = false
                         }
                     )
-                    .position(x: menuAnchor.x - 60, y: menuAnchor.y - 105)
+                    .position(x: menuAnchor.x - 52, y: menuAnchor.y - 115)
                 }
             }
             

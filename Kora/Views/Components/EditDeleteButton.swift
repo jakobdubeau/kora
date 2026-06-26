@@ -14,8 +14,8 @@ struct EditDeleteButton: View {
     @Binding var isDismissing: Bool
     let onDismissComplete: () -> Void
 
-    @State private var editOffset: CGFloat = 316
-    @State private var deleteOffset: CGFloat = 300
+    @State private var editOffset: CGFloat = 122
+    @State private var deleteOffset: CGFloat = 100
 
     var body: some View {
         VStack(spacing: 4) {
@@ -31,7 +31,7 @@ struct EditDeleteButton: View {
             .overlay(
                 RoundedRectangle(cornerRadius: 32)
                     .stroke(Color(.separator).opacity(0.5), lineWidth: 1))
-            .padding(.trailing, 16)
+            .padding(.trailing, 22)
             .offset(x: editOffset)
 
             Button {
@@ -46,20 +46,20 @@ struct EditDeleteButton: View {
             .overlay(
                 RoundedRectangle(cornerRadius: 32)
                     .stroke(Color(.separator).opacity(0.5), lineWidth: 1))
-            .padding(.leading, 16)
+            .padding(.leading, 22)
             .offset(x: deleteOffset)
         }
         .onAppear {
-            withAnimation(.easeOut(duration: 0.22)) { editOffset = 0 }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.07) {
-                withAnimation(.easeOut(duration: 0.22)) { deleteOffset = 0 }
+            withAnimation(.linear(duration: 0.14)) { editOffset = 0 }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.11) {
+                withAnimation(.linear(duration: 0.14)) { deleteOffset = 0 }
             }
         }
         .onChange(of: isDismissing) { _, new in
             guard new else { return }
-            withAnimation(.easeIn(duration: 0.22)) { deleteOffset = 300 }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                withAnimation(.easeIn(duration: 0.22)) { editOffset = 316 }
+            withAnimation(.linear(duration: 0.09)) { deleteOffset = 100 }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0) {
+                withAnimation(.linear(duration: 0.09)) { editOffset = 122 }
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.45) {
                 onDismissComplete()
