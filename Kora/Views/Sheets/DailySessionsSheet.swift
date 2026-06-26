@@ -107,6 +107,7 @@ struct DailySessionsSheet: View {
                                     .foregroundStyle(.secondary)
                             }
                         }
+                        // this is the bottom time marker
                         Text("5:00 AM")
                             .frame(alignment: .topLeading)
                             .font(.system(size: 9, weight: .regular))

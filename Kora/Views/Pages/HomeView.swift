@@ -10,9 +10,10 @@ import SwiftData
 
 struct HomeView: View {
     @State private var vm = HomeViewModel() // @state ensures viewmodel instance isn't lost after redraw
-    @State private var showAddCourse = false
-    @State private var showDailySessions = false
+    @State private var showAddCourse: Bool = false
+    @State private var showDailySessions: Bool = false
     @State private var activeCourse: Course? = nil
+    @State private var courseMenu: Course? = nil
     @State private var blackScreen: Double = 0
     
     @Binding var showTabs: Bool
@@ -97,8 +98,7 @@ struct HomeView: View {
                                         }
                                     }
                                 },
-                                onEdit: { },
-                                onDelete: { context.delete(course) }
+                                onMenu: { courseMenu = course }
                             )
                         }
                         
@@ -177,6 +177,17 @@ struct HomeView: View {
                         }
                     })
                     .zIndex(1)
+            }
+            
+            if courseMenu != nil {
+                ZStack {
+                    Color.clear
+                        .contentShape(Rectangle())
+                        .ignoresSafeArea()
+                        .onTapGesture { courseMenu = nil }
+                    
+                    EditDeleteButton(onEdit: {}, onDelete: {})
+                }
             }
             
             if showDailySessions {

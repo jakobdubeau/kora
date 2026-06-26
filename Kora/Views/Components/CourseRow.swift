@@ -14,8 +14,7 @@ struct CourseRow: View {
     let isActive: Bool
     let time: TimeInterval
     let onTap: () -> Void
-    let onEdit: () -> Void
-    let onDelete: () -> Void
+    let onMenu: () -> Void
     
     var body: some View {
         HStack {
@@ -38,9 +37,8 @@ struct CourseRow: View {
             Text(formatTime(seconds: time))
                 .monospacedDigit()
             
-            Menu {
-                Button("Edit") { onEdit() }
-                Button("Delete", role: .destructive) { onDelete() }
+            Button {
+                onMenu()
             } label: {
                 Image(systemName: "ellipsis")
                     .font(.system(size: 18, weight: .regular))
