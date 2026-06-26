@@ -14,6 +14,9 @@ struct HomeView: View {
     @State private var showDailySessions: Bool = false
     @State private var activeCourse: Course? = nil
     @State private var courseMenu: Course? = nil
+    @State private var isDismissingMenu: Bool = false
+    @State private var menuAnchor: CGPoint = .zero
+    @State private var rowDragging: Bool = false
     @State private var blackScreen: Double = 0
     
     @Binding var showTabs: Bool
@@ -98,8 +101,20 @@ struct HomeView: View {
                                         }
                                     }
                                 },
-                                onMenu: { courseMenu = course }
+                                onMenu: { anchor in
+                                    menuAnchor = anchor
+                                    courseMenu = course
+                                }
                             )
+                            .onChange(of: isDragging) { _, dragging in
+                                if dragging {
+                                    rowDragging = true
+                                } else {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                        rowDragging = false
+                                    }
+                                }
+                            }
                         }
                         
                         HStack {
@@ -184,9 +199,19 @@ struct HomeView: View {
                     Color.clear
                         .contentShape(Rectangle())
                         .ignoresSafeArea()
-                        .onTapGesture { courseMenu = nil }
-                    
-                    EditDeleteButton(onEdit: {}, onDelete: {})
+                        .allowsHitTesting(!rowDragging)
+                        .onTapGesture { isDismissingMenu = true }
+
+                    EditDeleteButton(
+                        onEdit: {},
+                        onDelete: {},
+                        isDismissing: $isDismissingMenu,
+                        onDismissComplete: {
+                            courseMenu = nil
+                            isDismissingMenu = false
+                        }
+                    )
+                    .position(x: menuAnchor.x - 60, y: menuAnchor.y - 105)
                 }
             }
             

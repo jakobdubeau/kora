@@ -14,8 +14,11 @@ struct CourseRow: View {
     let isActive: Bool
     let time: TimeInterval
     let onTap: () -> Void
-    let onMenu: () -> Void
-    
+    let onMenu: (CGPoint) -> Void
+
+    @State private var ellipsisAnchor: CGPoint = .zero
+    @State private var blockMenu: Bool = false
+
     var body: some View {
         HStack {
             Button {
@@ -38,7 +41,8 @@ struct CourseRow: View {
                 .monospacedDigit()
             
             Button {
-                onMenu()
+                guard !blockMenu else { return }
+                onMenu(ellipsisAnchor)
             } label: {
                 Image(systemName: "ellipsis")
                     .font(.system(size: 18, weight: .regular))
@@ -49,7 +53,21 @@ struct CourseRow: View {
                     .padding(.trailing, 4)
             }
             .contentShape(Rectangle())
+            .simultaneousGesture(
+                DragGesture(minimumDistance: 4)
+                    .onChanged { _ in blockMenu = true }
+                    .onEnded { _ in
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            blockMenu = false
+                        }
+                    }
+            )
             .dragHandle(id: course.id)
+            .onGeometryChange(for: CGPoint.self) { geo in
+                CGPoint(x: geo.frame(in: .global).midX, y: geo.frame(in: .global).midY)
+            } action: { point in
+                ellipsisAnchor = point
+            }
         }
         .frame(maxHeight: .infinity)
         .background(RoundedRectangle(cornerRadius: 14).fill(Color(.systemBackground)))
