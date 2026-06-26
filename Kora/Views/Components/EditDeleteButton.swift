@@ -14,10 +14,8 @@ struct EditDeleteButton: View {
     @Binding var isDismissing: Bool
     let onDismissComplete: () -> Void
 
-    @State private var editOffset: CGFloat = 60
-    @State private var deleteOffset: CGFloat = 60
-    @State private var editOpacity: Double = 0
-    @State private var deleteOpacity: Double = 0
+    @State private var editOffset: CGFloat = 316
+    @State private var deleteOffset: CGFloat = 300
 
     var body: some View {
         VStack(spacing: 4) {
@@ -35,7 +33,6 @@ struct EditDeleteButton: View {
                     .stroke(Color(.separator).opacity(0.5), lineWidth: 1))
             .padding(.trailing, 16)
             .offset(x: editOffset)
-            .opacity(editOpacity)
 
             Button {
                 onDelete()
@@ -51,25 +48,20 @@ struct EditDeleteButton: View {
                     .stroke(Color(.separator).opacity(0.5), lineWidth: 1))
             .padding(.leading, 16)
             .offset(x: deleteOffset)
-            .opacity(deleteOpacity)
         }
         .onAppear {
-            withAnimation(.easeOut(duration: 0.12)) { editOpacity = 1 }
-            withAnimation(.easeOut(duration: 0.18)) { editOffset = 0 }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                withAnimation(.easeOut(duration: 0.12)) { deleteOpacity = 1 }
-                withAnimation(.easeOut(duration: 0.18)) { deleteOffset = 0 }
+            withAnimation(.easeOut(duration: 0.22)) { editOffset = 0 }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.07) {
+                withAnimation(.easeOut(duration: 0.22)) { deleteOffset = 0 }
             }
         }
         .onChange(of: isDismissing) { _, new in
             guard new else { return }
-            withAnimation(.easeIn(duration: 0.1)) { deleteOpacity = 0 }
-            withAnimation(.easeIn(duration: 0.2)) { deleteOffset = 300 }
+            withAnimation(.easeIn(duration: 0.22)) { deleteOffset = 300 }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                withAnimation(.easeIn(duration: 0.1)) { editOpacity = 0 }
-                withAnimation(.easeIn(duration: 0.2)) { editOffset = 300 }
+                withAnimation(.easeIn(duration: 0.22)) { editOffset = 316 }
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.45) {
                 onDismissComplete()
             }
         }
