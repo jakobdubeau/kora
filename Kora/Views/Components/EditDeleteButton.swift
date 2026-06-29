@@ -50,16 +50,16 @@ struct EditDeleteButton: View {
             .offset(x: deleteOffset)
         }
         .onAppear {
-            withAnimation(.linear(duration: 0.14)) { editOffset = 0 }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.11) {
-                withAnimation(.linear(duration: 0.14)) { deleteOffset = 0 }
+            withAnimation(.spring(response: 0.30, dampingFraction: 0.9)) { editOffset = 0 }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.09) {
+                withAnimation(.spring(response: 0.30, dampingFraction: 0.9)) { deleteOffset = 0 }
             }
         }
         .onChange(of: isDismissing) { _, new in
             guard new else { return }
-            withAnimation(.linear(duration: 0.09)) { deleteOffset = 100 }
+            withAnimation(.spring(response: 0.25, dampingFraction: 1.0)) { deleteOffset = 100 }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0) {
-                withAnimation(.linear(duration: 0.09)) { editOffset = 122 }
+                withAnimation(.spring(response: 0.25, dampingFraction: 1.0)) { editOffset = 122 }
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.45) {
                 onDismissComplete()
