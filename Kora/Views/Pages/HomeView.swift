@@ -71,7 +71,7 @@ struct HomeView: View {
                         }
                     }
                     .padding(.top, 24)
-                    .padding(.bottom, 26)
+                    .padding(.bottom, 30)
                     Rectangle()
                         .foregroundStyle(Color(.separator).opacity(0.5))
                         .frame(height: 0.5)
