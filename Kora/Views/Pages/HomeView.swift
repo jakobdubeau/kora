@@ -74,11 +74,11 @@ struct HomeView: View {
                     }
                     .padding(.top, 24)
                     .padding(.bottom, 30)
-                    .blur(radius: (courseMenu != nil && !isDismissingMenu) ? 4 : 0)
+                    .blur(radius: (courseMenu != nil && !isDismissingMenu) ? 8 : 0)
                     Rectangle()
                         .foregroundStyle(Color(.separator).opacity(0.5))
                         .frame(height: 0.5)
-                        .blur(radius: (courseMenu != nil && !isDismissingMenu) ? 4 : 0)
+                        .blur(radius: (courseMenu != nil && !isDismissingMenu) ? 8 : 0)
                     
                     ScrollView {
                         ReorderableList(orderedCourses, rowHeight: rowHeight, onMove: { from, to in
@@ -115,7 +115,8 @@ struct HomeView: View {
                                     }
                                 }
                             )
-                            .blur(radius: (courseMenu != nil && courseMenu?.id != course.id && !isDismissingMenu) ? 4 : 0)
+                            .blur(radius: (courseMenu != nil && courseMenu?.id != course.id && !isDismissingMenu) ? 8 : 0)
+                            .clipped()
                             .onChange(of: isDragging) { _, dragging in
                                 if dragging {
                                     rowDragging = true
@@ -175,7 +176,7 @@ struct HomeView: View {
                         }
                         .padding(.leading, 10)
                         .padding(.bottom, 72)
-                        .blur(radius: (courseMenu != nil && !isDismissingMenu) ? 4 : 0)
+                        .blur(radius: (courseMenu != nil && !isDismissingMenu) ? 8 : 0)
                     }
                     .scrollBounceBehavior(.basedOnSize)
                     .scrollIndicators(.hidden)
