@@ -65,6 +65,7 @@ struct HeatmapView: View {
                         dayToken += 1
                         if selectedDay == nil {
                             openSeq += 1
+                            dayTransition = 0
                             withAnimation(.spring(duration: 0.3)) { selectedDay = day }
                         } else {
                             let token = dayToken
@@ -86,6 +87,7 @@ struct HeatmapView: View {
                 dayToken += 1
                 withAnimation(.spring(duration: 0.3)) {
                     selectedDay = nil
+                    dayTransition = 0
                 }
             }
             
@@ -109,6 +111,7 @@ struct HeatmapView: View {
             vm.setup(context: context, selectedMonth: selectedMonth)
             withAnimation(.spring(duration: 0.3)) {
                 selectedDay = nil
+                dayTransition = 0
             }
         }
         .padding(.top, 24)
