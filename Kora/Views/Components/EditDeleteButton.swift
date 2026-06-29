@@ -27,7 +27,7 @@ struct EditDeleteButton: View {
             }
             .buttonStyle(.plain)
             .frame(width: 72, height: 30)
-            .background(Color(.systemBackground))
+            .background(RoundedRectangle(cornerRadius: 32).fill(Color(.systemBackground)))
             .overlay(
                 RoundedRectangle(cornerRadius: 32)
                     .stroke(Color(.separator).opacity(0.5), lineWidth: 1))
@@ -42,7 +42,7 @@ struct EditDeleteButton: View {
             }
             .buttonStyle(.plain)
             .frame(width: 72, height: 30)
-            .background(Color(.systemBackground))
+            .background(RoundedRectangle(cornerRadius: 32).fill(Color(.systemBackground)))
             .overlay(
                 RoundedRectangle(cornerRadius: 32)
                     .stroke(Color(.separator).opacity(0.5), lineWidth: 1))

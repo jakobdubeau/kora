@@ -16,6 +16,8 @@ struct HomeView: View {
     @State private var courseMenu: Course? = nil
     @State private var isDismissingMenu: Bool = false
     @State private var menuAnchor: CGPoint = .zero
+    @State private var menuToken: Int = 0
+    @State private var closingToken: Int = 0
     @State private var rowDragging: Bool = false
     @State private var blackScreen: Double = 0
     
@@ -106,6 +108,8 @@ struct HomeView: View {
                                 },
                                 onMenu: { anchor in
                                     menuAnchor = anchor
+                                    menuToken += 1
+                                    isDismissingMenu = false
                                     withAnimation(.easeOut(duration: 0.2)) {
                                         courseMenu = course
                                     }
@@ -202,28 +206,32 @@ struct HomeView: View {
                     .zIndex(1)
             }
             
-            if courseMenu != nil {
+            if courseMenu != nil || isDismissingMenu {
                 ZStack {
-                    Color.clear
-                        .contentShape(Rectangle())
-                        .ignoresSafeArea()
-                        .allowsHitTesting(!rowDragging)
-                        .onTapGesture {
-                            withAnimation(.easeOut(duration: 0.2)) { isDismissingMenu = true }
-                        }
+                    if courseMenu != nil {
+                        Color.clear
+                            .contentShape(Rectangle())
+                            .ignoresSafeArea()
+                            .allowsHitTesting(!rowDragging)
+                            .onTapGesture {
+                                closingToken = menuToken
+                                isDismissingMenu = true
+                                withAnimation(.easeOut(duration: 0.2)) { courseMenu = nil }
+                            }
+                    }
 
                     EditDeleteButton(
                         onEdit: {},
                         onDelete: {},
                         isDismissing: $isDismissingMenu,
                         onDismissComplete: {
-                            withAnimation(.easeOut(duration: 0.2)) {
-                                courseMenu = nil
+                            if menuToken == closingToken {
+                                isDismissingMenu = false
                             }
-                            isDismissingMenu = false
                         }
                     )
-                    .position(x: menuAnchor.x - 52, y: menuAnchor.y - 115)
+                    .id(menuToken)
+                    .position(x: menuAnchor.x - 52, y: menuAnchor.y - 130)
                 }
             }
             
