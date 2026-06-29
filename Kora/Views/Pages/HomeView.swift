@@ -72,9 +72,11 @@ struct HomeView: View {
                     }
                     .padding(.top, 24)
                     .padding(.bottom, 30)
+                    .blur(radius: (courseMenu != nil && !isDismissingMenu) ? 4 : 0)
                     Rectangle()
                         .foregroundStyle(Color(.separator).opacity(0.5))
                         .frame(height: 0.5)
+                        .blur(radius: (courseMenu != nil && !isDismissingMenu) ? 4 : 0)
                     
                     ScrollView {
                         ReorderableList(orderedCourses, rowHeight: rowHeight, onMove: { from, to in
@@ -86,6 +88,7 @@ struct HomeView: View {
                             CourseRow(
                                 course: course,
                                 isDragging: isDragging,
+                                isFocused: courseMenu?.id == course.id && !isDismissingMenu,
                                 isActive: vm.isRunning(course),
                                 time: vm.courseTime(for: course),
                                 onTap: {
@@ -103,9 +106,12 @@ struct HomeView: View {
                                 },
                                 onMenu: { anchor in
                                     menuAnchor = anchor
-                                    courseMenu = course
+                                    withAnimation(.easeOut(duration: 0.2)) {
+                                        courseMenu = course
+                                    }
                                 }
                             )
+                            .blur(radius: (courseMenu != nil && courseMenu?.id != course.id && !isDismissingMenu) ? 4 : 0)
                             .onChange(of: isDragging) { _, dragging in
                                 if dragging {
                                     rowDragging = true
@@ -165,9 +171,11 @@ struct HomeView: View {
                         }
                         .padding(.leading, 10)
                         .padding(.bottom, 72)
+                        .blur(radius: (courseMenu != nil && !isDismissingMenu) ? 4 : 0)
                     }
                     .scrollBounceBehavior(.basedOnSize)
                     .scrollIndicators(.hidden)
+                    .scrollDisabled(courseMenu != nil)
                 }
             }
             .fullScreenCover(isPresented: $showAddCourse) {
@@ -200,14 +208,18 @@ struct HomeView: View {
                         .contentShape(Rectangle())
                         .ignoresSafeArea()
                         .allowsHitTesting(!rowDragging)
-                        .onTapGesture { isDismissingMenu = true }
+                        .onTapGesture {
+                            withAnimation(.easeOut(duration: 0.2)) { isDismissingMenu = true }
+                        }
 
                     EditDeleteButton(
                         onEdit: {},
                         onDelete: {},
                         isDismissing: $isDismissingMenu,
                         onDismissComplete: {
-                            courseMenu = nil
+                            withAnimation(.easeOut(duration: 0.2)) {
+                                courseMenu = nil
+                            }
                             isDismissingMenu = false
                         }
                     )
