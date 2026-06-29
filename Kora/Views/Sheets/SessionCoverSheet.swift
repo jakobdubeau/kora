@@ -11,6 +11,7 @@ struct SessionCover: View {
     @Bindable var vm: HomeViewModel
     @State private var focusMode: Bool = false
     @State private var statusBarHidden: Bool = false
+    @State private var lastTime: TimeInterval? = nil
     
     let course: Course
     let onDismiss: () -> Void
@@ -69,10 +70,11 @@ struct SessionCover: View {
                         .padding(.top, 9)
                         
                         VStack(spacing: 8) {
-                            Text(formatTime(seconds: vm.timer.currentSessionTime))
+                            Text(formatTime(seconds: lastTime ?? vm.timer.currentSessionTime))
                                 .font(.system(size: 48, weight: .semibold))
                                 .monospacedDigit()
                             Button {
+                                lastTime = vm.timer.currentSessionTime
                                 onDismiss()
                             } label: {
                                 AnimatedKoraAsterisk(

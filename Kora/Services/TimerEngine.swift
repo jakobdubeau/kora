@@ -186,8 +186,8 @@ final class TimerEngine {
     // MARK: - Timer UI
     
     private func startTimer() { // updates current time
-        guard timer == nil else { return } // we only create timer if one doesn't exist already
-        
+        stopTimer() // realign ticks to this session's start so the live counter matches real elapsed
+
         // closure = code you give to something else, so it can run it later
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in  // timer runs the closure every second,
             guard let self else { return } // weak references can dissapear                 // when it runs, it passes itself in (timer)

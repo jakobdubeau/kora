@@ -93,7 +93,7 @@ struct HeatmapView: View {
             
             ZStack {
                 if let day = selectedDay {
-                    DailyTimeline(sessions: vm.sessions(for: day), date: day)
+                    DailyTimeline(sessions: vm.sessions(for: day).filter { $0.duration >= 1 }, date: day)
                         .transition(.asymmetric(insertion: .opacity.combined(with: .move(edge: .bottom)), removal: .opacity.combined(with: .move(edge: .bottom))))
                         .id(openSeq)
                 }

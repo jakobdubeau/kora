@@ -192,11 +192,11 @@ struct HomeView: View {
                     vm: vm,
                     course: course,
                     onDismiss: {
+                        vm.toggleCourse(course)
                         withAnimation(.easeOut(duration: 0.3)) {
                             blackScreen = 1
                         }
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                            vm.toggleCourse(course)
                             activeCourse = nil
                             withAnimation(.easeOut(duration: 0.3)) {
                                 blackScreen = 0

@@ -25,7 +25,9 @@ struct DailySessionsSheet: View {
     var blocks: [TimeBlock] {
         var res: [TimeBlock] = []
         
-        let sessions = vm.sessions(for: Calendar.current.startOfDay(for: date)).sorted { $0.start < $1.start }
+        let sessions = vm.sessions(for: Calendar.current.startOfDay(for: date))
+            .filter { $0.duration >= 1 }
+            .sorted { $0.start < $1.start }
         
         let dayStart = Calendar.current.date(bySettingHour: 5, minute: 0, second: 0, of: date)
         let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: date)!
