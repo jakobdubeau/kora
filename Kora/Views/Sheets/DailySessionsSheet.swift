@@ -167,15 +167,13 @@ struct DailySessionsSheet: View {
             .padding(.trailing, 12)
             .padding(.leading, 6)
             .scrollIndicators(.hidden)
-            .scrollPosition(id: $scrollPosition, anchor: .top)
+            .scrollPosition(id: $scrollPosition, anchor: .center)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemBackground))
         .onAppear {
             vm.setup(context: context, selectedMonth: date)
-            Task {
-                scrollPosition = blocks.firstIndex { if case .session = $0 { return true } else { return false }}
-            }
+            scrollPosition = blocks.lastIndex { if case .session = $0 { return true } else { return false }}
         }
     }
 }

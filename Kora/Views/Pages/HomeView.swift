@@ -110,7 +110,7 @@ struct HomeView: View {
                                     menuAnchor = anchor
                                     menuToken += 1
                                     isDismissingMenu = false
-                                    withAnimation(.spring(response: 0.4, dampingFraction: 0.9)) {
+                                    withAnimation(.spring(response: 0.5, dampingFraction: 0.9)) {
                                         courseMenu = course
                                     }
                                 }
@@ -217,7 +217,7 @@ struct HomeView: View {
                             .onTapGesture {
                                 closingToken = menuToken
                                 isDismissingMenu = true
-                                withAnimation(.spring(response: 0.4, dampingFraction: 0.9)) { courseMenu = nil }
+                                withAnimation(.spring(response: 0.5, dampingFraction: 0.9)) { courseMenu = nil }
                             }
                     }
 
