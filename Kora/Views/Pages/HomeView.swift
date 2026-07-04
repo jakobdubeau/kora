@@ -10,6 +10,7 @@ import SwiftData
 
 struct HomeView: View {
     @State private var vm = HomeViewModel() // @state ensures viewmodel instance isn't lost after redraw
+    @State private var heatmapVM = HeatmapViewModel()
     @State private var showAddCourse: Bool = false
     @State private var showDailySessions: Bool = false
     @State private var activeCourse: Course? = nil
@@ -56,6 +57,7 @@ struct HomeView: View {
                                     showTabs = false
                                 }
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                    heatmapVM.setup(context: context, selectedMonth: Date.now)
                                     showDailySessions = true
                                     withAnimation(.easeOut(duration: 0.1)) {
                                         blackScreen = 0
@@ -238,6 +240,7 @@ struct HomeView: View {
             
             if showDailySessions {
                 DailySessionsSheet(
+                    vm: heatmapVM,
                     date: Date.now,
                     onDismiss: {
                         withAnimation(.easeOut(duration: 0.1)) {

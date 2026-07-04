@@ -9,8 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct DailySessionsSheet: View {
-    @State private var vm = HeatmapViewModel()
-    @State private var scrollPosition: Int?
+    @Bindable var vm: HeatmapViewModel
     
     @Environment(\.modelContext) private var context
     
@@ -50,6 +49,24 @@ struct DailySessionsSheet: View {
         return res
     }
     
+    // where default scroll should rest, between 0-1
+    var lastSessionAnchor: UnitPoint {
+        let heights = blocks.map { block -> CGFloat in
+            switch block {
+            case .empty(_, let duration): return max((duration / 3600) * 48, 24)
+            case .session(let session): return max((session.duration / 3600) * 48, 48)
+            }
+        }
+        let spacing: CGFloat = 10
+        let total = heights.reduce(0, +) + spacing * CGFloat(max(heights.count - 1, 0))
+        guard let last = blocks.lastIndex(where: { if case .session = $0 { return true } else { return false } }) else {
+            return .top
+        }
+        let before = heights[..<last].reduce(0, +) + spacing * CGFloat(last)
+        let center = before + heights[last] / 2
+        return UnitPoint(x: 0.5, y: total > 0 ? center / total : 0.5)
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 0) {
@@ -167,13 +184,9 @@ struct DailySessionsSheet: View {
             .padding(.trailing, 12)
             .padding(.leading, 6)
             .scrollIndicators(.hidden)
-            .scrollPosition(id: $scrollPosition, anchor: .center)
+            .defaultScrollAnchor(lastSessionAnchor)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemBackground))
-        .onAppear {
-            vm.setup(context: context, selectedMonth: date)
-            scrollPosition = blocks.lastIndex { if case .session = $0 { return true } else { return false }}
-        }
     }
 }
