@@ -64,7 +64,7 @@ struct DailySessionsSheet: View {
         }
         let before = heights[..<last].reduce(0, +) + spacing * CGFloat(last)
         let center = before + heights[last] / 2
-        return UnitPoint(x: 0.5, y: total > 0 ? center / total : 0.5)
+        return UnitPoint(x: 0.5, y: min((total > 0 ? center / total : 0.5) + 0.1, 1))
     }
 
     var body: some View {
