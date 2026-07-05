@@ -225,7 +225,14 @@ struct HomeView: View {
 
                     EditDeleteButton(
                         onEdit: {},
-                        onDelete: {},
+                        onDelete: {
+                            if let course = courseMenu {
+                                context.delete(course)
+                            }
+                            closingToken = menuToken
+                            isDismissingMenu = true
+                            withAnimation(.spring(response: 0.5, dampingFraction: 0.9)) { courseMenu = nil }
+                        },
                         isDismissing: $isDismissingMenu,
                         onDismissComplete: {
                             if menuToken == closingToken {

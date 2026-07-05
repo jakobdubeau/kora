@@ -104,7 +104,7 @@ struct AddCourse: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") {
-                        context.insert(Course(name: name, colour: selectedColor, sortOrder: courses.count)) // add new model to swift data
+                        context.insert(Course(name: name, colour: selectedColor, sortOrder: (courses.map(\.sortOrder).max() ?? -1) + 1)) // add new model to swift data
                         dismiss()
                     }
                     .disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty) // disable done if no name/only spaces
