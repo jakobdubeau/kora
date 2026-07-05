@@ -30,14 +30,14 @@ struct HomeView: View {
     
     let rowHeight: CGFloat = 64
 
-    @State private var asteriskColor: Color = {
+    private static let asteriskColor: Color = {
         let allShades = Color.palettes
             .filter { $0.name != "grey" } // $0 means the current element being filtered
             .flatMap { $0.shades } // flatten all shades into an array
         return Color(hex: allShades.randomElement() ?? "#FFFFFF")
     }()
 
-    @State private var isGolden: Bool = Int.random(in: 0..<100) == 0
+    private static let isGolden: Bool = Int.random(in: 0..<100) == 0
     @State private var shimmerRotation: Double = 0
     
     var body: some View {
@@ -141,7 +141,7 @@ struct HomeView: View {
                                         .scaledToFit()
                                         .frame(width: 24, height: 24)
                                         .foregroundStyle(
-                                            isGolden
+                                            Self.isGolden
                                                 ? AnyShapeStyle(AngularGradient(
                                                     colors: [
                                                         Color(hex: "#A47711"),
@@ -157,7 +157,7 @@ struct HomeView: View {
                                                     center: .center,
                                                     angle: .degrees(shimmerRotation)
                                                 ))
-                                                : AnyShapeStyle(asteriskColor)
+                                                : AnyShapeStyle(Self.asteriskColor)
                                         )
                                     Text("Add")
                                         .font(.system(size: 14, weight: .semibold))
@@ -266,7 +266,7 @@ struct HomeView: View {
             vm.saveSession(context: context) // closure (setup once), timer engine saves sessions, from launch, everytime timer engine calls stopRunningCourse, closure fires
             vm.setup(context: context)
             orderedCourses = courses
-            if isGolden {
+            if Self.isGolden {
                 withAnimation(.linear(duration: 7).repeatForever(autoreverses: false)) {
                     shimmerRotation = 360
                 }
