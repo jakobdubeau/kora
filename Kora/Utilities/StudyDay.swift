@@ -17,16 +17,16 @@ extension Calendar {
     }
 
     // edge case for 4AM > 6AM type
-    func studyDaySlices(start: Date, end: Date) -> [(dayStart: Date, start: Date, duration: TimeInterval)] {
-        var slices: [(dayStart: Date, start: Date, duration: TimeInterval)] = []
-        var sliceStart = start
-        while sliceStart < end {
-            let dayStart = studyDayStart(for: sliceStart)
+    func studyDaySplit(start: Date, end: Date) -> [(dayStart: Date, start: Date, duration: TimeInterval)] {
+        var split: [(dayStart: Date, start: Date, duration: TimeInterval)] = []
+        var splitStart = start
+        while splitStart < end {
+            let dayStart = studyDayStart(for: splitStart)
             let nextDay = self.date(byAdding: .day, value: 1, to: dayStart)!
-            let sliceEnd = min(end, nextDay)
-            slices.append((dayStart, sliceStart, sliceEnd.timeIntervalSince(sliceStart)))
-            sliceStart = sliceEnd
+            let splitEnd = min(end, nextDay)
+            split.append((dayStart, splitStart, splitEnd.timeIntervalSince(splitStart)))
+            splitStart = splitEnd
         }
-        return slices
+        return split
     }
 }

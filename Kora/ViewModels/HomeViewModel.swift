@@ -39,18 +39,22 @@ final class HomeViewModel {
     }
     
     func setup(context: ModelContext) {        
-        let today = Calendar.current.studyDayStart(for: Date.now)
-        
+        let todayStart = Calendar.current.studyDayStart(for: Date.now)
+        let dayEnd = Calendar.current.date(byAdding: .day, value: 1, to: todayStart)!
+        let lowerBound = Calendar.current.date(byAdding: .day, value: -1, to: todayStart)!
+
         let descriptor = FetchDescriptor<StudySession>(
-            predicate: #Predicate { session in session.start >= today }
+            predicate: #Predicate { session in session.start >= lowerBound && session.start < dayEnd }
         )
-                                         
+
         if let sessions = try? context.fetch(descriptor) {
             var totals: [UUID: TimeInterval] = [:]
             for session in sessions {
-                if let courseId = session.courseId {
-                    totals[courseId, default: 0] += session.duration.rounded(.down)
-                }
+                guard let courseId = session.courseId else { continue }
+                let end = session.start.addingTimeInterval(session.duration)
+                let contribution = min(end, dayEnd).timeIntervalSince(max(session.start, todayStart))
+                guard contribution > 0 else { continue }
+                totals[courseId, default: 0] += contribution.rounded(.down)
             }
             timer.loadCourseTimes(totals)
         }

@@ -30,14 +30,26 @@ struct HeatmapMapper {
         }
         
         for session in sessions {
-            let sessionDay = Calendar.current.startOfDay(for: Calendar.current.studyDayStart(for: session.start))
             guard let courseId = session.courseId,
                   let sessionCourse = courseLookup[courseId] else { continue }
-            
-            dailyTotals[sessionDay, default: 0] += session.duration.rounded(.down)
-            
-            let block = SessionBlock(duration: session.duration.rounded(.down), start: session.start, name: sessionCourse.name, colour: sessionCourse.colour, id: session.id)
-            dailySessions[sessionDay, default: []].append(block)
+
+            let end = session.start.addingTimeInterval(session.duration)
+            let dayEnd = Calendar.current.date(byAdding: .day, value: 1, to: Calendar.current.studyDayStart(for: session.start))!
+
+            if end <= dayEnd {
+                let sessionDay = Calendar.current.startOfDay(for: Calendar.current.studyDayStart(for: session.start))
+                dailyTotals[sessionDay, default: 0] += session.duration.rounded(.down)
+                let block = SessionBlock(duration: session.duration.rounded(.down), start: session.start, name: sessionCourse.name, colour: sessionCourse.colour, id: session.id)
+                dailySessions[sessionDay, default: []].append(block)
+            } else {
+                for split in Calendar.current.studyDaySplit(start: session.start, end: end) {
+                    let sessionDay = Calendar.current.startOfDay(for: split.dayStart)
+                    let splitDuration = split.duration.rounded(.down)
+                    dailyTotals[sessionDay, default: 0] += splitDuration
+                    let block = SessionBlock(duration: splitDuration, start: split.start, name: sessionCourse.name, colour: sessionCourse.colour, id: session.id)
+                    dailySessions[sessionDay, default: []].append(block)
+                }
+            }
         }
         return (dailyTotals, dailySessions)
     }
