@@ -101,6 +101,7 @@ where Data: RandomAccessCollection,
                         draggingID == AnyHashable(item.id) ? nil : swapAnimation,
                         value: currentTargetIndex
                     )
+                    .transition(.opacity)
             }
         }
         .coordinateSpace(name: coordinateSpaceName)

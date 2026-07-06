@@ -281,7 +281,9 @@ struct HomeView: View {
         }
         .onChange(of: courses) { _, newValue in
             if orderedCourses.count != newValue.count {
-                orderedCourses = newValue
+                withAnimation(.easeInOut(duration: 0.25)) {
+                    orderedCourses = newValue
+                }
             }
         }
     }
