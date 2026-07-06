@@ -39,7 +39,7 @@ final class HomeViewModel {
     }
     
     func setup(context: ModelContext) {        
-        let today = Calendar.current.startOfDay(for: Date.now)
+        let today = Calendar.current.studyDayStart(for: Date.now)
         
         let descriptor = FetchDescriptor<StudySession>(
             predicate: #Predicate { session in session.start >= today }

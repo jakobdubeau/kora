@@ -30,7 +30,7 @@ struct HeatmapMapper {
         }
         
         for session in sessions {
-            let sessionDay = Calendar.current.startOfDay(for: session.start)
+            let sessionDay = Calendar.current.startOfDay(for: Calendar.current.studyDayStart(for: session.start))
             guard let courseId = session.courseId,
                   let sessionCourse = courseLookup[courseId] else { continue }
             

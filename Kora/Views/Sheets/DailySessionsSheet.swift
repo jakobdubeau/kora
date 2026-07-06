@@ -45,7 +45,7 @@ struct DailySessionsSheet: View {
         
         let dayStart = Calendar.current.date(bySettingHour: 5, minute: 0, second: 0, of: date)
         let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: date)!
-        let dayEnd = Calendar.current.date(bySettingHour: 5, minute: 0, second: 0, of: tomorrow)
+        let dayEnd = Calendar.current.date(bySettingHour: 4, minute: 59, second: 59, of: tomorrow)
         
         var cursor = dayStart
         
@@ -143,7 +143,7 @@ struct DailySessionsSheet: View {
                             }
                         }
                         // this is the bottom time marker
-                        Text("5:00 AM")
+                        Text("4:59 AM")
                             .frame(alignment: .topLeading)
                             .font(.system(size: 9, weight: .regular))
                             .foregroundStyle(Color(.separator))
