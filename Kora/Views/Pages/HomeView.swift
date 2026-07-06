@@ -44,6 +44,7 @@ struct HomeView: View {
         ZStack {
             NavigationStack {
                 VStack(spacing: 0) {
+                    // MARK: - Date & Total Time
                     VStack(alignment: .center, spacing: 16) {
                         Text(Date(), format: .dateTime.weekday().day().month())
                             .font(.headline.bold())
@@ -82,6 +83,7 @@ struct HomeView: View {
                         .frame(height: 0.5)
                         .blur(radius: (courseMenu != nil && !isDismissingMenu) ? 8 : 0)
                     
+                    // MARK: - Course Rows
                     ScrollView {
                         ReorderableList(orderedCourses, rowHeight: rowHeight, onMove: { from, to in
                             orderedCourses.move(fromOffsets: IndexSet(integer: from), toOffset: (to > from) ? to + 1 : to)
@@ -130,6 +132,7 @@ struct HomeView: View {
                             }
                         }
                         
+                        // MARK: - Add Course Button
                         HStack {
                             Button {
                                 showAddCourse = true
@@ -189,6 +192,7 @@ struct HomeView: View {
                 AddCourse()
             }
             
+            // MARK: - Session Cover (Course Running)
             if let course = activeCourse {
                 SessionCover(
                     vm: vm,
@@ -209,6 +213,7 @@ struct HomeView: View {
                     .zIndex(1)
             }
             
+            // MARK: - Course Context Menu (Edit / Delete)
             if courseMenu != nil || isDismissingMenu {
                 ZStack {
                     if courseMenu != nil {
@@ -245,6 +250,7 @@ struct HomeView: View {
                 }
             }
             
+            // MARK: - Daily Sessions Sheet
             if showDailySessions {
                 DailySessionsSheet(
                     vm: heatmapVM,
@@ -263,12 +269,14 @@ struct HomeView: View {
                     })
                     .zIndex(1)
             }
+            // MARK: - Black Screen Overlay
             Color.black
                 .ignoresSafeArea()
                 .opacity(blackScreen)
                 .allowsHitTesting(false)
                 .zIndex(2)
         }
+        // MARK: - Lifecycle
         .onAppear {
             vm.saveSession(context: context) // closure (setup once), timer engine saves sessions, from launch, everytime timer engine calls stopRunningCourse, closure fires
             vm.setup(context: context)

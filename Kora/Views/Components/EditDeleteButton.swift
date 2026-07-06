@@ -34,7 +34,7 @@ struct EditDeleteButton: View {
             .padding(.trailing, 22)
             .offset(x: editOffset)
 
-            Button {
+            Button(role: .destructive) {
                 onDelete()
             } label: {
                 Text("Delete")
