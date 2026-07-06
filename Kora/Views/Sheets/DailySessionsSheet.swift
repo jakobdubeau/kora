@@ -15,6 +15,7 @@ struct DailySessionsSheet: View {
     
     let date: Date
     let onDismiss: () -> Void
+    let onSessionDeleted: () -> Void
 
     @State private var ellipsisAnchors: [UUID: CGPoint] = [:]
     @State private var sessionMenu: SessionBlock?
@@ -262,6 +263,7 @@ struct DailySessionsSheet: View {
         if let session = try? context.fetch(descriptor).first {
             context.delete(session)
             vm.setup(context: context, selectedMonth: date)
+            onSessionDeleted()
         }
     }
 }

@@ -266,6 +266,9 @@ struct HomeView: View {
                                 blackScreen = 0
                             }
                         }
+                    },
+                    onSessionDeleted: {
+                        vm.setup(context: context)
                     })
                     .zIndex(1)
             }
