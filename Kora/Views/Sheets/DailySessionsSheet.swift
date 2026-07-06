@@ -24,9 +24,16 @@ struct DailySessionsSheet: View {
     @State private var menuToken: Int = 0
     @State private var closingToken: Int = 0
 
-    enum TimeBlock {
+    enum TimeBlock: Identifiable {
         case session(SessionBlock)
         case empty(start: Date, duration: TimeInterval)
+
+        var id: Date {
+            switch self {
+            case .session(let session): return session.start
+            case .empty(let start, _): return start
+            }
+        }
     }
     
     var blocks: [TimeBlock] {
@@ -113,8 +120,7 @@ struct DailySessionsSheet: View {
             ScrollView {
                 HStack {
                     VStack(spacing: 10) {
-                        ForEach(blocks.indices, id: \.self) { index in
-                            let block = blocks[index]
+                        ForEach(blocks) { block in
                             
                             switch block {
                             case .empty(let start, let duration):
@@ -124,6 +130,7 @@ struct DailySessionsSheet: View {
                                     .frame(height: max(blankHeight, 24), alignment: .topLeading)
                                     .font(.system(size: 9, weight: .regular))
                                     .foregroundStyle(Color(.separator))
+                                    .transition(.opacity)
                                 
                             case .session(let session):
                                 let sessionHeight = (session.duration / 3600) * 48
@@ -132,6 +139,7 @@ struct DailySessionsSheet: View {
                                     .frame(height: max(sessionHeight, 48), alignment: .topLeading)
                                     .font(.system(size: 9, weight: .regular))
                                     .foregroundStyle(.secondary)
+                                    .transition(.opacity)
                             }
                         }
                         // this is the bottom time marker
@@ -145,8 +153,7 @@ struct DailySessionsSheet: View {
                     .padding(.top, 6)
                     
                     VStack(spacing: 10) {
-                        ForEach(blocks.indices, id: \.self) { index in
-                            let block = blocks[index]
+                        ForEach(blocks) { block in
                             
                             switch block {
                             case .empty(_, let duration):
@@ -157,7 +164,7 @@ struct DailySessionsSheet: View {
                                     .stroke(Color(.separator).opacity(0.5), lineWidth: 0.5)
                                     .overlay(Text("+ \(formatTimeBreak(seconds: duration))").frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading).padding(.horizontal, 12).padding(.vertical, 8).font(.system(size: 12, weight: .regular)).foregroundStyle(Color(.separator)))
                                     .frame(height: max(blankHeight, 24))
-                                    .id(index)
+                                    .transition(.opacity)
                                 
                             case .session(let session):
                                 let sessionHeight = (session.duration / 3600) * 48
@@ -202,11 +209,12 @@ struct DailySessionsSheet: View {
                                     }
                                 }
                                 .frame(height: max(sessionHeight, 48))
-                                .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#090909")).stroke(Color(.separator).opacity(0.5), lineWidth: 0.5))
-                                .id(index)
+                                .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#090909")).stroke(Color(.separator).opacity(0.5), lineWidth: (sessionMenu?.id == session.id && !isDismissingMenu) ? 2 : 0.5))
+                                .transition(.opacity)
                             }
                         }
                     }
+                    .padding(.trailing, 1)
                     .padding(.top, -9)
                 }
                 .padding(.top, 8)
