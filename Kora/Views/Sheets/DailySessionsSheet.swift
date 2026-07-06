@@ -262,7 +262,9 @@ struct DailySessionsSheet: View {
         let descriptor = FetchDescriptor<StudySession>(predicate: #Predicate { $0.id == id })
         if let session = try? context.fetch(descriptor).first {
             context.delete(session)
-            vm.setup(context: context, selectedMonth: date)
+            withAnimation(.easeInOut(duration: 0.25)) {
+                vm.setup(context: context, selectedMonth: date)
+            }
             onSessionDeleted()
         }
     }

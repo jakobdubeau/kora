@@ -16,6 +16,7 @@ struct EditDeleteButton: View {
 
     @State private var editOffset: CGFloat = 122
     @State private var deleteOffset: CGFloat = 100
+    @State private var confirmingDelete: Bool = false
 
     var body: some View {
         VStack(spacing: 4) {
@@ -35,14 +36,25 @@ struct EditDeleteButton: View {
             .offset(x: editOffset)
 
             Button(role: .destructive) {
-                onDelete()
+                if confirmingDelete {
+                    onDelete()
+                } else {
+                    withAnimation(.easeInOut(duration: 0.28)) { confirmingDelete = true }
+                }
             } label: {
                 Text("Delete")
                     .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(confirmingDelete ? Color.white : Color.red)
             }
             .buttonStyle(.plain)
             .frame(width: 72, height: 30)
-            .background(RoundedRectangle(cornerRadius: 32).fill(Color(.systemBackground)))
+            .background(
+                ZStack(alignment: .trailing) {
+                    Color(.systemBackground)
+                    Color.red.frame(width: confirmingDelete ? 72 : 0)
+                }
+                .clipShape(RoundedRectangle(cornerRadius: 32))
+            )
             .overlay(
                 RoundedRectangle(cornerRadius: 32)
                     .stroke(Color(.separator).opacity(0.5), lineWidth: 1))
