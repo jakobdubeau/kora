@@ -15,7 +15,14 @@ struct DailySessionsSheet: View {
     
     let date: Date
     let onDismiss: () -> Void
-    
+
+    @State private var ellipsisAnchors: [UUID: CGPoint] = [:]
+    @State private var sessionMenu: SessionBlock?
+    @State private var isDismissingMenu: Bool = false
+    @State private var menuAnchor: CGPoint = .zero
+    @State private var menuToken: Int = 0
+    @State private var closingToken: Int = 0
+
     enum TimeBlock {
         case session(SessionBlock)
         case empty(start: Date, duration: TimeInterval)
@@ -170,6 +177,28 @@ struct DailySessionsSheet: View {
                                     }
                                     .padding(.top, 7)
                                     Spacer()
+                                    
+                                    Button {
+                                        menuAnchor = ellipsisAnchors[session.id] ?? .zero
+                                        menuToken += 1
+                                        isDismissingMenu = false
+                                        withAnimation(.spring(response: 0.5, dampingFraction: 0.9)) {
+                                            sessionMenu = session
+                                        }
+                                    } label: {
+                                        Image(systemName: "ellipsis")
+                                            .font(.system(size: 18, weight: .regular))
+                                            .foregroundStyle(.white)
+                                            .rotationEffect(.degrees(90))
+                                            .frame(width: 32, height: 32, alignment: .trailing)
+                                            .padding(.leading, -14)
+                                            .padding(.trailing, 4)
+                                    }
+                                    .onGeometryChange(for: CGPoint.self) { geo in
+                                        CGPoint(x: geo.frame(in: .global).midX, y: geo.frame(in: .global).midY)
+                                    } action: { point in
+                                        ellipsisAnchors[session.id] = point
+                                    }
                                 }
                                 .frame(height: max(sessionHeight, 48))
                                 .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#090909")).stroke(Color(.separator).opacity(0.5), lineWidth: 0.5))
@@ -188,5 +217,51 @@ struct DailySessionsSheet: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemBackground))
+        // MARK: - Session Context Menu (Edit / Delete)
+        .overlay {
+            if sessionMenu != nil || isDismissingMenu {
+                ZStack {
+                    if sessionMenu != nil {
+                        Color.clear
+                            .contentShape(Rectangle())
+                            .ignoresSafeArea()
+                            .onTapGesture {
+                                closingToken = menuToken
+                                isDismissingMenu = true
+                                withAnimation(.spring(response: 0.5, dampingFraction: 0.9)) { sessionMenu = nil }
+                            }
+                    }
+
+                    EditDeleteButton(
+                        onEdit: {},
+                        onDelete: {
+                            if let block = sessionMenu {
+                                deleteSession(block)
+                            }
+                            closingToken = menuToken
+                            isDismissingMenu = true
+                            withAnimation(.spring(response: 0.5, dampingFraction: 0.9)) { sessionMenu = nil }
+                        },
+                        isDismissing: $isDismissingMenu,
+                        onDismissComplete: {
+                            if menuToken == closingToken {
+                                isDismissingMenu = false
+                            }
+                        }
+                    )
+                    .id(menuToken)
+                    .position(x: menuAnchor.x - 35, y: menuAnchor.y - 123)
+                }
+            }
+        }
+    }
+
+    private func deleteSession(_ block: SessionBlock) {
+        let id = block.id
+        let descriptor = FetchDescriptor<StudySession>(predicate: #Predicate { $0.id == id })
+        if let session = try? context.fetch(descriptor).first {
+            context.delete(session)
+            vm.setup(context: context, selectedMonth: date)
+        }
     }
 }
