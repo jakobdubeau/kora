@@ -51,7 +51,7 @@ final class HeatmapViewModel {
             predicate: #Predicate { session in session.start >= yearStart && session.start < yearEnd }
         )
         if let yearSessions = try? context.fetch(yearDescriptor) {
-            firstActiveMonth = yearSessions.map { Calendar.current.startOfDay(for: $0.start) }
+            firstActiveMonth = yearSessions.map { Calendar.current.studyDayStart(for: $0.start) }
                 .min()
                 .map { Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: $0))! }
         }

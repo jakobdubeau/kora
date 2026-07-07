@@ -39,12 +39,14 @@ struct DailySessionsSheet: View {
     var blocks: [TimeBlock] {
         var res: [TimeBlock] = []
         
-        let sessions = vm.sessions(for: Calendar.current.startOfDay(for: date))
+        let studyDate = Calendar.current.studyDayStart(for: date)
+
+        let sessions = vm.sessions(for: Calendar.current.startOfDay(for: studyDate))
             .filter { $0.duration >= 1 }
             .sorted { $0.start < $1.start }
-        
-        let dayStart = Calendar.current.date(bySettingHour: 5, minute: 0, second: 0, of: date)
-        let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: date)!
+
+        let dayStart = Calendar.current.date(bySettingHour: 5, minute: 0, second: 0, of: studyDate)
+        let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: studyDate)!
         let dayEnd = Calendar.current.date(bySettingHour: 4, minute: 59, second: 59, of: tomorrow)
         
         var cursor = dayStart
