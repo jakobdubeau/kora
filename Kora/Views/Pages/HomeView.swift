@@ -27,6 +27,7 @@ struct HomeView: View {
     @Query(sort: \Course.sortOrder) private var courses: [Course]
     @State private var orderedCourses: [Course] = []
     @Environment(\.modelContext) private var context // insert/delete/update
+    @Environment(\.scenePhase) private var scenePhase
     
     let rowHeight: CGFloat = 64
 
@@ -46,7 +47,7 @@ struct HomeView: View {
                 VStack(spacing: 0) {
                     // MARK: - Date & Total Time
                     VStack(alignment: .center, spacing: 16) {
-                        Text(Date(), format: .dateTime.weekday().day().month())
+                        Text(Calendar.current.studyDayStart(for: Date.now), format: .dateTime.weekday().day().month())
                             .font(.headline.bold())
                             .padding(.bottom, -2)
                         Text("\(formatTime(seconds: vm.totalTime))") // string interpolation
@@ -303,6 +304,11 @@ struct HomeView: View {
                 withAnimation(.easeInOut(duration: 0.25)) {
                     orderedCourses = newValue
                 }
+            }
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active {
+                vm.checkDayRollover()
             }
         }
     }

@@ -179,6 +179,24 @@ final class TimerEngine {
         currentTime = current
     }
     
+    func rollToNewDay(boundary: Date) {
+        let current = ProcessInfo.processInfo.systemUptime
+        let elapsedSinceBoundary = Date.now.timeIntervalSince(boundary)
+
+        if let running = runningCourse, let startDate = sessionStartDate {
+            onSessionEnd?(running, startDate, boundary)
+            sessionStartDate = boundary
+            sessionStartTime = current - elapsedSinceBoundary
+        } else {
+            breakStartTime = nil
+            stopTimer()
+        }
+
+        courseTimes = [:]
+        totalBreakTime = 0
+        currentTime = current
+    }
+    
     func loadCourseTimes(_ times: [UUID: TimeInterval]) {
         courseTimes = times
     }

@@ -15,6 +15,9 @@ import SwiftData
 final class HomeViewModel {
     
     let timer = TimerEngine()
+
+    private var lastLoadedDay = Calendar.current.studyDayStart(for: .now)
+    private var rolloverTimer: Timer?
     
     var totalTime: TimeInterval { timer.totalTime }
     var breakTime: TimeInterval { timer.breakTime }
@@ -37,6 +40,23 @@ final class HomeViewModel {
     func newDay() {
         timer.newDay()
     }
+
+    func checkDayRollover() {
+        let currentDay = Calendar.current.studyDayStart(for: .now)
+        guard currentDay != lastLoadedDay else { return }
+
+        timer.rollToNewDay(boundary: currentDay)
+        lastLoadedDay = currentDay
+        scheduleRollover()
+    }
+
+    private func scheduleRollover() {
+        rolloverTimer?.invalidate()
+        let nextBoundary = Calendar.current.date(byAdding: .day, value: 1, to: lastLoadedDay)!
+        rolloverTimer = Timer.scheduledTimer(withTimeInterval: nextBoundary.timeIntervalSinceNow, repeats: false) { [weak self] _ in
+            self?.checkDayRollover()
+        }
+    }
     
     func setup(context: ModelContext) {        
         let todayStart = Calendar.current.studyDayStart(for: Date.now)
@@ -58,6 +78,9 @@ final class HomeViewModel {
             }
             timer.loadCourseTimes(totals)
         }
+
+        lastLoadedDay = todayStart
+        scheduleRollover()
     }
     
     func saveSession(context: ModelContext) {
