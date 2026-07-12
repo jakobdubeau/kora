@@ -233,13 +233,6 @@ struct HomeView: View {
                         onEdit: {},
                         onDelete: {
                             if let course = courseMenu {
-                                let courseId = course.id
-                                let descriptor = FetchDescriptor<StudySession>(predicate: #Predicate { $0.courseId == courseId })
-                                if let sessions = try? context.fetch(descriptor) {
-                                    for session in sessions {
-                                        context.delete(session)
-                                    }
-                                }
                                 context.delete(course)
                                 vm.setup(context: context)
                             }
