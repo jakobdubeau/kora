@@ -17,6 +17,8 @@ class StudySession {
     var start: Date // Date represents absolute point in time
     var end: Date? // optional, either Date value or nil, now we use optional binding when accessing
     var isCompleted: Bool
+    var courseName: String?
+    var courseColour: String?
     
     // computed property (no stored value), value will be calculated every time it's accessed
     var duration: TimeInterval { // TimeInterval is basically a double formatted in seconds
@@ -27,11 +29,13 @@ class StudySession {
         }
     }
     
-    init(courseId: UUID?, start: Date = .now, end: Date? = nil, isCompleted: Bool = false) {
+    init(courseId: UUID?, start: Date = .now, end: Date? = nil, isCompleted: Bool = false, courseName: String? = nil, courseColour: String? = nil) {
         self.id = UUID()
         self.courseId = courseId
         self.start = start
         self.end = end
         self.isCompleted = isCompleted
+        self.courseName = courseName
+        self.courseColour = courseColour
     }
 }

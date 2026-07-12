@@ -30,8 +30,9 @@ struct HeatmapMapper {
         }
         
         for session in sessions {
-            guard let courseId = session.courseId,
-                  let sessionCourse = courseLookup[courseId] else { continue }
+            let sessionCourse = session.courseId.flatMap { courseLookup[$0] }
+            let name = session.courseName ?? sessionCourse?.name ?? "Deleted course"
+            let colour = session.courseColour ?? sessionCourse?.colour
 
             let end = session.start.addingTimeInterval(session.duration)
             let dayEnd = Calendar.current.date(byAdding: .day, value: 1, to: Calendar.current.studyDayStart(for: session.start))!
@@ -39,14 +40,14 @@ struct HeatmapMapper {
             if end <= dayEnd {
                 let sessionDay = Calendar.current.startOfDay(for: Calendar.current.studyDayStart(for: session.start))
                 dailyTotals[sessionDay, default: 0] += session.duration.rounded(.down)
-                let block = SessionBlock(duration: session.duration.rounded(.down), start: session.start, name: sessionCourse.name, colour: sessionCourse.colour, id: session.id)
+                let block = SessionBlock(duration: session.duration.rounded(.down), start: session.start, name: name, colour: colour, id: session.id)
                 dailySessions[sessionDay, default: []].append(block)
             } else {
                 for split in Calendar.current.studyDaySplit(start: session.start, end: end) {
                     let sessionDay = Calendar.current.startOfDay(for: split.dayStart)
                     let splitDuration = split.duration.rounded(.down)
                     dailyTotals[sessionDay, default: 0] += splitDuration
-                    let block = SessionBlock(duration: splitDuration, start: split.start, name: sessionCourse.name, colour: sessionCourse.colour, id: session.id)
+                    let block = SessionBlock(duration: splitDuration, start: split.start, name: name, colour: colour, id: session.id)
                     dailySessions[sessionDay, default: []].append(block)
                 }
             }

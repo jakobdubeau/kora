@@ -67,10 +67,13 @@ final class HomeViewModel {
             predicate: #Predicate { session in session.start >= lowerBound && session.start < dayEnd }
         )
 
+        let courseDescriptor = FetchDescriptor<Course>()
+        let courseIds = Set(((try? context.fetch(courseDescriptor)) ?? []).map { $0.id })
+        
         if let sessions = try? context.fetch(descriptor) {
             var totals: [UUID: TimeInterval] = [:]
             for session in sessions {
-                guard let courseId = session.courseId else { continue }
+                guard let courseId = session.courseId, courseIds.contains(courseId) else { continue }
                 let end = session.start.addingTimeInterval(session.duration)
                 let contribution = min(end, dayEnd).timeIntervalSince(max(session.start, todayStart))
                 guard contribution > 0 else { continue }
@@ -85,7 +88,10 @@ final class HomeViewModel {
     
     func saveSession(context: ModelContext) {
         timer.onSessionEnd = { courseId, startDate, endDate in
-            let session = StudySession(courseId: courseId, start: startDate, end: endDate, isCompleted: true)
+            let descriptor = FetchDescriptor<Course>(predicate: #Predicate { $0.id == courseId })
+            let course = (try? context.fetch(descriptor))?.first
+
+            let session = StudySession(courseId: courseId, start: startDate, end: endDate, isCompleted: true, courseName: course?.name, courseColour: course?.colour)
             
             context.insert(session)
         }
