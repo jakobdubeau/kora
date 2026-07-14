@@ -98,7 +98,7 @@ struct DailySessionsSheet: View {
                 
                 Spacer()
                 
-                Text("Edit Sessions")
+                Text("View Sessions")
                     .font(.headline.bold())
                 
                 Spacer()
