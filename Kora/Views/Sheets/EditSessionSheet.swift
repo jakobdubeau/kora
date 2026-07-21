@@ -87,16 +87,16 @@ struct EditSession: View {
                 HStack(spacing: 0) {
                     TextField("", text: $startHour)
                         .focused($focusedField, equals: .startHour)
-                        .font(.system(size: 34, weight: .regular))
+                        .font(.system(size: 36, weight: .regular))
                         .foregroundStyle(.white)
                         .fontDesign(.monospaced)
                         .keyboardType(.numberPad)
                         .multilineTextAlignment(.trailing)
-                        .frame(width: 44)
+                        .frame(width: 46)
                         .overlay(alignment: .trailing) {
                             if startHour.isEmpty {
                                 Text(initialStartHour)
-                                    .font(.system(size: 34, weight: .regular))
+                                    .font(.system(size: 36, weight: .regular))
                                     .fontDesign(.monospaced)
                                     .foregroundStyle(Color(.separator))
                                     .allowsHitTesting(false)
@@ -104,22 +104,23 @@ struct EditSession: View {
                         }
                     
                     Text(":")
-                        .font(.system(size: 34))
+                        .font(.system(size: 36))
                         .fontDesign(.monospaced)
                         .foregroundStyle(startHour.isEmpty || startMinute.isEmpty ? Color(.separator) : .white)
+                        .baselineOffset(3)
                     
                     TextField("", text: $startMinute)
                         .focused($focusedField, equals: .startMinute)
-                        .font(.system(size: 34, weight: .regular))
+                        .font(.system(size: 36, weight: .regular))
                         .foregroundStyle(.white)
                         .fontDesign(.monospaced)
                         .keyboardType(.numberPad)
                         .multilineTextAlignment(.leading)
-                        .frame(width: 44)
+                        .frame(width: 46)
                         .overlay(alignment: .leading) {
                             if startMinute.isEmpty {
                                 Text(initialStartMinute)
-                                    .font(.system(size: 34, weight: .regular))
+                                    .font(.system(size: 36, weight: .regular))
                                     .fontDesign(.monospaced)
                                     .foregroundStyle(Color(.separator))
                                     .allowsHitTesting(false)
@@ -158,16 +159,16 @@ struct EditSession: View {
                 HStack(spacing: 0) {
                     TextField("", text: $endHour)
                         .focused($focusedField, equals: .endHour)
-                        .font(.system(size: 34, weight: .regular))
+                        .font(.system(size: 36, weight: .regular))
                         .foregroundStyle(.white)
                         .fontDesign(.monospaced)
                         .keyboardType(.numberPad)
                         .multilineTextAlignment(.trailing)
-                        .frame(width: 44)
+                        .frame(width: 46)
                         .overlay(alignment: .trailing) {
                             if endHour.isEmpty {
                                 Text(initialEndHour)
-                                    .font(.system(size: 34, weight: .regular))
+                                    .font(.system(size: 36, weight: .regular))
                                     .fontDesign(.monospaced)
                                     .foregroundStyle(Color(.separator))
                                     .allowsHitTesting(false)
@@ -175,22 +176,23 @@ struct EditSession: View {
                         }
                     
                     Text(":")
-                        .font(.system(size: 34))
+                        .font(.system(size: 36))
                         .fontDesign(.monospaced)
                         .foregroundStyle(endHour.isEmpty || endMinute.isEmpty ? Color(.separator) : .white)
+                        .baselineOffset(3)
                     
                     TextField("", text: $endMinute)
                         .focused($focusedField, equals: .endMinute)
-                        .font(.system(size: 34, weight: .regular))
+                        .font(.system(size: 36, weight: .regular))
                         .foregroundStyle(.white)
                         .fontDesign(.monospaced)
                         .keyboardType(.numberPad)
                         .multilineTextAlignment(.leading)
-                        .frame(width: 44)
+                        .frame(width: 46)
                         .overlay(alignment: .leading) {
                             if endMinute.isEmpty {
                                 Text(initialEndMinute)
-                                    .font(.system(size: 34, weight: .regular))
+                                    .font(.system(size: 36, weight: .regular))
                                     .fontDesign(.monospaced)
                                     .foregroundStyle(Color(.separator))
                                     .allowsHitTesting(false)
@@ -220,7 +222,6 @@ struct EditSession: View {
                         .foregroundStyle(Color.white)
                 }
             }
-            .padding(.top, 4)
         }
         .padding(24)
         .frame(width: 275)
