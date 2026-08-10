@@ -85,7 +85,22 @@ struct EditSession: View {
                 }
                 // start time
                 HStack(spacing: 0) {
-                    TextField("", text: $startHour)
+                    TextField("", text: Binding(
+                        get: { startHour },
+                        set: { newValue in
+                            var digits = String(newValue.filter(\.isNumber).prefix(2))
+                            if digits.count == 2 {
+                                let n = Int(digits) ?? 0
+                                if n < 1 {
+                                    digits = ""
+                                } else {
+                                    digits = String(format: "%02d", min(n, 12))
+                                }
+                                focusedField = .startMinute // auto go to minutes if hour is filled
+                            }
+                            startHour = digits
+                        }
+                    ))
                         .focused($focusedField, equals: .startHour)
                         .font(.system(size: 36, weight: .regular))
                         .foregroundStyle(.white)
@@ -109,7 +124,18 @@ struct EditSession: View {
                         .foregroundStyle(startHour.isEmpty || startMinute.isEmpty ? Color(.separator) : .white)
                         .baselineOffset(3)
                     
-                    TextField("", text: $startMinute)
+                    TextField("", text: Binding(
+                        get: { startMinute },
+                        set: { newValue in
+                            var digits = String(newValue.filter(\.isNumber).prefix(2))
+                            if digits.count == 2 {
+                                let n = Int(digits) ?? 0
+                                digits = String(format: "%02d", min(n, 59))
+                                focusedField = nil
+                            }
+                            startMinute = digits
+                        }
+                    ))
                         .focused($focusedField, equals: .startMinute)
                         .font(.system(size: 36, weight: .regular))
                         .foregroundStyle(.white)
