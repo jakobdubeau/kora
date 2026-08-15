@@ -63,6 +63,12 @@ struct TimeEntry {
         segment == .hour ? hour : minute
     }
 
+    // user shouldn't have to remove the padded 0 added on
+    func trimmed(for segment: TimeSegment) -> String {
+        let shorter = String(text(for: segment).dropLast())
+        return shorter == "0" ? "" : shorter
+    }
+
     func placeholder(for segment: TimeSegment) -> String {
         segment == .hour ? hourPlaceholder : minutePlaceholder
     }
