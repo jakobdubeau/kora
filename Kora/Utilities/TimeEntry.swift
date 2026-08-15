@@ -33,7 +33,6 @@ enum TimeSegment {
     }
 }
 
-// so placeholders count as real values
 struct TimeEntry {
 
     var hour = ""
@@ -67,9 +66,5 @@ struct TimeEntry {
     func trimmed(for segment: TimeSegment) -> String {
         let shorter = String(text(for: segment).dropLast())
         return shorter == "0" ? "" : shorter
-    }
-
-    func placeholder(for segment: TimeSegment) -> String {
-        segment == .hour ? hourPlaceholder : minutePlaceholder
     }
 }
