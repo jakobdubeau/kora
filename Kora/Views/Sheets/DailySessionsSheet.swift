@@ -210,6 +210,8 @@ struct DailySessionsSheet: View {
                                     } action: { point in
                                         ellipsisAnchors[session.id] = point
                                     }
+                                    .frame(maxHeight: .infinity, alignment: .top)
+                                    .padding(.top, 6)
                                 }
                                 .frame(height: max(sessionHeight, 48))
                                 .background(RoundedRectangle(cornerRadius: 8).fill(Color(hex: "#090909")).stroke(Color(.separator).opacity(0.5), lineWidth: (sessionMenu?.id == session.id && !isDismissingMenu) ? 2 : 0.5))
