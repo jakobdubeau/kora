@@ -48,7 +48,7 @@ struct EditSession: View {
     }
     
     var body: some View {
-        VStack(spacing: 24) {
+        VStack(spacing: 28) {
             Text("Edit Session")
                 .font(.headline.bold())
                 .frame(maxWidth: .infinity, alignment: .center)
@@ -68,6 +68,7 @@ struct EditSession: View {
                             .foregroundStyle(start.isPM ? Color(.separator) : Color.white)
                             .fontDesign(.monospaced)
                     }
+                    .buttonStyle(.plain)
                     Button {
                         start.isPM = true
                     } label: {
@@ -76,6 +77,7 @@ struct EditSession: View {
                             .foregroundStyle(start.isPM ? Color.white : Color(.separator))
                             .fontDesign(.monospaced)
                     }
+                    .buttonStyle(.plain)
                 }
                 // start time
                 TimeField(
@@ -100,6 +102,7 @@ struct EditSession: View {
                             .foregroundStyle(end.isPM ? Color(.separator) : Color.white)
                             .fontDesign(.monospaced)
                     }
+                    .buttonStyle(.plain)
                     Button {
                         end.isPM = true
                     } label: {
@@ -108,6 +111,7 @@ struct EditSession: View {
                             .foregroundStyle(end.isPM ? Color.white : Color(.separator))
                             .fontDesign(.monospaced)
                     }
+                    .buttonStyle(.plain)
                 }
 
                 // end time
@@ -129,6 +133,7 @@ struct EditSession: View {
                         .font(.system(size: 15, weight: .semibold))
                         .foregroundStyle(Color.white)
                 }
+                .buttonStyle(.plain)
 
                 Button {
                     onSave(resolve(start), resolve(end))
@@ -137,14 +142,17 @@ struct EditSession: View {
                         .font(.system(size: 15, weight: .semibold))
                         .foregroundStyle(canSave ? Color.white : Color(.separator))
                 }
+                .buttonStyle(.plain)
                 .disabled(!canSave)
             }
         }
-        .padding(24)
-        .frame(width: 275)
+        .padding(.vertical, 28)
+        .padding(.horizontal, 36)
+        .frame(width: 300)
         .background(
             RoundedRectangle(cornerRadius: 24)
-                .fill(Color(.secondarySystemBackground))
+                .fill(Color(hex: "#090909"))
+                .overlay(RoundedRectangle(cornerRadius: 24).stroke(Color(.separator).opacity(0.5), lineWidth: 0.5))
         )
         .contentShape(Rectangle())
         .onTapGesture { cursor = nil }

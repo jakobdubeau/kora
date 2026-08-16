@@ -227,6 +227,7 @@ struct DailySessionsSheet: View {
             .scrollIndicators(.hidden)
             .defaultScrollAnchor(lastSessionAnchor)
         }
+        .blur(radius: editingSession != nil ? 8 : 0)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemBackground))
         // MARK: - Session Context Menu (Edit / Delete)
@@ -246,7 +247,9 @@ struct DailySessionsSheet: View {
 
                     EditDeleteButton(
                         onEdit: {
-                            editingSession = sessionMenu
+                            withAnimation(.spring(response: 0.4, dampingFraction: 0.9)) {
+                                editingSession = sessionMenu
+                            }
                             closingToken = menuToken
                             isDismissingMenu = true
                             withAnimation(.spring(response: 0.5, dampingFraction: 0.9)) { sessionMenu = nil }
@@ -277,21 +280,27 @@ struct DailySessionsSheet: View {
                 let limits = bounds(for: session)
 
                 ZStack {
-                    Color.black.opacity(0.4)
+                    Color.clear
+                        .contentShape(Rectangle())
                         .ignoresSafeArea()
-                        .onTapGesture { editingSession = nil }
+                        .onTapGesture {
+                            withAnimation(.spring(response: 0.4, dampingFraction: 0.9)) { editingSession = nil }
+                        }
 
                     EditSession(
                         lowerBound: limits.lower,
                         upperBound: limits.upper,
                         initialStart: session.start,
                         initialEnd: session.start.addingTimeInterval(session.duration),
-                        onCancel: { editingSession = nil },
+                        onCancel: {
+                            withAnimation(.spring(response: 0.4, dampingFraction: 0.9)) { editingSession = nil }
+                        },
                         onSave: { start, end in
                             updateSession(session, start: start, end: end)
-                            editingSession = nil
+                            withAnimation(.spring(response: 0.4, dampingFraction: 0.9)) { editingSession = nil }
                         }
                     )
+                    .transition(.opacity)
                 }
             }
         }
