@@ -176,7 +176,7 @@ struct HomeView: View {
                                 )
                             }
                             .buttonStyle(.plain)
-                            .padding(.top, 4)
+                            .padding(.top, 6)
                             
                             Spacer()
                         }

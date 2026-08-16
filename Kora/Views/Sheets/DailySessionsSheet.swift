@@ -23,6 +23,7 @@ struct DailySessionsSheet: View {
     @State private var menuAnchor: CGPoint = .zero
     @State private var menuToken: Int = 0
     @State private var closingToken: Int = 0
+    @State private var editingSession: SessionBlock?
 
     enum TimeBlock: Identifiable {
         case session(SessionBlock)
@@ -244,7 +245,12 @@ struct DailySessionsSheet: View {
                     }
 
                     EditDeleteButton(
-                        onEdit: {},
+                        onEdit: {
+                            editingSession = sessionMenu
+                            closingToken = menuToken
+                            isDismissingMenu = true
+                            withAnimation(.spring(response: 0.5, dampingFraction: 0.9)) { sessionMenu = nil }
+                        },
                         onDelete: {
                             if let block = sessionMenu {
                                 deleteSession(block)
@@ -264,6 +270,60 @@ struct DailySessionsSheet: View {
                     .position(x: menuAnchor.x - 35, y: menuAnchor.y - 123)
                 }
             }
+        }
+        // MARK: - Edit Session
+        .overlay {
+            if let session = editingSession {
+                let limits = bounds(for: session)
+
+                ZStack {
+                    Color.black.opacity(0.4)
+                        .ignoresSafeArea()
+                        .onTapGesture { editingSession = nil }
+
+                    EditSession(
+                        lowerBound: limits.lower,
+                        upperBound: limits.upper,
+                        initialStart: session.start,
+                        initialEnd: session.start.addingTimeInterval(session.duration),
+                        onCancel: { editingSession = nil },
+                        onSave: { start, end in
+                            updateSession(session, start: start, end: end)
+                            editingSession = nil
+                        }
+                    )
+                }
+            }
+        }
+    }
+    
+    private func bounds(for block: SessionBlock) -> (lower: Date, upper: Date) {
+        let studyDate = Calendar.current.studyDayStart(for: date)
+        let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: studyDate)!
+        let dayStart = Calendar.current.date(bySettingHour: 5, minute: 0, second: 0, of: studyDate)!
+        let dayEnd = Calendar.current.date(bySettingHour: 4, minute: 59, second: 59, of: tomorrow)!
+
+        let others = vm.sessions(for: Calendar.current.startOfDay(for: studyDate))
+            .filter { $0.duration >= 1 && $0.id != block.id }
+            .sorted { $0.start < $1.start }
+
+        let lower = others.last { $0.start < block.start }
+            .map { $0.start.addingTimeInterval($0.duration) } ?? dayStart
+        let upper = others.first { $0.start > block.start }?.start ?? dayEnd
+
+        return (lower, upper)
+    }
+
+    private func updateSession(_ block: SessionBlock, start: Date, end: Date) {
+        let id = block.id
+        let descriptor = FetchDescriptor<StudySession>(predicate: #Predicate { $0.id == id })
+        if let session = try? context.fetch(descriptor).first {
+            session.start = start
+            session.end = end
+            withAnimation(.easeInOut(duration: 0.25)) {
+                vm.setup(context: context, selectedMonth: date)
+            }
+            onSessionDeleted()
         }
     }
 
