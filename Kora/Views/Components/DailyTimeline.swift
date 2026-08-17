@@ -61,6 +61,7 @@ struct DailyTimeline: View {
                             RoundedRectangle(cornerRadius: 14)
                                 .fill(Color(hex: session.colour ?? "#FFFFFF"))
                                 .frame(width: 8)
+                                .padding(.vertical, 0.5)
                             
                             VStack(alignment: .leading, spacing: 0) {
                                 Text(session.name)
@@ -75,8 +76,8 @@ struct DailyTimeline: View {
                             Spacer()
                         }
                         .frame(height: sessionHeight)
-                        .background(RoundedRectangle(cornerRadius: 8).stroke(Color(.separator).opacity(0.5), lineWidth: 1))
-                        .padding(.leading, 44)
+                        .background(RoundedRectangle(cornerRadius: 8).fill(Color(.systemBackground)).stroke(Color(.separator).opacity(0.5), lineWidth: 1))
+                        .padding(.leading, 48)
                         .padding(.trailing, 16)
                         .padding(.top, startTime)
                     }

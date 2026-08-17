@@ -41,9 +41,9 @@ struct HeatmapGrid: View {
                 if let day = days[index] {
                     let colors = ["#090909", "#1D1D1D", "#2E2E2E", "#474747", "#6B6B6B", "#9D9D9D", "#FFFFFF"]
                     let colorIndex = [1, 2, 3, 4, 6, 8].filter { (dailyTotals[day] ?? 0) / 3600 >= $0 }.count
-                    RoundedRectangle(cornerRadius: 4)
+                    RoundedRectangle(cornerRadius: 6)
                         .fill(Color(hex: colors[colorIndex]))
-                        .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color(.separator).opacity(0.5), lineWidth: 0.5))
+                        .overlay(RoundedRectangle(cornerRadius: 6).stroke(colorIndex == 0 ? Color(.separator).opacity(0.5) : Color(hex: "#090909"), lineWidth: 0.5))
                         .frame(height: 36)
                         .aspectRatio(1, contentMode: .fit)
                         .onTapGesture { onTap(day) }
