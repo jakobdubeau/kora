@@ -92,6 +92,7 @@ struct AddCourse: View {
                                 .overlay(
                                     Circle().strokeBorder(.primary, lineWidth: selectedFamily == index ? 3 : 0)
                                 )
+                                .animation(.easeOut(duration: 0.2), value: selectedFamily)
                                 .onTapGesture {
                                     nameFocused = false
                                     selectedFamily = index
