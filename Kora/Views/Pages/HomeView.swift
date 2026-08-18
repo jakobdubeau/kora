@@ -15,6 +15,7 @@ struct HomeView: View {
     @State private var showDailySessions: Bool = false
     @State private var activeCourse: Course? = nil
     @State private var courseMenu: Course? = nil
+    @State private var editingCourse: Course? = nil
     @State private var isDismissingMenu: Bool = false
     @State private var menuAnchor: CGPoint = .zero
     @State private var menuToken: Int = 0
@@ -192,6 +193,9 @@ struct HomeView: View {
             .fullScreenCover(isPresented: $showAddCourse) {
                 AddCourse()
             }
+            .fullScreenCover(item: $editingCourse) { course in
+                EditCourse(course: course)
+            }
             
             // MARK: - Session Cover (Course Running)
             if let course = activeCourse {
@@ -230,7 +234,12 @@ struct HomeView: View {
                     }
 
                     EditDeleteButton(
-                        onEdit: {},
+                        onEdit: {
+                            editingCourse = courseMenu
+                            closingToken = menuToken
+                            isDismissingMenu = true
+                            withAnimation(.spring(response: 0.5, dampingFraction: 0.9)) { courseMenu = nil }
+                        },
                         onDelete: {
                             if let course = courseMenu {
                                 context.delete(course)
