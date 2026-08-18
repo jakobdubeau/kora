@@ -87,7 +87,7 @@ struct AddCourse: View {
                             let palette = Color.palettes[index]
 
                             Circle()
-                                .fill(Color(hex: palette.shades[2]))
+                                .fill(Color(hex: selectedFamily == index ? selectedColor : palette.shades[2]))
                                 .frame(width: 100, height: 100)
                                 .overlay(
                                     Circle().strokeBorder(.primary, lineWidth: selectedFamily == index ? 3 : 0)
@@ -122,7 +122,7 @@ struct AddCourse: View {
                                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                                 .padding(.leading, 35)
                                 .opacity(showShades ? 1 : 0)
-                                .animation(.easeIn(duration: 0.05), value: showShades)
+                                .animation(.easeIn(duration: 0.15).delay(showShades ? 0.09 : 0), value: showShades)
                                 .onTapGesture {
                                     withAnimation(.spring(response: 0.45, dampingFraction: 0.9)
                                         .delay(0.07)) {
@@ -184,7 +184,7 @@ private struct Shades: View {
                     value: show
                 )
                 .onTapGesture {
-                    withAnimation(.spring(response: 0.45, dampingFraction: 0.9)) {
+                    withAnimation(.smooth(duration: 0.2)) {
                         selectedColor = hex
                     }
                 }
