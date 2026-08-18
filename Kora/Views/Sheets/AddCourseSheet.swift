@@ -19,16 +19,67 @@ struct AddCourse: View {
     @State private var selectedColor: String = Color.palettes[8].shades[0]
     @State private var showShades: Bool = false // animation
     @State private var counter: Int = 0
+    @FocusState private var nameFocused: Bool
     
     var body: some View {
-        NavigationStack {
-            GeometryReader { _ in
+        GeometryReader { _ in
             VStack {
-                Form {
-                    TextField("Course name", text: $name)
+                ZStack {
+                    Text("Add Course")
+                        .font(.headline.bold())
+
+                    HStack(spacing: 0) {
+                        Button {
+                            dismiss()
+                        } label: {
+                            Text("Cancel")
+                                .font(.system(size: 14, weight: .semibold))
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 8)
+                                .background(Color(.systemBackground))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 32)
+                                        .stroke(Color(.separator).opacity(0.5), lineWidth: 1)
+                                )
+                        }
+                        .buttonStyle(.plain)
+
+                        Spacer()
+
+                        Button {
+                            context.insert(Course(name: name, colour: selectedColor, sortOrder: (courses.map(\.sortOrder).max() ?? -1) + 1)) // add new model to swift data
+                            dismiss()
+                        } label: {
+                            Text("Done")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundStyle(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? Color(.separator) : Color.white)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 8)
+                                .background(Color(.systemBackground))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 32)
+                                        .stroke(Color(.separator).opacity(0.5), lineWidth: 1)
+                                )
+                        }
+                        .buttonStyle(.plain)
+                        .disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty) // disable done if no name/only spaces
+                    }
                 }
-                .frame(height: 130)
-                .scrollDisabled(true)
+                .padding(.horizontal, 22)
+                .padding(.vertical, 22)
+                
+                TextField("e.g. Math", text: $name)
+                    .font(.system(size: 18, weight: .regular))
+                    .focused($nameFocused)
+                    .padding(.horizontal, 16)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 46)
+                    .background(Color(hex: "#090909"))
+                    .clipShape(RoundedRectangle(cornerRadius: 14))
+                    .overlay(RoundedRectangle(cornerRadius: 14).stroke(Color(.separator).opacity(0.5), lineWidth: nameFocused ? 2 : 0.5))
+                    .padding(.horizontal, 22)
+                    .padding(.top, 10)
+                    .padding(.bottom, 58)
 
                 ZStack {
                     LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 30) {
@@ -42,6 +93,7 @@ struct AddCourse: View {
                                     Circle().strokeBorder(.primary, lineWidth: selectedFamily == index ? 3 : 0)
                                 )
                                 .onTapGesture {
+                                    nameFocused = false
                                     selectedFamily = index
                                     selectedColor = palette.shades[2]
                                     counter += 1
@@ -92,25 +144,10 @@ struct AddCourse: View {
                 
                 Spacer()
             }
-            }
-            .ignoresSafeArea(.keyboard)
-            .navigationTitle("Add Course")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        dismiss()
-                    }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") {
-                        context.insert(Course(name: name, colour: selectedColor, sortOrder: (courses.map(\.sortOrder).max() ?? -1) + 1)) // add new model to swift data
-                        dismiss()
-                    }
-                    .disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty) // disable done if no name/only spaces
-                }
-            }
+            .contentShape(Rectangle())
+            .onTapGesture { nameFocused = false }
         }
+        .ignoresSafeArea(.keyboard)
     }
 }
 
