@@ -14,3 +14,7 @@ struct OnboardingView: View {
             .font(.system(size: 22, weight: .medium))
     }
 }
+
+#Preview {
+    OnboardingView()
+}
