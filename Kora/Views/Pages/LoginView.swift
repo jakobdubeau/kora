@@ -121,6 +121,22 @@ struct LoginView: View {
                     .background(Color(hex: "#090909"))
                     .clipShape(RoundedRectangle(cornerRadius: 14))
                     .overlay(RoundedRectangle(cornerRadius: 14).stroke(Color(.separator).opacity(0.5), lineWidth: 0.5))
+                
+                Button {
+                    coordinator.continueAsGuest()
+                } label: {
+                    HStack(spacing: 4) {
+                        Text("Skip for now")
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 11, weight: .semibold))
+                    }
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(Color(.separator))
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 44)
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
             }
             .padding(.horizontal, 22)
         }
@@ -129,4 +145,5 @@ struct LoginView: View {
 
 #Preview {
     LoginView()
+        .environment(AppCoordinator())
 }
