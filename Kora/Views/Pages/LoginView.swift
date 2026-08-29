@@ -62,6 +62,7 @@ struct LoginView: View {
     
     @State private var email: String = ""
     @State private var password: String = ""
+    @State private var authViewModel = AuthViewModel()
     
     var body: some View {
         ZStack {
@@ -94,7 +95,16 @@ struct LoginView: View {
                     .buttonStyle(.plain)
                 }
                 
-                SignInWithAppleButton(.continue, onRequest: { _ in }, onCompletion: { _ in })
+                SignInWithAppleButton(.continue) { request in
+                    authViewModel.prepareAppleRequest(request)
+                } onCompletion: { result in
+                    Task {
+                        if let session = await authViewModel.handleAppleCompletion(result) {
+                            coordinator.session = session
+                            coordinator.state = .onboarding
+                        }
+                    }
+                }
                     .frame(height: 46)
                     .signInWithAppleButtonStyle(.white)
                     .cornerRadius(14)
@@ -137,7 +147,15 @@ struct LoginView: View {
                     .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
+
+                if let errorMessage = authViewModel.errorMessage {
+                    Text(errorMessage)
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundStyle(.red)
+                        .multilineTextAlignment(.center)
+                }
             }
+            .disabled(authViewModel.isLoading)
             .padding(.horizontal, 22)
         }
     }

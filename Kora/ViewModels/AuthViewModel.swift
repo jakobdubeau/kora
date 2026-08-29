@@ -30,10 +30,7 @@ final class AuthViewModel {
         errorMessage = nil
 
         switch result {
-        case .failure(let error):
-            if (error as? ASAuthorizationError)?.code != .canceled {
-                errorMessage = "Apple sign-in didn't complete. Try again."
-            }
+        case .failure:
             return nil
 
         case .success(let authorization):
