@@ -12,8 +12,8 @@ import Foundation
 struct UserProfile: Codable, Identifiable {
     let id: UUID
     var username: String
-    var avatarURL: URL?
-    var bannerURL: URL?
+    var avatarURL: URL? = nil
+    var bannerURL: URL? = nil
 
     enum CodingKeys: String, CodingKey {
         case id

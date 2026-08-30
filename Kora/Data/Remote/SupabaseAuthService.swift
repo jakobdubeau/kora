@@ -10,13 +10,19 @@ import Foundation
 import Supabase
 
 struct SupabaseAuthService {
+    
+    // do + try/catch = handle error here
+    // try inside throws = pass error to caller
+    // try? = replace error with nil
 
     private let client = SupabaseClientProvider.client
 
     func restoreSession() async -> Session? {
+        // checks if any cached session, nil could mean never signed in, signed out, data deleted etc.
         guard let cached = client.auth.currentSession else { return nil }
 
         do {
+            // look for valid session
             return try await client.auth.session
         } catch {
             return cached
