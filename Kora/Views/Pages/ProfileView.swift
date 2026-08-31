@@ -21,6 +21,7 @@ struct ProfileView: View {
             Button {
                 Task {
                     try? await authService.signOut()
+                    coordinator.clearGuest()
                     coordinator.session = nil
                     coordinator.profile = nil
                     coordinator.state = .login

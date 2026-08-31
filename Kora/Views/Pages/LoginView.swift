@@ -63,6 +63,7 @@ struct LoginView: View {
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var authViewModel = AuthViewModel()
+    private let profileService = SupabaseProfileService()
     
     var body: some View {
         ZStack {
@@ -100,7 +101,12 @@ struct LoginView: View {
                     Task {
                         if let session = await authViewModel.handleAppleCompletion(result) {
                             coordinator.session = session
-                            coordinator.state = .onboarding
+
+                            if let userId = coordinator.userId {
+                                coordinator.profile = try? await profileService.fetchProfile(userId: userId)
+                            }
+
+                            coordinator.state = coordinator.profile == nil ? .onboarding : .main
                         }
                     }
                 }

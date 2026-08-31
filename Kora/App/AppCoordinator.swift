@@ -24,7 +24,11 @@ final class AppCoordinator {
     var state: AppState = .splash
     var session: Session?
     var profile: UserProfile?
-    var isGuest: Bool
+    private var hasSkippedLogin: Bool
+
+    var isGuest: Bool {
+        session == nil && hasSkippedLogin
+    }
 
     var userId: UUID? {
         session?.user.id
@@ -32,12 +36,17 @@ final class AppCoordinator {
 
     // user defaults is built in storage for small user device preferences
     init() {
-        isGuest = UserDefaults.standard.bool(forKey: Self.guestKey)
+        hasSkippedLogin = UserDefaults.standard.bool(forKey: Self.guestKey)
     }
 
     func continueAsGuest() {
         UserDefaults.standard.set(true, forKey: Self.guestKey)
-        isGuest = true
+        hasSkippedLogin = true
         state = .main
+    }
+
+    func clearGuest() {
+        UserDefaults.standard.removeObject(forKey: Self.guestKey)
+        hasSkippedLogin = false
     }
 }
