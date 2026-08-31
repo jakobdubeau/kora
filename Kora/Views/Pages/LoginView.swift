@@ -75,7 +75,6 @@ struct LoginView: View {
                 
                 HStack {
                     Button {
-                        coordinator.state = .main
                     } label: {
                         HStack(spacing: 4) {
                             Image("GoogleLogoTAsset")

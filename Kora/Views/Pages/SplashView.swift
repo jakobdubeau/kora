@@ -11,6 +11,7 @@ struct SplashView: View {
     
     @Environment(AppCoordinator.self) private var coordinator
     private let authService = SupabaseAuthService()
+    private let profileService = SupabaseProfileService()
     
     var body: some View {
         AnimatedKoraAsterisk(color: .primary, size: 172)
@@ -18,8 +19,13 @@ struct SplashView: View {
             .task {
                 coordinator.session = await authService.restoreSession()
                 
-                if coordinator.session != nil {
-                    coordinator.state = .onboarding
+                if let userId = coordinator.userId {
+                    do {
+                        coordinator.profile = try await profileService.fetchProfile(userId: userId)
+                        coordinator.state = coordinator.profile == nil ? .onboarding : .main
+                    } catch {
+                        coordinator.state = .main
+                    }
                 } else if coordinator.isGuest {
                     coordinator.state = .main
                 } else {

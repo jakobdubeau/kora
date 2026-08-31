@@ -23,7 +23,7 @@ final class OnboardingViewModel {
     private static let allowed = CharacterSet.alphanumerics.union(CharacterSet(charactersIn: "_"))
     private static let hint = "Please only use letters, numbers, or underscores."
 
-    private let profileService = SupabaseProfile()
+    private let profileService = SupabaseProfileService()
 
     var username = "" {
         didSet { validate() }

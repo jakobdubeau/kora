@@ -1,5 +1,5 @@
 //
-//  SupabaseProfile.swift
+//  SupabaseProfileService.swift
 //  Kora
 //
 //  Created by Jakob Dubeau on 2026-01-22.
@@ -12,7 +12,7 @@ enum ProfileError: Error {
     case usernameTaken
 }
 
-struct SupabaseProfile {
+struct SupabaseProfileService {
 
     private let client = SupabaseClientProvider.client
 
