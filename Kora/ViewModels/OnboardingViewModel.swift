@@ -32,10 +32,6 @@ final class OnboardingViewModel {
     var isSubmitting = false
     var errorMessage: String?
 
-    var canSubmit: Bool {
-        status == .available && !isSubmitting
-    }
-    
     var message: String {
         switch status {
         case .idle, .checking: Self.hint
@@ -46,8 +42,15 @@ final class OnboardingViewModel {
     }
     
     func validate() {
+        errorMessage = nil
+        
         let name = normalized(username)
+
         if name.isEmpty {
+            status = .idle
+        } else if !name.unicodeScalars.allSatisfy({ Self.allowed.contains($0) }) {
+            status = .invalid(Self.hint)
+        } else if name.count < 3 {
             status = .idle
         } else if let reason = validationError(for: name) {
             status = .invalid(reason)
@@ -56,20 +59,33 @@ final class OnboardingViewModel {
         }
     }
 
+    func tooShort() {
+        let name = normalized(username)
+        guard !name.isEmpty, name.count < 3, let reason = validationError(for: name) else { return }
+
+        status = .invalid(reason)
+    }
+
     func checkAvailability() async {
         let name = normalized(username)
         guard !name.isEmpty, validationError(for: name) == nil else { return }
 
         do {
             status = try await profileService.isUsernameAvailable(name) ? .available : .taken
+            errorMessage = nil
         } catch {
+            guard !Task.isCancelled else { return }
             errorMessage = "Couldn't check that username. Check your connection."
         }
     }
 
     func submit(userId: UUID) async -> UserProfile? {
         let name = normalized(username)
-        guard validationError(for: name) == nil else { return nil }
+
+        if let reason = validationError(for: name) {
+            status = .invalid(reason)
+            return nil
+        }
 
         errorMessage = nil
         isSubmitting = true
@@ -87,14 +103,13 @@ final class OnboardingViewModel {
     }
 
     private func normalized(_ raw: String) -> String {
-        raw.trimmingCharacters(in: .whitespacesAndNewlines)
-            .precomposedStringWithCanonicalMapping
+        raw.precomposedStringWithCanonicalMapping
     }
 
     private func validationError(for name: String) -> String? {
+        if !name.unicodeScalars.allSatisfy({ Self.allowed.contains($0) }) { return Self.hint }
         if name.count < 3 { return "At least 3 characters." }
         if name.count > 20 { return "20 characters maximum." }
-        if !name.unicodeScalars.allSatisfy({ Self.allowed.contains($0) }) { return Self.hint }
         return nil
     }
 }
