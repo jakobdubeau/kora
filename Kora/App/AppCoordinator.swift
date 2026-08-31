@@ -26,6 +26,10 @@ final class AppCoordinator {
     var profile: UserProfile?
     var isGuest: Bool
 
+    var userId: UUID? {
+        session?.user.id
+    }
+
     // user defaults is built in storage for small user device preferences
     init() {
         isGuest = UserDefaults.standard.bool(forKey: Self.guestKey)
