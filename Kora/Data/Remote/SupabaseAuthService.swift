@@ -29,6 +29,10 @@ struct SupabaseAuthService {
         }
     }
     
+    func session(from url: URL) async throws -> Session {
+        try await client.auth.session(from: url)
+    }
+
     func signOut() async throws {
         try await client.auth.signOut()
     }
