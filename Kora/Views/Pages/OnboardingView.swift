@@ -65,6 +65,7 @@ struct OnboardingView: View {
                     .foregroundStyle(vm.status == .available ? Color.black : Color(.separator))
                     .clipShape(RoundedRectangle(cornerRadius: 14))
                     .overlay(RoundedRectangle(cornerRadius: 14).stroke(Color(.separator).opacity(0.5), lineWidth: 0.5))
+                    .animation(.smooth(duration: 0.2), value: vm.status)
             }
             .buttonStyle(.plain)
             .disabled(vm.isSubmitting)

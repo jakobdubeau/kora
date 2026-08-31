@@ -54,7 +54,7 @@ final class OnboardingViewModel {
             status = .idle
         } else if let reason = validationError(for: name) {
             status = .invalid(reason)
-        } else {
+        } else if status != .available {
             status = .checking
         }
     }
