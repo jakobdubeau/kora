@@ -63,6 +63,7 @@ struct LoginView: View {
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var authViewModel = AuthViewModel()
+    @State private var isResolving = false
     private let profileService = SupabaseProfileService()
     
     var body: some View {
@@ -99,14 +100,20 @@ struct LoginView: View {
                     authViewModel.prepareAppleRequest(request)
                 } onCompletion: { result in
                     Task {
+                        isResolving = true
+                        defer { isResolving = false }
+                        
                         if let session = await authViewModel.handleAppleCompletion(result) {
                             coordinator.session = session
 
                             if let userId = coordinator.userId {
-                                coordinator.profile = try? await profileService.fetchProfile(userId: userId)
+                                do {
+                                    coordinator.profile = try await profileService.fetchProfile(userId: userId)
+                                    coordinator.state = coordinator.profile == nil ? .onboarding : .main
+                                } catch {
+                                    coordinator.state = .main
+                                }
                             }
-
-                            coordinator.state = coordinator.profile == nil ? .onboarding : .main
                         }
                     }
                 }
@@ -160,7 +167,7 @@ struct LoginView: View {
                         .multilineTextAlignment(.center)
                 }
             }
-            .disabled(authViewModel.isLoading)
+            .disabled(authViewModel.isLoading || isResolving)
             .padding(.horizontal, 22)
         }
     }

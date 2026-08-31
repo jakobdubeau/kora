@@ -47,7 +47,8 @@ struct SupabaseProfileService {
                 .single()
                 .execute()
                 .value // returns UserProfile
-        } catch let error as PostgrestError where error.code == "23505" {
+        } catch let error as PostgrestError
+            where error.code == "23505" && error.message.contains("profiles_username") {
             throw ProfileError.usernameTaken
         }
     }
