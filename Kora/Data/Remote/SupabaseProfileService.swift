@@ -30,7 +30,7 @@ struct SupabaseProfileService {
         let matches: [UserProfile] = try await client
             .from("profiles")
             .select()
-            .ilike("username", pattern: username)
+            .ilike("username", pattern: username.replacingOccurrences(of: "_", with: "\\_"))
             .limit(1)
             .execute()
             .value

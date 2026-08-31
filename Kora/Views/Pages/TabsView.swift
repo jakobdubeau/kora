@@ -32,7 +32,7 @@ struct TabsView: View {
                 HeatmapView()
                 
             case .profile:
-                HomeView(showTabs: $showTabs)
+                ProfileView()
                 
             }
             

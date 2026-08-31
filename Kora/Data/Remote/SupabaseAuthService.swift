@@ -29,6 +29,10 @@ struct SupabaseAuthService {
         }
     }
     
+    func signOut() async throws {
+        try await client.auth.signOut()
+    }
+
     @discardableResult
     func signInWithApple(idToken: String, nonce: String) async throws -> Session {
         try await client.auth.signInWithIdToken(
