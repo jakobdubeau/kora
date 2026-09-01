@@ -86,12 +86,12 @@ final class HomeViewModel {
         scheduleRollover()
     }
     
-    func saveSession(context: ModelContext) {
+    func saveSession(context: ModelContext, userId: UUID?) {
         timer.onSessionEnd = { courseId, startDate, endDate in
             let descriptor = FetchDescriptor<Course>(predicate: #Predicate { $0.id == courseId })
             let course = (try? context.fetch(descriptor))?.first
 
-            let session = StudySession(courseId: courseId, start: startDate, end: endDate, isCompleted: true, courseName: course?.name, courseColour: course?.colour)
+            let session = StudySession(courseId: courseId, start: startDate, end: endDate, isCompleted: true, courseName: course?.name, courseColour: course?.colour, userId: userId)
             
             context.insert(session)
         }

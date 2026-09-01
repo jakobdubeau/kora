@@ -28,6 +28,7 @@ struct HomeView: View {
     @Query(sort: \Course.sortOrder) private var courses: [Course]
     @State private var orderedCourses: [Course] = []
     @Environment(\.modelContext) private var context // insert/delete/update
+    @Environment(AppCoordinator.self) private var coordinator
     @Environment(\.scenePhase) private var scenePhase
     
     let rowHeight: CGFloat = 64
@@ -292,7 +293,7 @@ struct HomeView: View {
         }
         // MARK: - Lifecycle
         .onAppear {
-            vm.saveSession(context: context) // closure (setup once), timer engine saves sessions, from launch, everytime timer engine calls stopRunningCourse, closure fires
+            vm.saveSession(context: context, userId: coordinator.userId) // closure (setup once), timer engine saves sessions, from launch, everytime timer engine calls stopRunningCourse, closure fires
             vm.setup(context: context)
             orderedCourses = courses
             if Self.isGolden {
@@ -318,5 +319,6 @@ struct HomeView: View {
 #Preview {
     HomeView(showTabs: .constant(true))
         .modelContainer(for: [Course.self, StudySession.self], inMemory: true)
+        .environment(AppCoordinator())
 }
 
