@@ -23,10 +23,19 @@ struct OnboardingView: View {
 
     var body: some View {
         VStack(spacing: 48) {
-            Text("Choose a username")
-                .font(.system(size: 28, weight: .medium))
-                .fontDesign(.monospaced)
-                .frame(maxWidth: .infinity, alignment: .center)
+            VStack(spacing: 16) {
+                Text("Welcome to Kora")
+                    .font(.system(size: 22, weight: .medium))
+                    .fontDesign(.monospaced)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+                Text("Choose a username so your friends can find you.")
+                    .font(.system(size: 16, weight: .regular))
+                    .foregroundStyle(Color.secondary)
+                    .fontDesign(.monospaced)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .padding(.bottom, -8)
 
             VStack(alignment: .leading, spacing: 12) {
                 TextField("Username", text: $vm.username)
