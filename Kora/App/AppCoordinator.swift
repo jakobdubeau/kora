@@ -22,6 +22,7 @@ final class AppCoordinator {
     private static let guestKey = "hasSkippedLogin"
     
     var state: AppState = .splash
+    var blackScreen: Double = 0
     var session: Session?
     var profile: UserProfile?
     private var hasSkippedLogin: Bool

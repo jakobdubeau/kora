@@ -13,6 +13,8 @@ struct OnboardingView: View {
 
     @State private var vm = OnboardingViewModel()
 
+    private let authService = SupabaseAuthService()
+
     private var messageColor: Color {
         switch vm.status {
         case .idle, .checking: Color.secondary
@@ -28,12 +30,14 @@ struct OnboardingView: View {
                     .font(.system(size: 22, weight: .medium))
                     .fontDesign(.monospaced)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.leading, 8)
                 
                 Text("Choose a username so your friends can find you.")
                     .font(.system(size: 16, weight: .regular))
                     .foregroundStyle(Color.secondary)
                     .fontDesign(.monospaced)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.leading, 8)
             }
             .padding(.bottom, -8)
 
@@ -77,9 +81,40 @@ struct OnboardingView: View {
                     .animation(.smooth(duration: 0.2), value: vm.status)
             }
             .buttonStyle(.plain)
-            .disabled(vm.isSubmitting)
+            .allowsHitTesting(vm.status == .available && !vm.isSubmitting)
         }
         .padding(.horizontal, 22)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .overlay(alignment: .topLeading) {
+            Button {
+                withAnimation(.easeOut(duration: 0.1)) {
+                    coordinator.blackScreen = 1
+                }
+
+                Task {
+                    try? await Task.sleep(for: .milliseconds(100))
+
+                    coordinator.session = nil
+                    coordinator.profile = nil
+                    coordinator.state = .login
+
+                    withAnimation(.easeOut(duration: 0.1)) {
+                        coordinator.blackScreen = 0
+                    }
+
+                    try? await authService.signOut()
+                }
+            } label: {
+                Image(systemName: "chevron.left")
+                    .font(.system(size: 19, weight: .medium))
+                    .foregroundStyle(.secondary)
+                    .frame(width: 44, height: 44, alignment: .topLeading)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .padding(.leading, 22)
+            .padding(.top, 22)
+        }
         .task(id: vm.username) {
             try? await Task.sleep(for: .milliseconds(300))
             guard !Task.isCancelled else { return }

@@ -32,6 +32,12 @@ struct KoraApp: App {
                     TabsView()
                 }
             }
+            .overlay {
+                Color.black
+                    .ignoresSafeArea()
+                    .opacity(coordinator.blackScreen)
+                    .allowsHitTesting(false)
+            }
             .environment(coordinator)
             .onOpenURL { url in
                 Task {
