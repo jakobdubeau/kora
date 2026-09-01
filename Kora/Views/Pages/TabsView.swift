@@ -30,7 +30,7 @@ struct TabsView: View {
             switch selectedTab {
                 
             case .home:
-                HomeView(showTabs: $showTabs)
+                HomeView(showTabs: $showTabs, userId: coordinator.userId)
                 
             case .groups:
                 HeatmapView()

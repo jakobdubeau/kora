@@ -9,11 +9,17 @@ import SwiftUI
 import SwiftData
 
 struct AddCourse: View {
+    let userId: UUID?
+
     @Environment(\.modelContext) private var context // db session
     @Environment(\.dismiss) private var dismiss // close the modal
-    @Environment(AppCoordinator.self) private var coordinator
-    
+
     @Query private var courses: [Course]
+
+    init(userId: UUID?) {
+        self.userId = userId
+        _courses = Query(filter: #Predicate<Course> { $0.userId == userId })
+    }
 
     @State private var name: String = "" // @State to redraw when value changes
     @State private var selectedFamily: Int? = nil
@@ -48,7 +54,7 @@ struct AddCourse: View {
                         Spacer()
 
                         Button {
-                            context.insert(Course(name: name, colour: selectedColor, sortOrder: (courses.map(\.sortOrder).max() ?? -1) + 1, userId: coordinator.userId)) // add new model to swift data
+                            context.insert(Course(name: name, colour: selectedColor, sortOrder: (courses.map(\.sortOrder).max() ?? -1) + 1, userId: userId)) // add new model to swift data
                             dismiss()
                         } label: {
                             Text("Done")

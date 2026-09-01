@@ -25,13 +25,21 @@ struct HomeView: View {
     
     @Binding var showTabs: Bool
     
-    @Query(sort: \Course.sortOrder) private var courses: [Course]
+    @Query private var courses: [Course]
     @State private var orderedCourses: [Course] = []
     @Environment(\.modelContext) private var context // insert/delete/update
     @Environment(AppCoordinator.self) private var coordinator
     @Environment(\.scenePhase) private var scenePhase
     
     let rowHeight: CGFloat = 64
+
+    init(showTabs: Binding<Bool>, userId: UUID?) {
+        _showTabs = showTabs
+        _courses = Query(
+            filter: #Predicate<Course> { $0.userId == userId },
+            sort: \Course.sortOrder
+        )
+    }
 
     private static let asteriskColor: Color = {
         let allShades = Color.palettes
@@ -192,7 +200,7 @@ struct HomeView: View {
                 }
             }
             .fullScreenCover(isPresented: $showAddCourse) {
-                AddCourse()
+                AddCourse(userId: coordinator.userId)
             }
             .fullScreenCover(item: $editingCourse) { course in
                 EditCourse(course: course)
@@ -317,7 +325,7 @@ struct HomeView: View {
     }
 }
 #Preview {
-    HomeView(showTabs: .constant(true))
+    HomeView(showTabs: .constant(true), userId: nil)
         .modelContainer(for: [Course.self, StudySession.self], inMemory: true)
         .environment(AppCoordinator())
 }
