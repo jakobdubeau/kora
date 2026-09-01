@@ -6,8 +6,10 @@
 //
 
 import AuthenticationServices
+import GoogleSignIn
 import Observation
 import Supabase
+import UIKit
 
 @MainActor
 @Observable
@@ -24,6 +26,53 @@ final class AuthViewModel {
         currentNonce = nonce
         request.requestedScopes = [.email]
         request.nonce = SupabaseAuthService.sha256(nonce)
+    }
+
+    func signInWithGoogle() async -> Session? {
+        errorMessage = nil
+
+        guard let presenter = rootViewController else {
+            errorMessage = "Couldn't open Google sign-in."
+            return nil
+        }
+
+        isLoading = true
+        defer { isLoading = false }
+
+        do {
+            let nonce = SupabaseAuthService.randomNonce()
+
+            let result = try await GIDSignIn.sharedInstance.signIn(
+                withPresenting: presenter,
+                hint: nil,
+                additionalScopes: nil,
+                nonce: SupabaseAuthService.sha256(nonce)
+            )
+
+            guard let idToken = result.user.idToken?.tokenString else {
+                errorMessage = "Google didn't return an identity token."
+                return nil
+            }
+
+            return try await authService.signInWithGoogle(
+                idToken: idToken,
+                accessToken: result.user.accessToken.tokenString,
+                nonce: nonce
+            )
+        } catch {
+            if (error as? GIDSignInError)?.code != .canceled {
+                errorMessage = "Google sign-in didn't complete. Try again."
+            }
+            return nil
+        }
+    }
+
+    private var rootViewController: UIViewController? {
+        UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap(\.windows)
+            .first { $0.isKeyWindow }?
+            .rootViewController
     }
 
     func handleAppleCompletion(_ result: Result<ASAuthorization, Error>) async -> Session? {

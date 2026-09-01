@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		363F5A75303CF97D002CC26D /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 363F5A74303CF97D002CC26D /* Supabase */; };
+		363F5A8B3046481D002CC26D /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 363F5A8A3046481D002CC26D /* GoogleSignIn */; };
+		363F5A8D3046481D002CC26D /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 363F5A8C3046481D002CC26D /* GoogleSignInSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +29,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				363F5A8D3046481D002CC26D /* GoogleSignInSwift in Frameworks */,
 				363F5A75303CF97D002CC26D /* Supabase in Frameworks */,
+				363F5A8B3046481D002CC26D /* GoogleSignIn in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +75,8 @@
 			name = Kora;
 			packageProductDependencies = (
 				363F5A74303CF97D002CC26D /* Supabase */,
+				363F5A8A3046481D002CC26D /* GoogleSignIn */,
+				363F5A8C3046481D002CC26D /* GoogleSignInSwift */,
 			);
 			productName = Kora;
 			productReference = 364453402F231D06006D3E0A /* Kora.app */;
@@ -102,6 +108,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				363F5A73303CF97D002CC26D /* XCRemoteSwiftPackageReference "supabase-swift" */,
+				363F5A893046481D002CC26D /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 364453412F231D06006D3E0A /* Products */;
@@ -376,6 +383,14 @@
 				minimumVersion = 2.5.1;
 			};
 		};
+		363F5A893046481D002CC26D /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.2.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -383,6 +398,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 363F5A73303CF97D002CC26D /* XCRemoteSwiftPackageReference "supabase-swift" */;
 			productName = Supabase;
+		};
+		363F5A8A3046481D002CC26D /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 363F5A893046481D002CC26D /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		363F5A8C3046481D002CC26D /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 363F5A893046481D002CC26D /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

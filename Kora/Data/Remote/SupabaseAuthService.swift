@@ -29,6 +29,13 @@ struct SupabaseAuthService {
         }
     }
     
+    @discardableResult
+    func signInWithGoogle(idToken: String, accessToken: String, nonce: String) async throws -> Session {
+        try await client.auth.signInWithIdToken(
+            credentials: .init(provider: .google, idToken: idToken, accessToken: accessToken, nonce: nonce)
+        )
+    }
+    
     func session(from url: URL) async throws -> Session {
         try await client.auth.session(from: url)
     }

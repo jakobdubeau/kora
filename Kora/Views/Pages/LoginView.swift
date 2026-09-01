@@ -77,6 +77,23 @@ struct LoginView: View {
                 
                 HStack {
                     Button {
+                        Task {
+                            isResolving = true
+                            defer { isResolving = false }
+
+                            if let session = await authViewModel.signInWithGoogle() {
+                                coordinator.session = session
+
+                                if let userId = coordinator.userId {
+                                    do {
+                                        coordinator.profile = try await profileService.fetchProfile(userId: userId)
+                                        coordinator.state = coordinator.profile == nil ? .onboarding : .main
+                                    } catch {
+                                        coordinator.state = .main
+                                    }
+                                }
+                            }
+                        }
                     } label: {
                         HStack(spacing: 4) {
                             Image("GoogleLogoTAsset")
