@@ -20,7 +20,7 @@ final class HeatmapViewModel {
         dailySessions[day] ?? []
     }
 
-    func setup(context: ModelContext, selectedMonth: Date) {
+    func setup(context: ModelContext, selectedMonth: Date, userId: UUID?) {
 
         let month = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: selectedMonth))!
         let nextMonth = Calendar.current.date(byAdding: .month, value: 1, to: month)!
@@ -29,13 +29,15 @@ final class HeatmapViewModel {
 
         // query
         let descriptor = FetchDescriptor<StudySession>(
-            predicate: #Predicate { session in session.start >= monthStart && session.start < nextMonthStart }
+            predicate: #Predicate { session in session.userId == userId && session.start >= monthStart && session.start < nextMonthStart }
         )
                          
         // how we actually fetch sessions from swiftData, becomes an array
         if let sessions = try? context.fetch(descriptor) {
             
-            let courseDescriptor = FetchDescriptor<Course>()
+            let courseDescriptor = FetchDescriptor<Course>(
+                predicate: #Predicate { course in course.userId == userId }
+            )
             
             if let courses = try? context.fetch(courseDescriptor) {
                 
@@ -52,7 +54,7 @@ final class HeatmapViewModel {
         let yearStarted = Calendar.current.date(bySettingHour: 5, minute: 0, second: 0, of: yearStart)!
         let yearEnded = Calendar.current.date(bySettingHour: 5, minute: 0, second: 0, of: yearEnd)!
         let yearDescriptor = FetchDescriptor<StudySession>(
-            predicate: #Predicate { session in session.start >= yearStarted && session.start < yearEnded }
+            predicate: #Predicate { session in session.userId == userId && session.start >= yearStarted && session.start < yearEnded }
         )
         if let yearSessions = try? context.fetch(yearDescriptor) {
             firstActiveMonth = yearSessions.map { Calendar.current.studyDayStart(for: $0.start) }

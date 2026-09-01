@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct TabsView: View {
     
@@ -14,6 +15,9 @@ struct TabsView: View {
         case groups
         case profile
     }
+    
+    @Environment(\.modelContext) private var context
+    @Environment(AppCoordinator.self) private var coordinator
     
     @State private var selectedTab: Tab = .home
     @State private var activeTab: Tab = .home
@@ -40,6 +44,23 @@ struct TabsView: View {
                 .ignoresSafeArea()
                 .opacity(tabTransition)
                 .allowsHitTesting(false)
+        }
+        // guest data has no owner, so the first account to sign in adopts it
+        .task(id: coordinator.userId) {
+            guard let userId = coordinator.userId else { return }
+
+            let courses = FetchDescriptor<Course>(predicate: #Predicate { $0.userId == nil })
+            let sessions = FetchDescriptor<StudySession>(predicate: #Predicate { $0.userId == nil })
+
+            for course in (try? context.fetch(courses)) ?? [] {
+                course.userId = userId
+            }
+
+            for session in (try? context.fetch(sessions)) ?? [] {
+                session.userId = userId
+            }
+
+            try? context.save()
         }
         .safeAreaInset(edge: .bottom) {
             if showTabs {

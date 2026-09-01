@@ -58,16 +58,18 @@ final class HomeViewModel {
         }
     }
     
-    func setup(context: ModelContext) {        
+    func setup(context: ModelContext, userId: UUID?) {
         let todayStart = Calendar.current.studyDayStart(for: Date.now)
         let dayEnd = Calendar.current.date(byAdding: .day, value: 1, to: todayStart)!
         let lowerBound = Calendar.current.date(byAdding: .day, value: -1, to: todayStart)!
 
         let descriptor = FetchDescriptor<StudySession>(
-            predicate: #Predicate { session in session.start >= lowerBound && session.start < dayEnd }
+            predicate: #Predicate { session in session.userId == userId && session.start >= lowerBound && session.start < dayEnd }
         )
 
-        let courseDescriptor = FetchDescriptor<Course>()
+        let courseDescriptor = FetchDescriptor<Course>(
+            predicate: #Predicate { course in course.userId == userId }
+        )
         let courseIds = Set(((try? context.fetch(courseDescriptor)) ?? []).map { $0.id })
         
         if let sessions = try? context.fetch(descriptor) {

@@ -17,6 +17,7 @@ struct HeatmapView: View {
     @State private var openSeq: Int = 0
     
     @Environment(\.modelContext) private var context
+    @Environment(AppCoordinator.self) private var coordinator
     
     var body: some View {
         VStack(alignment: .center, spacing: 16) {
@@ -104,11 +105,11 @@ struct HeatmapView: View {
             Spacer()
         }
         .onAppear {
-            vm.setup(context: context, selectedMonth: selectedMonth)
+            vm.setup(context: context, selectedMonth: selectedMonth, userId: coordinator.userId)
         }
         .onChange(of: selectedMonth) {
             dayToken += 1
-            vm.setup(context: context, selectedMonth: selectedMonth)
+            vm.setup(context: context, selectedMonth: selectedMonth, userId: coordinator.userId)
             withAnimation(.spring(duration: 0.3)) {
                 selectedDay = nil
                 dayTransition = 0
@@ -121,4 +122,5 @@ struct HeatmapView: View {
 #Preview {
     HeatmapView()
         .modelContainer(for: [Course.self, StudySession.self], inMemory: true)
+        .environment(AppCoordinator())
 }

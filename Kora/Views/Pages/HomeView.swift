@@ -61,7 +61,7 @@ struct HomeView: View {
                                     showTabs = false
                                 }
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                    heatmapVM.setup(context: context, selectedMonth: Date.now)
+                                    heatmapVM.setup(context: context, selectedMonth: Date.now, userId: coordinator.userId)
                                     showDailySessions = true
                                     withAnimation(.easeOut(duration: 0.1)) {
                                         blackScreen = 0
@@ -244,7 +244,7 @@ struct HomeView: View {
                         onDelete: {
                             if let course = courseMenu {
                                 context.delete(course)
-                                vm.setup(context: context)
+                                vm.setup(context: context, userId: coordinator.userId)
                             }
                             closingToken = menuToken
                             isDismissingMenu = true
@@ -280,7 +280,7 @@ struct HomeView: View {
                         }
                     },
                     onSessionDeleted: {
-                        vm.setup(context: context)
+                        vm.setup(context: context, userId: coordinator.userId)
                     })
                     .zIndex(1)
             }
@@ -294,7 +294,7 @@ struct HomeView: View {
         // MARK: - Lifecycle
         .onAppear {
             vm.saveSession(context: context, userId: coordinator.userId) // closure (setup once), timer engine saves sessions, from launch, everytime timer engine calls stopRunningCourse, closure fires
-            vm.setup(context: context)
+            vm.setup(context: context, userId: coordinator.userId)
             orderedCourses = courses
             if Self.isGolden {
                 withAnimation(.linear(duration: 7).repeatForever(autoreverses: false)) {

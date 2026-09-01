@@ -12,6 +12,7 @@ struct DailySessionsSheet: View {
     @Bindable var vm: HeatmapViewModel
     
     @Environment(\.modelContext) private var context
+    @Environment(AppCoordinator.self) private var coordinator
     
     let date: Date
     let onDismiss: () -> Void
@@ -332,7 +333,7 @@ struct DailySessionsSheet: View {
             session.start = start
             session.end = end
             withAnimation(.easeInOut(duration: 0.25)) {
-                vm.setup(context: context, selectedMonth: date)
+                vm.setup(context: context, selectedMonth: date, userId: coordinator.userId)
             }
             onSessionDeleted()
         }
@@ -344,7 +345,7 @@ struct DailySessionsSheet: View {
         if let session = try? context.fetch(descriptor).first {
             context.delete(session)
             withAnimation(.easeInOut(duration: 0.25)) {
-                vm.setup(context: context, selectedMonth: date)
+                vm.setup(context: context, selectedMonth: date, userId: coordinator.userId)
             }
             onSessionDeleted()
         }
