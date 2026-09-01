@@ -37,7 +37,7 @@ struct HomeView: View {
         _showTabs = showTabs
         _courses = Query(
             filter: #Predicate<Course> { $0.userId == userId },
-            sort: \Course.sortOrder
+            sort: [SortDescriptor(\Course.sortOrder), SortDescriptor(\Course.createdAt)]
         )
     }
 

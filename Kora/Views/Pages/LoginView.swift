@@ -184,7 +184,7 @@ struct LoginView: View {
                         .multilineTextAlignment(.center)
                 }
             }
-            .disabled(authViewModel.isLoading || isResolving)
+            .allowsHitTesting(!(authViewModel.isLoading || isResolving))
             .padding(.horizontal, 22)
         }
     }

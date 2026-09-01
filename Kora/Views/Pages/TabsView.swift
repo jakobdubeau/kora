@@ -31,6 +31,7 @@ struct TabsView: View {
                 
             case .home:
                 HomeView(showTabs: $showTabs, userId: coordinator.userId)
+                    .id(coordinator.userId)
                 
             case .groups:
                 HeatmapView()
