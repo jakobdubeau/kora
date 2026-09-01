@@ -17,12 +17,14 @@ class Course {
     var colour: String?
     var createdAt: Date
     var sortOrder: Int = 0
+    var userId: UUID? // owning account, nil means unclaimed guest data
     
-    init(name: String, colour: String? = nil, sortOrder: Int = 0) {
+    init(name: String, colour: String? = nil, sortOrder: Int = 0, userId: UUID? = nil) {
         self.id = UUID()
         self.name = name
         self.colour = colour
         self.createdAt = .now
         self.sortOrder = sortOrder
+        self.userId = userId
     }
 }

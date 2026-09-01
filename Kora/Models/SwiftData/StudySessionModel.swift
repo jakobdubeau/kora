@@ -19,6 +19,7 @@ class StudySession {
     var isCompleted: Bool
     var courseName: String?
     var courseColour: String?
+    var userId: UUID? // owning account, nil means unclaimed guest data
     
     // computed property (no stored value), value will be calculated every time it's accessed
     var duration: TimeInterval { // TimeInterval is basically a double formatted in seconds
@@ -29,7 +30,7 @@ class StudySession {
         }
     }
     
-    init(courseId: UUID?, start: Date = .now, end: Date? = nil, isCompleted: Bool = false, courseName: String? = nil, courseColour: String? = nil) {
+    init(courseId: UUID?, start: Date = .now, end: Date? = nil, isCompleted: Bool = false, courseName: String? = nil, courseColour: String? = nil, userId: UUID? = nil) {
         self.id = UUID()
         self.courseId = courseId
         self.start = start
@@ -37,5 +38,6 @@ class StudySession {
         self.isCompleted = isCompleted
         self.courseName = courseName
         self.courseColour = courseColour
+        self.userId = userId
     }
 }
