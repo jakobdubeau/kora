@@ -39,7 +39,6 @@ struct OnboardingView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.leading, 8)
             }
-            .padding(.bottom, -8)
 
             VStack(alignment: .leading, spacing: 12) {
                 TextField("Username", text: $vm.username)
