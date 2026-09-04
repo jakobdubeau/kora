@@ -21,6 +21,66 @@ final class AuthViewModel {
     var isLoading = false
     var errorMessage: String?
 
+    func sendCode(to email: String) async -> Bool {
+        errorMessage = nil
+        isLoading = true
+        defer { isLoading = false }
+
+        do {
+            try await authService.sendEmailCode(to: email)
+            return true
+        } catch {
+            errorMessage = "Couldn't send a code to that address."
+            return false
+        }
+    }
+
+    func verifyCode(_ code: String, for email: String) async -> Session? {
+        errorMessage = nil
+        isLoading = true
+        defer { isLoading = false }
+
+        do {
+            switch try await authService.verifyEmailCode(email: email, code: code) {
+            case .session(let session):
+                return session
+            case .user:
+                errorMessage = "That code didn't work. Try again."
+                return nil
+            }
+        } catch {
+            errorMessage = "That code didn't work. Check it and try again."
+            return nil
+        }
+    }
+
+    func setPassword(_ password: String) async -> Bool {
+        errorMessage = nil
+        isLoading = true
+        defer { isLoading = false }
+
+        do {
+            try await authService.setPassword(password)
+            return true
+        } catch {
+            errorMessage = "Couldn't save that password. Try again."
+            return false
+        }
+    }
+
+    func logIn(email: String, password: String) async -> Session? {
+        errorMessage = nil
+        isLoading = true
+        defer { isLoading = false }
+
+        do {
+            return try await authService.signIn(email: email, password: password)
+        } catch {
+            errorMessage = "That email and password don't match an account."
+            return nil
+        }
+    }
+
     func prepareAppleRequest(_ request: ASAuthorizationAppleIDRequest) {
         let nonce = SupabaseAuthService.randomNonce()
         currentNonce = nonce

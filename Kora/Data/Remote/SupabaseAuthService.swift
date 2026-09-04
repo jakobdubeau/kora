@@ -44,6 +44,29 @@ struct SupabaseAuthService {
         try await client.auth.signOut()
     }
 
+    func sendEmailCode(to email: String) async throws {
+        try await client.auth.signInWithOTP(email: email)
+    }
+
+    // .email verifies whether the code came from a signup or a magic link
+    func verifyEmailCode(email: String, code: String) async throws -> AuthResponse {
+        try await client.auth.verifyOTP(email: email, token: code, type: .email)
+    }
+
+    func setPassword(_ password: String) async throws {
+        _ = try await client.auth.update(user: UserAttributes(password: password))
+    }
+
+    @discardableResult
+    func signIn(email: String, password: String) async throws -> Session {
+        try await client.auth.signIn(email: email, password: password)
+    }
+
+    // .user means confirmation is pending, .session means they're signed in already
+    func signUp(email: String, password: String) async throws -> AuthResponse {
+        try await client.auth.signUp(email: email, password: password)
+    }
+
     @discardableResult
     func signInWithApple(idToken: String, nonce: String) async throws -> Session {
         try await client.auth.signInWithIdToken(
