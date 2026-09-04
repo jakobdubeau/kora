@@ -18,7 +18,7 @@ struct EmailCodeView: View {
     @State private var vm = AuthViewModel()
     @State private var code: String = ""
     @FocusState private var focused: Bool
-    @State private var resent: Bool = false
+    @State private var cooldown: Int = 0
 
     private var canSubmit: Bool {
         code.count == 6 && !vm.isLoading
@@ -108,8 +108,8 @@ struct EmailCodeView: View {
             .allowsHitTesting(canSubmit)
 
             Group {
-                if resent {
-                    Text("Code sent.")
+                if cooldown > 0 {
+                    Text("Resend in \(cooldown)s")
                         .font(.system(size: 14, weight: .medium))
                         .foregroundStyle(Color.secondary)
                 } else {
@@ -119,7 +119,9 @@ struct EmailCodeView: View {
 
                         Button {
                             Task {
-                                resent = await vm.sendCode(to: email)
+                                if await vm.sendCode(to: email) {
+                                    cooldown = 60
+                                }
                             }
                         } label: {
                             Text("Resend")
@@ -135,6 +137,12 @@ struct EmailCodeView: View {
         }
         .padding(.horizontal, 22)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .task(id: cooldown) {
+            guard cooldown > 0 else { return }
+            try? await Task.sleep(for: .seconds(1))
+            guard !Task.isCancelled else { return }
+            cooldown -= 1
+        }
         .navigationBarBackButtonHidden(true)
         .overlay(alignment: .topLeading) {
             Button {
