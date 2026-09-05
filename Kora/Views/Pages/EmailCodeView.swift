@@ -25,7 +25,7 @@ struct EmailCodeView: View {
     }
 
     var body: some View {
-        VStack(spacing: 48) {
+        VStack(spacing: 42) {
             VStack(spacing: 16) {
                 Text("Check your email")
                     .font(.system(size: 22, weight: .medium))

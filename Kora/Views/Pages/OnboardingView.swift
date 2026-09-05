@@ -24,7 +24,7 @@ struct OnboardingView: View {
     }
 
     var body: some View {
-        VStack(spacing: 48) {
+        VStack(spacing: 42) {
             VStack(spacing: 16) {
                 Text("Welcome to Kora")
                     .font(.system(size: 22, weight: .medium))
