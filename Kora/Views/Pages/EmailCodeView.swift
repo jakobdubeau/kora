@@ -137,6 +137,7 @@ struct EmailCodeView: View {
         }
         .padding(.horizontal, 22)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .onAppear { if cooldown == 0 { cooldown = 60 } }
         .task(id: cooldown) {
             guard cooldown > 0 else { return }
             try? await Task.sleep(for: .seconds(1))
