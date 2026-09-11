@@ -6,7 +6,7 @@
 </p>
 
 <div align="center">
-    <img alt="Kora screens" src="Kora/Resources/Assets.xcassets/koragallery.imageset/koragallery.png" width="1000" style="border-radius: 10px;" />
+    <img alt="Kora screens" src="Kora/Resources/Assets.xcassets/koragallery4x.imageset/koragallery4x.png" width="1000" style="border-radius: 10px;" />
 </div>
 
 ## Technical Stack
