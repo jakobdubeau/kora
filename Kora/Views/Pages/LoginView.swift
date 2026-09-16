@@ -60,20 +60,60 @@ struct LoginView: View {
     
     @Environment(AppCoordinator.self) private var coordinator
     
+    enum Step: Hashable {
+        case code(email: String)
+        case createPassword
+        case emailLogin
+    }
+    
     @State private var email: String = ""
-    @State private var password: String = ""
     @State private var authViewModel = AuthViewModel()
     @State private var isResolving = false
+    @State private var path: [Step] = []
+    @FocusState private var emailFocused: Bool
     private let profileService = SupabaseProfileService()
     
     var body: some View {
+        NavigationStack(path: $path) {
+            content
+                .navigationDestination(for: Step.self) { step in
+                    switch step {
+                    case .code(let email):
+                        EmailCodeView(email: email) {
+                            path.append(.createPassword)
+                        }
+
+                    case .createPassword:
+                        CreatePasswordView {
+                            coordinator.state = .onboarding
+                        }
+
+                    case .emailLogin:
+                        EmailLoginView {
+                            Task {
+                                guard let userId = coordinator.userId else { return }
+
+                                do {
+                                    coordinator.profile = try await profileService.fetchProfile(userId: userId)
+                                    coordinator.state = coordinator.profile == nil ? .onboarding : .main
+                                } catch {
+                                    coordinator.state = .main
+                                }
+                            }
+                        }
+                    }
+                }
+        }
+    }
+
+    private var content: some View {
         ZStack {
             StarField()
             VStack(alignment: .center, spacing: 16) {
                 Text("Kora")
                     .font(.system(size: 72, weight: .medium))
                     .fontDesign(.monospaced)
-                    .padding(.bottom, 22)
+                    .padding(.bottom, 16)
                 
                 HStack {
                     Button {
@@ -154,12 +194,63 @@ struct LoginView: View {
                 
                 TextField("Your Email", text: $email)
                     .font(.system(size: 18, weight: .regular))
-                    .multilineTextAlignment(TextAlignment.center)
+                    .multilineTextAlignment(.center)
+                    .focused($emailFocused)
+                    .onChange(of: email) { _, _ in authViewModel.errorMessage = nil }
+                    .keyboardType(.emailAddress)
+                    .textContentType(.emailAddress)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                    .padding(.horizontal, 16)
                     .frame(maxWidth: .infinity)
                     .frame(height: 46)
                     .background(Color(hex: "#090909"))
                     .clipShape(RoundedRectangle(cornerRadius: 14))
                     .overlay(RoundedRectangle(cornerRadius: 14).stroke(Color(.separator).opacity(0.5), lineWidth: 0.5))
+                    .overlay(alignment: .trailing) {
+                        Button {
+                            Task {
+                                if await authViewModel.sendCode(to: email) {
+                                    path.append(.code(email: email))
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "arrow.right.circle.fill")
+                                .font(.system(size: 24, weight: .medium))
+                                .foregroundStyle(email.isEmpty ? Color(.separator) : Color.white)
+                                .frame(width: 44, height: 44)
+                                .contentShape(Rectangle())
+                                .animation(.smooth(duration: 0.2), value: email.isEmpty)
+                        }
+                        .buttonStyle(.plain)
+                        .allowsHitTesting(!email.isEmpty)
+                        .padding(.trailing, 2)
+                    }
+
+                if let errorMessage = authViewModel.errorMessage {
+                    Text(errorMessage)
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundStyle(.red)
+                        .multilineTextAlignment(.center)
+                }
+
+                Button {
+                    path.append(.emailLogin)
+                } label: {
+                    HStack(spacing: 4) {
+                        Text("Already have an account?")
+                            .foregroundStyle(Color.secondary)
+                        Text("Sign in")
+                            .fontWeight(.semibold)
+                            .foregroundStyle(Color.white)
+                    }
+                    .font(.system(size: 14, weight: .medium))
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 32)
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .padding(.top, -6)
                 
                 Button {
                     coordinator.continueAsGuest()
@@ -176,17 +267,12 @@ struct LoginView: View {
                     .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
-
-                if let errorMessage = authViewModel.errorMessage {
-                    Text(errorMessage)
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundStyle(.red)
-                        .multilineTextAlignment(.center)
-                }
             }
             .allowsHitTesting(!(authViewModel.isLoading || isResolving))
             .padding(.horizontal, 22)
         }
+        .contentShape(Rectangle())
+        .onTapGesture { emailFocused = false }
     }
 }
 
