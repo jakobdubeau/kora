@@ -208,23 +208,23 @@ struct LoginView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 14))
                     .overlay(RoundedRectangle(cornerRadius: 14).stroke(Color(.separator).opacity(0.5), lineWidth: 0.5))
                     .overlay(alignment: .trailing) {
-                        Button {
-                            Task {
-                                if await authViewModel.sendCode(to: email) {
-                                    path.append(.code(email: email))
+                        Image(systemName: "arrow.right.circle.fill")
+                            .font(.system(size: 24, weight: .medium))
+                            .foregroundStyle(email.isEmpty ? Color(.separator) : Color.white)
+                            .frame(width: 44, height: 44)
+                            .contentShape(Rectangle())
+                            .animation(.smooth(duration: 0.2), value: email.isEmpty)
+                            .onTapGesture {
+                                emailFocused = false
+
+                                Task {
+                                    if await authViewModel.sendCode(to: email) {
+                                        path.append(.code(email: email))
+                                    }
                                 }
                             }
-                        } label: {
-                            Image(systemName: "arrow.right.circle.fill")
-                                .font(.system(size: 24, weight: .medium))
-                                .foregroundStyle(email.isEmpty ? Color(.separator) : Color.white)
-                                .frame(width: 44, height: 44)
-                                .contentShape(Rectangle())
-                                .animation(.smooth(duration: 0.2), value: email.isEmpty)
-                        }
-                        .buttonStyle(.plain)
-                        .allowsHitTesting(!email.isEmpty)
-                        .padding(.trailing, 2)
+                            .allowsHitTesting(!email.isEmpty)
+                            .padding(.trailing, 2)
                     }
 
                 if let errorMessage = authViewModel.errorMessage {
